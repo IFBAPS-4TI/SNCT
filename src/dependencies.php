@@ -5,7 +5,8 @@ $container = $app->getContainer();
 
 // Register component on container
 $container['view'] = function ($container) {
-    $view = new \Slim\Views\Twig('path/to/templates', [
+    $settings = $container->get('settings')['renderer'];
+    $view = new \Slim\Views\Twig($settings['template_path'], [
         'cache' =>  __DIR__ . '/../cache/'
     ]);
 
