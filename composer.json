@@ -1,14 +1,13 @@
 {
-    "name": "slim/slim-skeleton",
-    "description": "A Slim Framework skeleton application for rapid development",
-    "keywords": ["microframework", "rest", "router", "psr7"],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
-    "license": "MIT",
+    "name": "IFBAPS-4TI/SNCT",
+    "description": "Sistema de Gerenciamento para a SNCT",
+    "keywords": ["snct"],
+    "homepage": "https://github.com/IFBAPS-4TI/SNCT",
+    "license": "Apache 2.0",
     "authors": [
         {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
+            "name": "Guilherme Scararanse",
+            "email": "guilherme.scaranse@ifba.edu.br"
         }
     ],
     "require": {
