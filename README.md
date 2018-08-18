@@ -16,7 +16,7 @@ Depende de:
 Instale as dependências do Composer e inicie o servidor virtual:
 ```sh
 composer install
-php -S 0.0.0.0:8080 -t public
+composer start
 ```
 ### Outras plataformas
 Caso esteja utilizando Nginx, Apache ou outro servidor HTTP, aponte o `public_html` para a pasta `public` do projeto.
