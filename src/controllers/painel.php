@@ -13,7 +13,7 @@ class Painel
     {
         // your code
         // to access items in the container... $this->container->get('');
-        return $this->container->view->render($response, 'panel/login.html', $args);;
+        return $this->container->view->render($response, 'panel/login.html', $args);
     }
 }
 
