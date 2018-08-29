@@ -23,8 +23,8 @@ require __DIR__ . '/../src/dependencies.php';
 // Register middleware
 require __DIR__ . '/../src/middleware.php';
 
-// Register controllers
-require __DIR__ . '/../src/controllers.php';
+// Register addons (Controllers and others)
+require __DIR__ . '/../src/addons.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';
