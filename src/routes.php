@@ -21,3 +21,10 @@ $app->group('/panel', function() {
         return $this->view->render($response, 'panel/panel.html', $args);
     });
 });
+
+$app->group('/api', function() {
+    $this->get('/login',  '\Painel:home');
+    $this->get('/dash', function ($request, $response, $args) {
+        return $this->view->render($response, 'panel/panel.html', $args);
+    });
+});

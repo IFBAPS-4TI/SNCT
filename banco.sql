@@ -1,5 +1,5 @@
-CREATE DATABASE a;
-USE a;
+CREATE DATABASE snct;
+USE snct;
 
 CREATE TABLE Participante
 (
