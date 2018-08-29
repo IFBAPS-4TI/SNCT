@@ -13,17 +13,8 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     return $this->view->render($response, 'home/index.html', $args);
 });
 
-$app->group('/panel', function() {
-    $this->get('/login', function ($request, $response, $args) {
-        return $this->view->render($response, 'panel/login.html', $args);
-    });
-    $this->get('/dash', function ($request, $response, $args) {
-        return $this->view->render($response, 'panel/panel.html', $args);
-    });
-});
-
-$app->group('/api', function() {
-    $this->get('/login', \Painel::class . ':home');
+$app->group('/painel', function() {
+    $this->get('/login',  \Painel::class . ':loginView');
     $this->get('/dash', function ($request, $response, $args) {
         return $this->view->render($response, 'panel/panel.html', $args);
     });
