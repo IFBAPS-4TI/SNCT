@@ -14,7 +14,8 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 $app->group('/painel', function() {
-    $this->get('/login',  \Painel::class . ':loginView');
+    $this->get('/entrar',  \Painel::class . ':loginView');
+    $this->get('/registrar',  \Painel::class . ':registerView');
     $this->get('/dash', function ($request, $response, $args) {
         return $this->view->render($response, 'panel/panel.html', $args);
     });
