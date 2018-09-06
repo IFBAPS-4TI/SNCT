@@ -8,6 +8,12 @@ class Painel
     {
         $this->container = $container;
     }
+    public function indexView($request, $response, $args)
+    {
+        // your code
+        // to access items in the container... $this->container->get('');
+        return $this->container->view->render($response, 'panel/login.html', $args);
+    }
     public function registerView($request, $response, $args)
     {
         // your code
