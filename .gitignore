@@ -4,3 +4,4 @@
 .idea/*
 /cache/*
 !/cache/README.md
+.env
