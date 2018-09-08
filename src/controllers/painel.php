@@ -32,7 +32,8 @@ class Painel
 
     public function registrarUsuario($request, $response, $args)
     {
-        $params = $request->getParams();
+        $params = $request->getParams(); // Pegamos os dados do formulário
+        // E aí nós validamos esse formulário
         try {
             if (!\Respect\Validation\Validator::stringType()->notEmpty()->validate($params['inputName'])) {
                 throw new Exception("Nome não pode estar vazio!");
@@ -50,6 +51,7 @@ class Painel
                 throw new Exception("Data de nascimento inválida ou usuário não possui mais de 13 anos.");
             }
         } catch (Exception $e) {
+            // Se houverem erros no formulário, enviar para o template
             return $this->container->view->render($response, 'panel/register.html', [
                 'erro' => $e->getMessage()
             ]);
