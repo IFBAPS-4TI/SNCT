@@ -1,26 +1,29 @@
 CREATE DATABASE snct;
 USE snct;
 
-CREATE TABLE Participante
+CREATE TABLE Usuario
 (
-id_participante integer primary key,
-nome varchar(40) NOT NULL,
-email varchar(20) NOT NULL,
-senha varchar(20) NOT NULL
+id_usuario integer primary key,
+nome varchar() NOT NULL,
+email varchar() NOT NULL,
+nascimento varchar(10) NOT NULL,
+cpf varchar(11) NOT NULL,
+senha varchar() NOT NULL
 );
 
+/*
 CREATE TABLE Administrador
 (
 id_administrador integer primary key,
-id_participante integer,
-foreign key(id_participante) references Participante(id_participante)
+id_usuario integer,
+foreign key(id_usuario) references Participante(id_participante)
 );
 
 CREATE TABLE Monitor
 (
 id_monitor integer primary key,
-id_participante integer,
-foreign key(id_participante) references Participante(id_participante)
+id_usuario integer,
+foreign key(id_usuario) references Participante(id_participante)
 );
 
 CREATE TABLE Atividade
@@ -52,5 +55,5 @@ foreign key(id_atividade) references Atividade(id_atividade),
 primary key(id_monitor, id_atividade)
 );
 
-
+*/
 
