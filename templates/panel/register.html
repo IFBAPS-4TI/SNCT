@@ -17,12 +17,10 @@
 <body class="text-center">
 <div class="container">
     <form class="form-signin" method="post">
-        {% if erros is defined %}
-        {% for erro in errors %}
-        <div class="alert alert-danger" role="alert">
-            <strong>Erro!</strong> {{ erro }}
-        </div>
-        {% endfor %}
+        {% if erro is defined %}
+            <div class="alert alert-danger" role="alert">
+                <strong>Erro!</strong> {{ erro }}
+            </div>
         {% endif %}
         <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Olá</a></h1>
         <p class="text-muted">Se registre para ter acesso ao painel de atividades, monitoria e muito mais.</p>
@@ -37,6 +35,7 @@
         <input type="text" id="inputDate" name="inputDate" class="form-control" placeholder="Data de Nascimento" required>
         <label for="inputPassword" class="sr-only">Senha</label>
         <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Senha" required>
+        <p class="text-muted mb-3 font-weight-light">Você deve ter no mínimo 13 anos para se registrar.</p>
         <button class="btn btn-lg btn-info btn-block" type="submit"><i class="fas fa-passport"></i> Registrar</button>
         <hr class="colorgraph">
         <div class="row mt-2">
@@ -52,8 +51,8 @@
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
-    $('#inputCPF').mask('000.000.000-00', {reverse: true});
-    $('#inputDate').mask('00/00/0000', {reverse: true});
+    $('#inputCPF').mask('000.000.000-00', {reverse: false});
+    $('#inputDate').mask('00/00/0000', {reverse: false});
 </script>
 </body>
 </html>
