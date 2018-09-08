@@ -14,7 +14,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 $app->group('/painel', function() {
-    $this->get('/entrar',  \Painel::class . ':loginView');
-    $this->get('/registrar',  \Painel::class . ':registerView');
-    $this->get('',  \Painel::class . ':indexView');
+    $this->get('/entrar',  \Painel::class . ':loginView')->setName('entrar');
+    $this->get('/registrar',  \Painel::class . ':registerView')->setName('registrar');
+    $this->get('',  \Painel::class . ':indexView')->setName('painel');
+
+    $this->post('/registrar',  \Painel::class . ':registrarUsuario');
 });
