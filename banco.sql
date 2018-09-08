@@ -3,11 +3,11 @@ USE snct;
 
 CREATE TABLE Usuario
 (
-id_usuario integer primary key,
+id_usuario integer primary key AUTO_INCREMENT,
 nome varchar() NOT NULL,
-email varchar() NOT NULL,
+email varchar() NOT NULL UNIQUE,
 nascimento varchar(10) NOT NULL,
-cpf varchar(11) NOT NULL,
+cpf varchar(11) NOT NULL UNIQUE,
 senha varchar() NOT NULL
 );
 
