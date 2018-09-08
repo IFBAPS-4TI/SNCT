@@ -115,10 +115,18 @@ class Usuario
     /**
      * @param mixed $senha
      */
-    public function setSenha($senha)
+    public function setSenha($senha, $raw = false)
     {
+        if(!$raw){
         $senha_hash = $this->better_crypt($senha);
         unset($senha);
         $this->senha = $senha_hash;
+        }else{
+            $this->senha = $senha;
+        }
+    }
+    public function erasePass(){
+        unset($this->senha);
+        $this->senha = null;
     }
 }

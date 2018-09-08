@@ -30,6 +30,46 @@ class Painel
         return true;
     }
 
+    /**
+     * Controle responsável por logar o usuário e definir o token.
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return mixed
+     * @throws \Interop\Container\Exception\ContainerException
+     */
+    public function logarUsuario($request, $response, $args)
+    {
+        $params = $request->getParams(); // Pegamos os dados do formulário
+        $usuario = new \Models\Usuario();
+        $usuario->setEmail($params['inputEmail']);
+        $usuario->setSenha($params['inputPassword'], true);
+        $handler = new DatabaseHandler();
+        try {
+            $usuario = $handler->authUsuario($usuario);
+            $token = array(
+                "email" => $usuario->getEmail(),
+                "iss" => $_SERVER['SERVER_NAME']
+            );
+            $this->session->set('jwt_token', Util::encodeToken($token));
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
+        } catch (Exception $e) {
+            // Se houverem erros no formulário, enviar para o template
+            return $this->container->view->render($response, 'panel/login.html', [
+                'erro' => $e->getMessage()
+            ]);
+        }
+
+
+    }
+
+    /**
+     * Controle responsável por criar usuário
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return mixed
+     */
     public function registrarUsuario($request, $response, $args)
     {
         $params = $request->getParams(); // Pegamos os dados do formulário
@@ -60,11 +100,11 @@ class Painel
             $usuario->setEmail($params['inputEmail']);
             $usuario->setSenha($params['inputPassword']);
             $usuario->setNascimento($params['inputDate']);
-            if($handler->criarUsuario($usuario)){
+            if ($handler->criarUsuario($usuario)) {
                 return $this->container->view->render($response, 'panel/login.html', [
                     'info' => "Usuário registrado com sucesso."
                 ]);
-            }else{
+            } else {
                 throw new Exception("Algo deu errado.");
             }
         } catch (Exception $e) {
@@ -76,27 +116,52 @@ class Painel
         // Usuário válido
     }
 
+    public function logoutView($request, $response, $args)
+    {
+
+        $this->session->delete('jwt_token');
+        return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
+    }
+
     public function indexView($request, $response, $args)
     {
+
         try {
             if ($this->session->exists('jwt_token')) {
-                $token = JWT::decode(base64_decode($this->session->get('jwt_token')), $_SERVER["jwt_key"], array('HS512'));
+                $token = (array)Util::decodeToken($this->session->get('jwt_token'));
             } else {
+
                 throw new Exception('Token não existe');
             }
         } catch (Exception $e) {
-            return $response->withStatus(303)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
+            return $response->withStatus(203)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
         return $this->container->view->render($response, 'panel/panel.html', $args);
     }
 
     public function registerView($request, $response, $args)
     {
+        if ($this->session->exists('jwt_token')) {
+            try {
+                $token = Util::decodeToken($this->session->get('jwt_token'));
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
+            } catch (Exception $e) {
+                $this->session->delete('jwt_token');
+            }
+        }
         return $this->container->view->render($response, 'panel/register.html', $args);
     }
 
     public function loginView($request, $response, $args)
     {
+        if ($this->session->exists('jwt_token')) {
+            try {
+                $token = Util::decodeToken($this->session->get('jwt_token'));
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
+            } catch (Exception $e) {
+                $this->session->delete('jwt_token');
+            }
+        }
         return $this->container->view->render($response, 'panel/login.html', $args);
     }
 }

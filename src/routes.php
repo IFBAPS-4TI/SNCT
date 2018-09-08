@@ -17,6 +17,7 @@ $app->group('/painel', function() {
     $this->get('/entrar',  \Painel::class . ':loginView')->setName('entrar');
     $this->get('/registrar',  \Painel::class . ':registerView')->setName('registrar');
     $this->get('',  \Painel::class . ':indexView')->setName('painel');
-
+    $this->get('/sair',  \Painel::class . ':logoutView')->setName('sair');
     $this->post('/registrar',  \Painel::class . ':registrarUsuario');
+    $this->post('/entrar',  \Painel::class . ':logarUsuario');
 });

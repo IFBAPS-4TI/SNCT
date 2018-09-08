@@ -33,4 +33,24 @@ class DatabaseHandler
             ->values(array($usuario->getNome(), $usuario->getEmail(), $usuario->getNascimento(), $usuario->getCpf(), $usuario->getSenha()));
         return $insert->execute(false);
     }
+    public function getDataByEmail($email){
+        $select = $this->pdo->select()
+            ->from('Usuario')
+            ->where('email', '=', $email);
+        $stmt = $select->execute();
+        return $stmt->fetch();
+    }
+    public function authUsuario(\Models\Usuario $usuario){
+        $data = $this->getDataByEmail($usuario->getEmail());
+        if(count($data) > 1 && crypt($usuario->getSenha(), $data['senha']) == $data['senha']) {
+            $usuario->setNascimento($data['nascimento']);
+            $usuario->setCpf($data['cpf']);
+            $usuario->setId($data['id_usuario']);
+            $usuario->setNome($data['nome']);
+            $usuario->erasePass(); # Apagar senha, pq não precisamos mais dela.
+        }else{
+            throw new Exception("Usuário ou senha incorretos.");
+        }
+        return $usuario;
+    }
 }
