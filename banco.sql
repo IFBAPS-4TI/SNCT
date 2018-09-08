@@ -1,14 +1,14 @@
-CREATE DATABASE snct;
+CREATE DATABASE IF NOT EXISTS snct;
 USE snct;
 
 CREATE TABLE Usuario
 (
 id_usuario integer primary key AUTO_INCREMENT,
-nome varchar() NOT NULL,
-email varchar() NOT NULL UNIQUE,
+nome varchar(255) NOT NULL,
+email varchar(255) NOT NULL UNIQUE,
 nascimento varchar(10) NOT NULL,
 cpf varchar(11) NOT NULL UNIQUE,
-senha varchar() NOT NULL
+senha text NOT NULL
 );
 
 /*

@@ -100,7 +100,7 @@ class Usuario
      */
     public function setCpf($cpf)
     {
-        $cpf = (int) filter_var($cpf, FILTER_SANITIZE_NUMBER_INT);
+        $cpf = preg_replace("/[^0-9]/", '', $cpf);
         $this->cpf = $cpf;
     }
 
@@ -117,7 +117,7 @@ class Usuario
      */
     public function setSenha($senha)
     {
-        $senha_hash = better_crypt($senha);
+        $senha_hash = $this->better_crypt($senha);
         unset($senha);
         $this->senha = $senha_hash;
     }

@@ -17,6 +17,11 @@
 <body class="text-center">
 <div class="container">
     <form class="form-signin" method="get" action="/panel/dash">
+        {% if info is defined %}
+        <div class="alert alert-info" role="alert">
+            <strong>Olá!</strong> {{ info }}
+        </div>
+        {% endif %}
         <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Olá</a></h1>
         <p class="text-muted">Visitante? Palestrante? Monitor? Acesse sua área aqui!</p>
         <hr class="colorgraph">

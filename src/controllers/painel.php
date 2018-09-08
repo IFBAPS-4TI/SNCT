@@ -47,8 +47,25 @@ class Painel
             if (!\Respect\Validation\Validator::stringType()->notEmpty()->length(8, null)->validate($params['inputPassword'])) {
                 throw new Exception("Senha deve possuir no mínimo 8 caracteres.");
             }
-            if (!\Respect\Validation\Validator::date('d-m-Y')->notEmpty()->validate($params['inputDate']) && $this->validarAniversario($params['inputDate'])) {
-                throw new Exception("Data de nascimento inválida ou usuário não possui mais de 13 anos.");
+            if (!\Respect\Validation\Validator::date('d/m/Y')->notEmpty()->validate($params['inputDate'])) {
+                throw new Exception("Data de nascimento inválida. Data: {$params['inputDate']}");
+            }
+            if (!$this->validarAniversario($params['inputDate'])) {
+                throw new Exception("Usuário não possui mais de 13 anos.");
+            }
+            $handler = new DatabaseHandler();
+            $usuario = new \Models\Usuario();
+            $usuario->setNome($params['inputName']);
+            $usuario->setCpf($params['inputCPF']);
+            $usuario->setEmail($params['inputEmail']);
+            $usuario->setSenha($params['inputPassword']);
+            $usuario->setNascimento($params['inputDate']);
+            if($handler->criarUsuario($usuario)){
+                return $this->container->view->render($response, 'panel/login.html', [
+                    'info' => "Usuário registrado com sucesso."
+                ]);
+            }else{
+                throw new Exception("Algo deu errado.");
             }
         } catch (Exception $e) {
             // Se houverem erros no formulário, enviar para o template
