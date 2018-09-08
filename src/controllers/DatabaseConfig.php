@@ -13,7 +13,7 @@ class DatabaseConfig
      */
     public function __construct()
     {
-        $this->url = "mysql:host={$_SERVER['sql_host']};dbname={$_SERVER['sql_database']}";
+        $this->url = "mysql:host={$_SERVER['sql_host']};dbname={$_SERVER['sql_database']};charset=utf8";
         $this->usuario = $_SERVER['sql_username'];
         $this->senha = $_SERVER['sql_password'];
         $this->pdo = new \Slim\PDO\Database($this->url, $this->usuario, $this->senha);
