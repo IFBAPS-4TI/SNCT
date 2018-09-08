@@ -100,6 +100,7 @@ class Usuario
      */
     public function setCpf($cpf)
     {
+        $cpf = (int) filter_var($cpf, FILTER_SANITIZE_NUMBER_INT);
         $this->cpf = $cpf;
     }
 
