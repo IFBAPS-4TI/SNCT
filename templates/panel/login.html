@@ -1,37 +1,20 @@
 {% extends "/panel/templates/login.html" %}
 {% block content %}
-<form class="form-signin" method="post">
-    {% if info == 1 %}
-    <div class="alert alert-info" role="alert">
-        <strong>Olá!</strong> Usuário cadastrado com sucesso.
+<h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Olá</a></h1>
+<p class="text-muted">Visitante? Palestrante? Monitor? Acesse sua área aqui!</p>
+<hr class="colorgraph">
+<label for="inputEmail" class="sr-only">Email</label>
+<input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email" required autofocus>
+<label for="inputPassword" class="sr-only">Senha</label>
+<input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Senha" required>
+<button class="btn btn-lg btn-primary btn-block" type="submit"><i class="fas fa-compass"></i> Entrar</button>
+<hr class="colorgraph">
+<div class="row mt-2">
+    <div class="col">
+        <a href="/painel/registrar" class="btn btn-info btn-sm" role="button"><i class="fas fa-passport"></i>
+            Registrar</a>
+        <a href="/painel/recuperar" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-key"></i>
+            Esqueci a senha</a>
     </div>
-    {% endif %}
-    {% if info == 2 %}
-    <div class="alert alert-info" role="alert">
-        <strong>Olá!</strong> Uma nova senha foi enviada para teu email.
-    </div>
-    {% endif %}
-    {% if erro is defined %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Erro!</strong> {{ erro }}
-    </div>
-    {% endif %}
-    <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Olá</a></h1>
-    <p class="text-muted">Visitante? Palestrante? Monitor? Acesse sua área aqui!</p>
-    <hr class="colorgraph">
-    <label for="inputEmail" class="sr-only">Email</label>
-    <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email" required autofocus>
-    <label for="inputPassword" class="sr-only">Senha</label>
-    <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Senha" required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit"><i class="fas fa-compass"></i> Entrar</button>
-    <hr class="colorgraph">
-    <div class="row mt-2">
-        <div class="col">
-            <a href="/painel/registrar" class="btn btn-info btn-sm" role="button"><i class="fas fa-passport"></i>
-                Registrar</a>
-            <a href="/painel/recuperar" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-key"></i>
-                Esqueci a senha</a>
-        </div>
-    </div>
-</form>
+</div>
 {% endblock %}

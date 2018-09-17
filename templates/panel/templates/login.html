@@ -16,8 +16,11 @@
 
 <body class="text-center">
 <div class="container">
+    <form class="form-signin" method="post">
+    {{ flash()|raw }}
     {% block content %}
     {% endblock %}
+    </form>
 </div>
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>

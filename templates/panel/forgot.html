@@ -1,16 +1,5 @@
 {% extends "/panel/templates/login.html" %}
 {% block content %}
-<form class="form-signin" method="post">
-    {% if info is defined %}
-    <div class="alert alert-info" role="alert">
-        <strong>Olá!</strong> {{ info }}
-    </div>
-    {% endif %}
-    {% if erro is defined %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Erro!</strong> {{ erro }}
-    </div>
-    {% endif %}
     <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Resgatar</a></h1>
     <p class="text-muted">Uma nova senha será enviada para o email cadastrado.</p>
     <hr class="colorgraph">
@@ -28,5 +17,4 @@
                 Entrar</a>
         </div>
     </div>
-</form>
 {% endblock %}
