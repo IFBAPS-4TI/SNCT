@@ -7,13 +7,16 @@ $container = $app->getContainer();
 $container['view'] = function ($container) {
     $settings = $container->get('settings')['renderer'];
     $view = new \Slim\Views\Twig($settings['template_path'], [
-        'cache' =>  false # __DIR__ . '/../cache/'
+        'cache' => false # __DIR__ . '/../cache/'
     ]);
 
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container->get('request')->getUri()->getBasePath()), '/');
+    $flash = new Twig_SimpleFunction('flash', function () {
+        return Tamtamchik\SimpleFlash\Flash::display();
+    });
     $view->addExtension(new Slim\Views\TwigExtension($container->get('router'), $basePath));
-
+    $view->getEnvironment()->addFunction($flash);
     return $view;
 };
 
