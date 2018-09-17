@@ -1,5 +1,5 @@
 <?php
-
+use Tamtamchik\SimpleFlash\Flash;
 class Painel
 {
     protected $container;
@@ -55,9 +55,8 @@ class Painel
             return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
         } catch (Exception $e) {
             // Se houverem erros no formulário, enviar para o template
-            return $this->container->view->render($response, 'panel/login.html', [
-                'erro' => $e->getMessage()
-            ]);
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
+            return $this->container->view->render($response, 'panel/login.html', $args);
         }
 
 
@@ -85,17 +84,15 @@ class Painel
             $senha = Util::generateRandomString(8);
             $usuario->setSenha($senha);
             if ($handler->alterarSenha($usuario, $senha)) {
-                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', [
-                    'info' => "2"
-                ]));
+                Flash::message("<strong>Sucesso!</strong> Uma nova senha foi enviada para o email cadastrado.", $type="info");
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
             } else {
                 throw new Exception("Algo deu errado.");
             }
         } catch (Exception $e) {
             // Se houverem erros no formulário, enviar para o template
-            return $this->container->view->render($response, 'panel/forgot.html', [
-                'erro' => $e->getMessage()
-            ]);
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
+            return $this->container->view->render($response, 'panel/forgot.html', $args);
         }
         // Usuário válido
     }
@@ -139,17 +136,15 @@ class Painel
             $usuario->setSenha($params['inputPassword']);
             $usuario->setNascimento($params['inputDate']);
             if ($handler->criarUsuario($usuario)) {
-                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', [
-                    'info' => "1"
-                ]));
+                Flash::message('<strong>Sucesso!</strong> Usuário criado com sucesso.', $type="success");
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
             } else {
                 throw new Exception("Algo deu errado.");
             }
         } catch (Exception $e) {
             // Se houverem erros no formulário, enviar para o template
-            return $this->container->view->render($response, 'panel/register.html', [
-                'erro' => $e->getMessage()
-            ]);
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
+            return $this->container->view->render($response, 'panel/register.html', $args);
         }
         // Usuário válido
     }
@@ -177,7 +172,6 @@ class Painel
 
     public function indexView($request, $response, $args)
     {
-
         try {
             if ($this->session->exists('jwt_token')) {
                 $token = (array)Util::decodeToken($this->session->get('jwt_token'));
@@ -214,9 +208,7 @@ class Painel
                 $this->session->delete('jwt_token');
             }
         }
-        return $this->container->view->render($response, 'panel/login.html', [
-            'info' => $args['id']
-        ]);
+        return $this->container->view->render($response, 'panel/login.html', $args);
     }
 }
 

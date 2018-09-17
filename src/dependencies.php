@@ -1,5 +1,7 @@
 <?php
 // DIC configuration
+use Tamtamchik\SimpleFlash\TemplateFactory;
+use Tamtamchik\SimpleFlash\Templates;
 
 $container = $app->getContainer();
 
@@ -13,7 +15,10 @@ $container['view'] = function ($container) {
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container->get('request')->getUri()->getBasePath()), '/');
     $flash = new Twig_SimpleFunction('flash', function () {
-        return Tamtamchik\SimpleFlash\Flash::display();
+        $template = TemplateFactory::create(Templates::BOOTSTRAP_4);
+        $flash = new Tamtamchik\SimpleFlash\Flash($template);
+
+        return $flash::display();
     });
     $view->addExtension(new Slim\Views\TwigExtension($container->get('router'), $basePath));
     $view->getEnvironment()->addFunction($flash);
