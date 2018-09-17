@@ -1,3 +1,4 @@
+DROP DATABASE snct;
 CREATE DATABASE IF NOT EXISTS snct;
 USE snct;
 
@@ -11,6 +12,13 @@ cpf varchar(11) NOT NULL UNIQUE,
 senha text NOT NULL
 );
 
+CREATE TABLE Administradores
+(
+id_administrador integer primary key AUTO_INCREMENT,
+id_usuario integer,
+FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+ON DELETE CASCADE
+);
 /*
 CREATE TABLE Administrador
 (
@@ -56,4 +64,3 @@ primary key(id_monitor, id_atividade)
 );
 
 */
-

@@ -63,6 +63,13 @@ class Painel
 
     }
 
+    /** Controle responsável por resetar a senha
+     * @param $request
+     * @param $response
+     * @param $args
+     * @return mixed
+     * @throws \Interop\Container\Exception\ContainerException
+     */
     public function resetarSenha($request, $response, $args)
     {
         $params = $request->getParams(); // Pegamos os dados do formulário
@@ -79,7 +86,7 @@ class Painel
             $usuario->setSenha($senha);
             if ($handler->alterarSenha($usuario, $senha)) {
                 return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', [
-                    'info' => "Senha enviada para o email."
+                    'info' => "2"
                 ]));
             } else {
                 throw new Exception("Algo deu errado.");
@@ -99,6 +106,7 @@ class Painel
      * @param $response
      * @param $args
      * @return mixed
+     * @throws \Interop\Container\Exception\ContainerException
      */
     public function registrarUsuario($request, $response, $args)
     {
@@ -131,9 +139,9 @@ class Painel
             $usuario->setSenha($params['inputPassword']);
             $usuario->setNascimento($params['inputDate']);
             if ($handler->criarUsuario($usuario)) {
-                return $this->container->view->render($response, 'panel/login.html', [
-                    'info' => "Usuário registrado com sucesso."
-                ]);
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', [
+                    'info' => "1"
+                ]));
             } else {
                 throw new Exception("Algo deu errado.");
             }
@@ -180,7 +188,7 @@ class Painel
         } catch (Exception $e) {
             return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
-        return $this->container->view->render($response, 'panel/panel.html', $args);
+        return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
     }
 
     public function registerView($request, $response, $args)
@@ -206,7 +214,9 @@ class Painel
                 $this->session->delete('jwt_token');
             }
         }
-        return $this->container->view->render($response, 'panel/login.html', $args);
+        return $this->container->view->render($response, 'panel/login.html', [
+            'info' => $args['id']
+        ]);
     }
 }
 

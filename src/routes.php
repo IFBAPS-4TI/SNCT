@@ -14,9 +14,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 $app->group('/painel', function () {
-    $this->get('/entrar', \Painel::class . ':loginView')->setName('entrar');
+    $this->get('/entrar[/{id}]', \Painel::class . ':loginView')->setName('entrar');
     $this->get('/registrar', \Painel::class . ':registerView')->setName('registrar');
-    $this->get('', \Painel::class . ':indexView')->setName('painel');
+    $this->get('[/]', \Painel::class . ':indexView')->setName('painel');
     $this->get('/sair', \Painel::class . ':logoutView')->setName('sair');
     $this->get('/recuperar', \Painel::class . ':forgotView')->setName('resetar');
     /* POST rotas */

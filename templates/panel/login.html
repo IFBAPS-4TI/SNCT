@@ -17,9 +17,14 @@
 <body class="text-center">
 <div class="container">
     <form class="form-signin" method="post">
-        {% if info is defined %}
+        {% if info == 1 %}
         <div class="alert alert-info" role="alert">
-            <strong>Olá!</strong> {{ info }}
+            <strong>Olá!</strong> Usuário cadastrado com sucesso.
+        </div>
+        {% endif %}
+        {% if info == 2 %}
+        <div class="alert alert-info" role="alert">
+            <strong>Olá!</strong> Uma nova senha foi enviada para teu email.
         </div>
         {% endif %}
         {% if erro is defined %}
