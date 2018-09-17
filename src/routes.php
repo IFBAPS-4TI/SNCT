@@ -13,11 +13,14 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     return $this->view->render($response, 'home/index.html', $args);
 });
 
-$app->group('/painel', function() {
-    $this->get('/entrar',  \Painel::class . ':loginView')->setName('entrar');
-    $this->get('/registrar',  \Painel::class . ':registerView')->setName('registrar');
-    $this->get('',  \Painel::class . ':indexView')->setName('painel');
-    $this->get('/sair',  \Painel::class . ':logoutView')->setName('sair');
-    $this->post('/registrar',  \Painel::class . ':registrarUsuario');
-    $this->post('/entrar',  \Painel::class . ':logarUsuario');
+$app->group('/painel', function () {
+    $this->get('/entrar', \Painel::class . ':loginView')->setName('entrar');
+    $this->get('/registrar', \Painel::class . ':registerView')->setName('registrar');
+    $this->get('', \Painel::class . ':indexView')->setName('painel');
+    $this->get('/sair', \Painel::class . ':logoutView')->setName('sair');
+    $this->get('/recuperar', \Painel::class . ':forgotView')->setName('resetar');
+    /* POST rotas */
+    $this->post('/recuperar', \Painel::class . ':resetarSenha');
+    $this->post('/registrar', \Painel::class . ':registrarUsuario');
+    $this->post('/entrar', \Painel::class . ':logarUsuario');
 });

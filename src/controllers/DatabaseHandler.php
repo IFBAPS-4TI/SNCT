@@ -15,6 +15,39 @@ class DatabaseHandler
         $this->pdo = $this->config->getPdo();
     }
 
+    public function alterarSenha(\Models\Usuario $usuario, $novaSenha)
+    {
+        $data = $this->getDataByEmail($usuario->getEmail());
+        if (count($data) > 1 && $data['cpf'] == $usuario->getCpf()) {
+            // Usuário encontrado
+            $update = $this->pdo->update(array('senha' => $usuario->getSenha()))
+                ->table('Usuario')
+                ->whereMany(array('email' => $usuario->getEmail(), 'cpf' => $usuario->getCpf()), '=');
+            $afetadas = $update->execute();
+            if (count($afetadas) > 0) {
+                $email = new \SendGrid\Mail\Mail();
+                $email->setFrom("noreply@example.org", "IFBA - Porto Seguro");
+                $email->setSubject("SNCT - Nova senha");
+                $email->addTo($usuario->getEmail(), "Usuário");
+                $email->addContent(
+                    "text/html", "Sua nova senha é <strong>{$novaSenha}</strong>. Lembre-se que você pode altera-la a qualquer momento no seu painel."
+                );
+                $sendgrid = new \SendGrid($_SERVER['SENDGRID_API_KEY']);
+                try {
+                    $sendgrid->send($email);
+                } catch (Exception $e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
+        } else {
+            throw new Exception("Usuário não encontrado.");
+        }
+        return true;
+    }
+
     public function criarUsuario(\Models\Usuario $usuario)
     {
         // Verifica se email ou cpf do usuário já existe
@@ -33,22 +66,26 @@ class DatabaseHandler
             ->values(array($usuario->getNome(), $usuario->getEmail(), $usuario->getNascimento(), $usuario->getCpf(), $usuario->getSenha()));
         return $insert->execute(false);
     }
-    public function getDataByEmail($email){
+
+    public function getDataByEmail($email)
+    {
         $select = $this->pdo->select()
             ->from('Usuario')
             ->where('email', '=', $email);
         $stmt = $select->execute();
         return $stmt->fetch();
     }
-    public function authUsuario(\Models\Usuario $usuario){
+
+    public function authUsuario(\Models\Usuario $usuario)
+    {
         $data = $this->getDataByEmail($usuario->getEmail());
-        if(count($data) > 1 && crypt($usuario->getSenha(), $data['senha']) == $data['senha']) {
+        if (count($data) > 1 && crypt($usuario->getSenha(), $data['senha']) == $data['senha']) {
             $usuario->setNascimento($data['nascimento']);
             $usuario->setCpf($data['cpf']);
             $usuario->setId($data['id_usuario']);
             $usuario->setNome($data['nome']);
             $usuario->erasePass(); # Apagar senha, pq não precisamos mais dela.
-        }else{
+        } else {
             throw new Exception("Usuário ou senha incorretos.");
         }
         return $usuario;

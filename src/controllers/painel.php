@@ -63,6 +63,36 @@ class Painel
 
     }
 
+    public function resetarSenha($request, $response, $args)
+    {
+        $params = $request->getParams(); // Pegamos os dados do formulário
+        // E aí nós validamos esse formulário
+        try {
+            if (!\Respect\Validation\Validator::email()->validate($params['inputEmail'])) {
+                throw new Exception("Email inválido.");
+            }
+            $handler = new DatabaseHandler();
+            $usuario = new \Models\Usuario();
+            $usuario->setCpf($params['inputCPF']);
+            $usuario->setEmail($params['inputEmail']);
+            $senha = Util::generateRandomString(8);
+            $usuario->setSenha($senha);
+            if ($handler->alterarSenha($usuario, $senha)) {
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', [
+                    'info' => "Senha enviada para o email."
+                ]));
+            } else {
+                throw new Exception("Algo deu errado.");
+            }
+        } catch (Exception $e) {
+            // Se houverem erros no formulário, enviar para o template
+            return $this->container->view->render($response, 'panel/forgot.html', [
+                'erro' => $e->getMessage()
+            ]);
+        }
+        // Usuário válido
+    }
+
     /**
      * Controle responsável por criar usuário
      * @param $request
@@ -116,6 +146,20 @@ class Painel
         // Usuário válido
     }
 
+    public function forgotView($request, $response, $args)
+    {
+
+        if ($this->session->exists('jwt_token')) {
+            try {
+                $token = Util::decodeToken($this->session->get('jwt_token'));
+                return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
+            } catch (Exception $e) {
+                $this->session->delete('jwt_token');
+            }
+        }
+        return $this->container->view->render($response, 'panel/forgot.html', $args);
+    }
+
     public function logoutView($request, $response, $args)
     {
 
@@ -134,7 +178,7 @@ class Painel
                 throw new Exception('Token não existe');
             }
         } catch (Exception $e) {
-            return $response->withStatus(203)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
+            return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
         return $this->container->view->render($response, 'panel/panel.html', $args);
     }
