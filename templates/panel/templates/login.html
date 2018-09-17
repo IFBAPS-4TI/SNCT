@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Painel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/login.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script>
+    $('#inputCPF').mask('000.000.000-00', {reverse: false});
+    $('#inputDate').mask('00/00/0000', {reverse: false});
+</script>
+</body>
+</html>

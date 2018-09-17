@@ -1,53 +1,32 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Painel</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="/css/login.css" rel="stylesheet">
-</head>
-
-<body class="text-center">
-<div class="container">
-    <form class="form-signin" method="post">
-        {% if info is defined %}
-        <div class="alert alert-info" role="alert">
-            <strong>Olá!</strong> {{ info }}
+{% extends "/panel/templates/login.html" %}
+{% block content %}
+<form class="form-signin" method="post">
+    {% if info is defined %}
+    <div class="alert alert-info" role="alert">
+        <strong>Olá!</strong> {{ info }}
+    </div>
+    {% endif %}
+    {% if erro is defined %}
+    <div class="alert alert-danger" role="alert">
+        <strong>Erro!</strong> {{ erro }}
+    </div>
+    {% endif %}
+    <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Resgatar</a></h1>
+    <p class="text-muted">Uma nova senha será enviada para o email cadastrado.</p>
+    <hr class="colorgraph">
+    <label for="inputEmail" class="sr-only">Email</label>
+    <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email" required autofocus>
+    <label for="inputCPF" class="sr-only">CPF</label>
+    <input type="text" id="inputCPF" name="inputCPF" class="form-control" placeholder="CPF" required>
+    <button class="btn mt-3 btn-lg btn-primary btn-block" type="submit"><i class="fas fa-key"></i> Resgatar</button>
+    <hr class="colorgraph">
+    <div class="row mt-2">
+        <div class="col">
+            <a href="/painel/registrar" class="btn btn-info btn-sm" role="button"><i class="fas fa-passport"></i>
+                Registrar</a>
+            <a href="/painel/entrar" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-passport"></i>
+                Entrar</a>
         </div>
-        {% endif %}
-        {% if erro is defined %}
-        <div class="alert alert-danger" role="alert">
-            <strong>Erro!</strong> {{ erro }}
-        </div>
-        {% endif %}
-        <h1 class="h3 mb-3 font-weight-normal"><a href="/" class="no-decoration">Resgatar</a></h1>
-        <p class="text-muted">Uma nova senha será enviada para o email cadastrado.</p>
-        <hr class="colorgraph">
-        <label for="inputEmail" class="sr-only">Email</label>
-        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email" required autofocus>
-        <label for="inputCPF" class="sr-only">CPF</label>
-        <input type="text" id="inputCPF" name ="inputCPF" class="form-control" placeholder="CPF" required>
-        <button class="btn mt-3 btn-lg btn-primary btn-block" type="submit"><i class="fas fa-key"></i> Resgatar</button>
-        <hr class="colorgraph">
-        <div class="row mt-2">
-            <div class="col">
-                <a href="/painel/registrar" class="btn btn-info btn-sm" role="button"><i class="fas fa-passport"></i> Registrar</a>
-                <a href="/painel/entrar" class="btn btn-secondary btn-sm" role="button"><i class="fas fa-passport"></i> Entrar</a>
-            </div>
-        </div>
-    </form>
-</div>
-<script src="/vendor/jquery/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-<script>
-    $('#inputCPF').mask('000.000.000-00', {reverse: false});
-</script>
-</body>
-</html>
+    </div>
+</form>
+{% endblock %}
