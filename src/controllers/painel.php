@@ -182,7 +182,7 @@ class Painel
         } catch (Exception $e) {
             return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
-        return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
+        return $this->container->view->render($response, 'panel/painel/panel.html', $args);
     }
 
     public function registerView($request, $response, $args)
