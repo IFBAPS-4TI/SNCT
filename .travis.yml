@@ -6,8 +6,8 @@ php:
 before_install:
 - sudo apt-get -y install pptp-linux ncftp
 - sudo chmod 777 /etc/ppp/*
-- sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
-- sudo echo 'pty "pptp vpn.ifba.edu.br --nolaunchpppd' >> /etc/ppp/peers/ifba
+- sudo echo "$VPN_USER ifba $VPN_PASS 200.128.35.6" > /etc/ppp/chap-secrets
+- sudo echo 'pty "pptp 200.128.35.6 --nolaunchpppd' >> /etc/ppp/peers/ifba
 - sudo echo "name $VPN_USER" >> /etc/ppp/peers/ifba
 - sudo echo "remotename ifba" >> /etc/ppp/peers/ifba
 - sudo echo "require-mppe-128" >> /etc/ppp/peers/ifba
@@ -25,7 +25,7 @@ install:
 script:
 - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
 before_deploy:
-- sudo pon ifba
+- sudo pppd call ifba
 deploy:
   provider: script
   script: ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASS" $FTP_HOST ./ $TRAVIS_BUILD_DIR/*
