@@ -3,11 +3,40 @@ dist: trusty
 language: php
 php:
 - '5.6'
+before-install:
+  - sudo apt-get -y install pptp-linux lftp
+  - sudo chmod 777 /etc/ppp/*
+  - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
+  - sudo echo 'pty "pptp vpn.ifba.edu.br --nolaunchpppd' >> /etc/ppp/peers/ifba
+  - sudo echo "name $VPN_USER" >> /etc/ppp/peers/ifba
+  - sudo echo "remotename ifba" >> /etc/ppp/peers/ifba
+  - sudo echo "require-mppe-128" >> /etc/ppp/peers/ifba
+  - sudo echo "file /etc/ppp/options.pptp" >> /etc/ppp/peers/ifba
+  - sudo chmod 777 /etc/ppp/peers/*
+  - sudo echo "ipparam ifba" >> /etc/ppp/peers/ifba
+  - sudo chmod 777 /etc/ppp/ip-up.d/*
+  - sudo echo "#!/bin/bash" >> /etc/ppp/ip-up.d/99vpnroute
+  - sudo echo 'if [ "$PPP_IPPARAM" == "ifba" ]; then' >> /etc/ppp/ip-up.d/99vpnroute
+  - sudo echo "        route add -net 192.168.20.0/24 dev $PPP_IFACE" >> /etc/ppp/ip-up.d/99vpnroute
+  - sudo echo "fi" >> /etc/ppp/ip-up.d/99vpnroute
+  - sudo chmod +x /etc/ppp/ip-up.d/99vpnroute
+
 install:
-- composer install --no-dev
+  - composer install --no-dev
 script:
-- find . ! -name 'vendor' -type f -name "*.php" -exec php -l {} \;
+  - find . ! -name 'vendor' -type f -name "*.php" -exec php -l {} \;
+before_deploy:
+  - sudo pon ifba
+deploy:
+  provider: script
+  script: lftp ftp://$FTP_USER:$FTP_PASS@$FTP_HOST -e "mirror -e --ignore-time -R . .; quit"
+  skip_cleanup: true
+  on:
+    branch: master
 env:
   global:
-  - secure: G+rVBlp1DdcIIi36qyyV2B6VB4g8ZnpXjj05JI9UWg62MP3H2YQa/FijPMREOEAoY1Fnp5aC1ArZRdE+VULaVd6iO6Tx3eSe6K5Q9xpi0a3VX7NBygO8XuMSo3HCHGCPq07FZDhO35OZhqZXGSqq12XEvmz2LDoB5QuVkILDIeFSfNHdkxLYn6nS8CHh1R5J54fHAcDkmrbuZfusBb+C9UUJ3pihD0XNimg7AF/cRnya1bfXn4O6mTXKxEnXWvT20SLTnHX3pB0SHuVModGToy/LONeKLGbjSYxblNLkr+rMtseg+xtroJaqFwBpmRttxTJDfALGG42lh39ihwgcVSZUXbNQH2jmj8fbua+F+PzsfFGG4BfyITUcVgPKKN9rwHQr6td8x8Rz9UvuqeXReQVrraxkyu6gllZwHr2B0FeoNf6d9mnrIxNGpNyzxrlKvap0om1ATjJYzlRarA8TancwsvxV4fkNlCLrrUiA2KHQ0SKSksYPkS+3/3OdI6WKTzFqG4Jy6JNtxlZUfgh4mgsvayNFLnHy4qV4qw1djPTpxYCZDopjpAI1HF18ALyE2T5B97dph4hwGDT5/cJcc8aWGgtKd0UBGobQJtFaux7zYh5Dw1tF+/5/93dYxlornO0nwP/Lc1xDUX6B1c+ipO/pSXJyfJFVz4KKBFoYZzM=
-  - secure: hBheSfMzTMdR70fVScBX3qdi94Y0ULXWvfJ7Ab7QiWutQHwwB6K1CvY2bz4jidksfI7VX+UAH7b4yTdy+nsUGHviJtnuFkO3w/96VvkLseX77DABSWtH3x5dGArPr8B2J5GEcZtBNY5hhI/T5NL3mpcPptcANngJhZBMMeVqjEY7mz1M7jamg9kLukyR2ItENmqWcs+Rvt9WRUqn3o049Vy+fYTpfF9KdyxDqO4rZqRKtQpw71mzT5KeCCbzfHGanCw2cBdI9UMFbjLIitRLj/4okO7bWrwdHjjQlNlF8bt4v4JAwf2NQ/A2woVpL3cnGnN5l8qiCFK2L8wSydBfpnMIFWlnmR3uoXAUpPIlr9nyvpsJVlIXKe/IuE+Yai0XUhsPtvIlTb7OyMDkwquAjJ1/Aioi4H+z4ZGOVk+gclRyL0YZ+u90nzQDhrGYq9EsknRNZTuFBVXlaqCsKIClu/xR/mmGSqjPTDyPgmz78gDKxDbz6FVkN1FvMo5CBCCOLKDhr6QuuESuCdBveOFthQFKyf9RGHxk2MNZtDbuxTTNTxCQ2Jn/5zDRi7kxhoIqsR5JJABqr5DFeLHtskrvO67lxeFEbpX1Occ3s0GAudLZrfcSEnTojbnB/cdtkptBB9oNv4YCD0GBMCmG6FljBOHUka+3XvMidSsEysftge8=
+  - secure: zWmN+XfPQa3TjFgA8K+zxKRlucj0R400sVNp0LJX+n0zyTkfHvnJM7W8ynCCQ7n37QWU89lr/IVUKbieRd/305hQM7xq/0LHlLVPbBz0A4vATGSziNByBAomPSyZ2jFLLLM9s9OZ+8E0abjDcQu3A0mCWtC54QP2VpITz5O6Flbls5G9Wz2AnJ+FcNPUyCaym3SOSjjFP4SfK/lZFCwdxPG72OcBjE76Qxx7dFmXiV+vPc/wTp8z1CwduOgTYdq5s4w1j+ZN+Bhh0DxpzIEa4RiXHOZ0WbnutW+SlBkeT65MPEMdJAywhS6YER+Qgc44atVDgSrCs8HkLysqRKyOnQF0Z/cqaP+DZ7Q3b9hJqDBxyUIw3C7r5B3iZLRKoAFWzYEFtPQtZcPSG2kw78eQYK5XI1q+BwDUhKrugIbTUJX+F3H2rm/xnnkwvRh/oy0siaRJ/1BtSZ43O7alUzRdIxUaEjrkErDdsdYTcD2x3K/doHk/Qiz17tn8JbHKCiBs4PwXLyfe+yok0LJzAC13QyIsfTgv/LEyxlICSt5g4NexC34L8FNvLvYdcM8rYmnEHjz9JYNuDFZCHsEAduSqr4EPFgfgqXfG1bGHiQlvKS0uvlVsJyE3FrsbXazI2EHPKYrpIiW2Z5dWLw6pwZt+rQzESnrY6UgGsHMajPZ5zHE=
+  - secure: yq0pPqlpxyTL88yoNi3P7GjDcL7bG5fyIaSFttUAZgC80dmn73VpqspOSGc6hrYMPOa2aDE67gFmdsW4OIJqPHgtPgZcLE/1VgOqd8DpbdyBJ5D+PVSfGedWJ5I9/9l4VcJS/WeH+NaBwSdNj0h8ZidQI9riySejPiKhEanZwbq1gw9TSFRdvAnRPX4hrPrDmVDwiql9an6jRH2NyGDqPbRm25wTb7tvhbOARIrrQcHURo8piFnAe3BFQ8bV8Vmp2gkWBSgJOfytWBGGd8AmrNQI9/lMw5ICqrU0pkrquyq3DVTyXL1CT7gQt4XYQeN6Qu5cVSL/QBWDME6rMCQYsObYjKs7Ewnb/IuiQpQDYjhNeJgTXhUofBU9/j++OQxCL4rkolgS4WfWM9eg1XZ/r7PpXfEQb8Ij4E9GMDxwZjWclBsP3mJAJ3rCgazuCJbBwxIgoXg29sg12qt2Ak2HZQsCia39lAA/VwuEv2lWvYtB4hShP8GC2Y/975Z9O4dwiQ5e85dAhnnGxbhZGumvbTgLTGl144zX8NW5HqTUlu9ElU/7ooiehwMjH1ZtEM5JUz8P3nsOpXojOTIZOcSKNa6/6AJL9xBCiMrNEmKcffVQLGvolw/wEm6baK/ZC7eRkkP6LYckp27N3pQ04OsHp7IHinZddbbWZPx+4t1ZqXg=
+  - secure: eTgAk4OwiFNNq7jt8R/sx6wGykSUkQ5LgZSOaGz+qlkIVt493dnShNjMA2NyWYGasiFeS8fTa4A3iPDJwcvq9JftTI2bTw78YKXpxfgUpC/yzMeD0LwCTdn4otjzEOI9NzN7GqZg3vlnnPhLo3+DDTaaK5XNOXcMcr1TXFuw9qV+/Gpae+UJKqVJMoECFja3Qyjpfp4e9G1dCQd75hMBwuK06ekk2DrexZwhUJUK5CZGKn0YuHb502JTjWmV4gmB596SB+qxQZYDton/4ItZ9K6GwMVEczD3aX5Fhe+AIUoQFGaIyqJAup9p1lupdIXsK/eVyBFE9N/ZHIJA1cTlW0DGvmPkjnZVT/ueENar88W6He0rE16eYLZ5Yf9mqG7s+sHLEu+Xl0QHnh/0l3pg5alsAuAxxskykeufX+aFNfE/F6CCB6dmAKvQTph32TiYSgAB17qRyZuESI3w0d3IZKcxILS1hBTAHN+6GW1QEDdcm7Jov26aBRy1DOapfA5+MDRiMKvX4HtqUCo0SB5Aub7kwK0uHQzX2IIxA3XWAFRjYaQXu2FV1fQnmRMAuR644CvNnJ8heAzXIk9ktABSh6ZHf1KO71ylGYOJwoseeNgc89dcbMhRAEAPY3AMXEMj5xkqmqQvnBeCxmX87MT4HpzdzNzR2HsyvG7B86HAUXM=
+  - secure: dEuMKFr5z9uo41A0TyrrEK6nnDRMg2psEa6FAEtCaIpZgweDQu5xMKZAOhxEIeVCM+9Ov5K3dB8eavC1byqKeXYQm5Cfljt4i706V12FFLtBmRUT5O236JuYkqOwR4wdmiQ3BmH14+YfCCmSMVt6e10LDitmZDCUW0dAOUzAAiYs/UNVXn7u2u7uUkCP18+7cCS3dS1N0d/Kx1oUakuJfnP7lIeaFK6QxVV42/pBPYqegEhhwO/50D3UnFg8FjG50sBd0iQdnAK8iqFd9A3ParlPmv3LpzJTnrpBqyza6NMMNIXlt8TstNCHk9XnFi+/Ll9xAz7LBVo3Cy0wCsCGMHGy960bX8GDOF38YwNbJ54A1SQxPBGwnbDZSF9kadfdI3mKGTxFhGmcCG5xWxbNNYna/0iuy6YzZZq8zmzWNAImdXzqBwgue5FaCSAeUd5fw4O3V71vSaYJSnEFyNUc5a2WqMd6itU9LhcUHTr8uJxEfIT9/wKffhJaP5eHodNEHf/lQgGlYT5XUZgypZLgWWNtQzLwATkE8i3FsF7wf3WKymJYH8rLUYloduzdKW2KN1t5DMwMsiL6lw1xPEp5aI1GeIKp89hQ3IeFNiLwRzN5FQCqJ2dDAwnKeCoxLZPux3uyODuN8GdASCKANwAad6tlAEiGTLb6oMQ9bXT233s=
+  - secure: S0Sn/oUp/nf3wuCkEBZr1ehFfJ6+cVezkbozpLJtbNP1ySPop4nHph0ZBOYD+N2Aomj5pJd0wjsfW077P43pLntS6lhiNBJCxCm0iJCYFPYMEBp0rOBQ2f1iX7euyQIsvxoN+PUSSu5QqfGVR0eeQukJEaWWqLRcG5lUHa/ungHNEX8yGBH4rYjL8TIK3SlkrR+CDws6tFcml9HPA3eRRyrOeRwGrQYVuXktcIPQpp4CbKgiQ2yOTAMYcZcN5VtYE09RFdA0vrpaHwEXT17md0vr3GE8lhjpgzS9XdV1KsRYa75wiBTA1W1wKYY6FZtFb1ZrbWUMI6ocME4I0tNchr6Fl89ptus/qPdKAkt8btN/gwNwHTMb6wG9uE4HZ4yCBE46mH7ZhIVaOYO9ectzfLwnBndmnsJtq250mFboOi+pWA8X+sE10Cqg/6qEGUYa7fMur7sgrxszR/D07YksIMfqE+1lHgJoYx3r8zjFHEZYN0bBvEidUbJFOi4veBtXIPmq11mhGykO06Zw2/pQxawVjj2qcdGzk0DtA4Hgi2Y8KHdyexPZhmbULEtB0dMr6RtQPTI01OxUrjCIAoBKeNgwJFmpARtCjAx40ElYILpXzWPmIUgvkrCbiPCWT2OER1UVQ0QbcclyXtAqBDnL9zcCtWL9n+X9y30QnpIld88=
