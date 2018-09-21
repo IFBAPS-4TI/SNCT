@@ -3,7 +3,7 @@ dist: trusty
 language: php
 php:
 - '5.6'
-install:
+before-install:
 - sudo apt-get -y install pptp-linux
 - sudo chmod 777 /etc/ppp/*
 - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
@@ -21,7 +21,7 @@ install:
 - sudo echo "fi" >> /etc/ppp/ip-up.d/99vpnroute
 - sudo chmod +x /etc/ppp/ip-up.d/99vpnroute
 - sudo pon workvpn
-script:
+before_install:
 - composer install
 env:
   global:
