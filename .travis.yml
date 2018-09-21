@@ -27,7 +27,7 @@ script:
 before_deploy:
   - sudo pon ifba
   - mkdir ../temp
-  - sudo curlftpfs -o allow_other 'ftp://$FTP_USER:$FTP_PASS@$FTP_HOST' ../temp
+  - sudo curlftpfs -o allow_other user="$FTP_USER:$FTP_PASS" $FTP_HOST ../temp
 deploy:
   provider: script
   script: echo "teste" >> ../temp/teste.txt
