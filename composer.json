@@ -22,10 +22,10 @@
     "respect/validation": "^1.1",
     "slim/pdo": "^1.10",
     "sendgrid/sendgrid": "^7.2",
-    "tamtamchik/simple-flash": "^1.2"
+    "tamtamchik/simple-flash": "^1.2",
+    "helhum/dotenv-connector": "^1.1.0"
   },
   "require-dev": {
-    "helhum/dotenv-connector": "^2.1",
     "phpunit/phpunit": ">=4.8 < 6.0"
   },
   "autoload-dev": {
