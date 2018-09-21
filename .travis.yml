@@ -5,6 +5,8 @@ php:
 - '5.6'
 install:
 - composer install --no-dev
+script:
+- find . -type f -name "*.php" -exec php -l {} \;
 env:
   global:
   - secure: G+rVBlp1DdcIIi36qyyV2B6VB4g8ZnpXjj05JI9UWg62MP3H2YQa/FijPMREOEAoY1Fnp5aC1ArZRdE+VULaVd6iO6Tx3eSe6K5Q9xpi0a3VX7NBygO8XuMSo3HCHGCPq07FZDhO35OZhqZXGSqq12XEvmz2LDoB5QuVkILDIeFSfNHdkxLYn6nS8CHh1R5J54fHAcDkmrbuZfusBb+C9UUJ3pihD0XNimg7AF/cRnya1bfXn4O6mTXKxEnXWvT20SLTnHX3pB0SHuVModGToy/LONeKLGbjSYxblNLkr+rMtseg+xtroJaqFwBpmRttxTJDfALGG42lh39ihwgcVSZUXbNQH2jmj8fbua+F+PzsfFGG4BfyITUcVgPKKN9rwHQr6td8x8Rz9UvuqeXReQVrraxkyu6gllZwHr2B0FeoNf6d9mnrIxNGpNyzxrlKvap0om1ATjJYzlRarA8TancwsvxV4fkNlCLrrUiA2KHQ0SKSksYPkS+3/3OdI6WKTzFqG4Jy6JNtxlZUfgh4mgsvayNFLnHy4qV4qw1djPTpxYCZDopjpAI1HF18ALyE2T5B97dph4hwGDT5/cJcc8aWGgtKd0UBGobQJtFaux7zYh5Dw1tF+/5/93dYxlornO0nwP/Lc1xDUX6B1c+ipO/pSXJyfJFVz4KKBFoYZzM=
