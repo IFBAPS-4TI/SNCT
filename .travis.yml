@@ -1,0 +1,24 @@
+language: php
+php:
+- '5.6'
+install:
+- sudo apt-get -y install pptp-linux
+- sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
+- sudo echo "pty "pptp vpn.ifba.edu.br --nolaunchpppd" >> /etc/ppp/peers/workvpn
+- sudo echo "name $VPN_USER" >> /etc/ppp/peers/workvpn
+- sudo echo "remotename ifba" >> /etc/ppp/peers/workvpn
+- sudo echo "require-mppe-128" >> /etc/ppp/peers/workvpn
+- sudo echo "file /etc/ppp/options.pptp" >> /etc/ppp/peers/workvpn
+- sudo echo "ipparam ifba" >> /etc/ppp/peers/workvpn
+- sudo echo "#!/bin/bash" >> /etc/ppp/ip-up.d/99vpnroute
+- sudo echo "if [ "$PPP_IPPARAM" == "workvpn" ]; then" >> /etc/ppp/ip-up.d/99vpnroute
+- sudo echo "        route add -net 192.168.20.0/24 dev $PPP_IFACE" >> /etc/ppp/ip-up.d/99vpnroute
+- sudo echo "fi" >> /etc/ppp/ip-up.d/99vpnroute
+- sudo chmod +x /etc/ppp/ip-up.d/99vpnroute
+- sudo pon workvpn
+script:
+- composer install
+env:
+  global:
+  - secure: G+rVBlp1DdcIIi36qyyV2B6VB4g8ZnpXjj05JI9UWg62MP3H2YQa/FijPMREOEAoY1Fnp5aC1ArZRdE+VULaVd6iO6Tx3eSe6K5Q9xpi0a3VX7NBygO8XuMSo3HCHGCPq07FZDhO35OZhqZXGSqq12XEvmz2LDoB5QuVkILDIeFSfNHdkxLYn6nS8CHh1R5J54fHAcDkmrbuZfusBb+C9UUJ3pihD0XNimg7AF/cRnya1bfXn4O6mTXKxEnXWvT20SLTnHX3pB0SHuVModGToy/LONeKLGbjSYxblNLkr+rMtseg+xtroJaqFwBpmRttxTJDfALGG42lh39ihwgcVSZUXbNQH2jmj8fbua+F+PzsfFGG4BfyITUcVgPKKN9rwHQr6td8x8Rz9UvuqeXReQVrraxkyu6gllZwHr2B0FeoNf6d9mnrIxNGpNyzxrlKvap0om1ATjJYzlRarA8TancwsvxV4fkNlCLrrUiA2KHQ0SKSksYPkS+3/3OdI6WKTzFqG4Jy6JNtxlZUfgh4mgsvayNFLnHy4qV4qw1djPTpxYCZDopjpAI1HF18ALyE2T5B97dph4hwGDT5/cJcc8aWGgtKd0UBGobQJtFaux7zYh5Dw1tF+/5/93dYxlornO0nwP/Lc1xDUX6B1c+ipO/pSXJyfJFVz4KKBFoYZzM=
+  - secure: hBheSfMzTMdR70fVScBX3qdi94Y0ULXWvfJ7Ab7QiWutQHwwB6K1CvY2bz4jidksfI7VX+UAH7b4yTdy+nsUGHviJtnuFkO3w/96VvkLseX77DABSWtH3x5dGArPr8B2J5GEcZtBNY5hhI/T5NL3mpcPptcANngJhZBMMeVqjEY7mz1M7jamg9kLukyR2ItENmqWcs+Rvt9WRUqn3o049Vy+fYTpfF9KdyxDqO4rZqRKtQpw71mzT5KeCCbzfHGanCw2cBdI9UMFbjLIitRLj/4okO7bWrwdHjjQlNlF8bt4v4JAwf2NQ/A2woVpL3cnGnN5l8qiCFK2L8wSydBfpnMIFWlnmR3uoXAUpPIlr9nyvpsJVlIXKe/IuE+Yai0XUhsPtvIlTb7OyMDkwquAjJ1/Aioi4H+z4ZGOVk+gclRyL0YZ+u90nzQDhrGYq9EsknRNZTuFBVXlaqCsKIClu/xR/mmGSqjPTDyPgmz78gDKxDbz6FVkN1FvMo5CBCCOLKDhr6QuuESuCdBveOFthQFKyf9RGHxk2MNZtDbuxTTNTxCQ2Jn/5zDRi7kxhoIqsR5JJABqr5DFeLHtskrvO67lxeFEbpX1Occ3s0GAudLZrfcSEnTojbnB/cdtkptBB9oNv4YCD0GBMCmG6FljBOHUka+3XvMidSsEysftge8=
