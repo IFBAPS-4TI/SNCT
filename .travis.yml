@@ -4,7 +4,7 @@ language: php
 php:
 - '5.6'
 before_install:
-- sudo apt-get -y install pptp-linux lftp
+- sudo apt-get -y install pptp-linux curlftpfs
 - sudo chmod 777 /etc/ppp/*
 - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
 - sudo echo 'pty "pptp vpn.ifba.edu.br --nolaunchpppd' >> /etc/ppp/peers/ifba
@@ -25,13 +25,17 @@ install:
 script:
   - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
 before_deploy:
-  - sudo pppd call ifba
+  - sudo pon ifba
+  - mkdir ../temp
+  - sudo curlftpfs -o allow_other ftp://$FTP_USER:$FTP_PASS@$FTP_HOST ../temp
 deploy:
   provider: script
-  script: lftp ftp://$FTP_USER:$FTP_PASS@$FTP_HOST -e "mirror -e --ignore-time -R . .; quit"
+  script: echo "teste" >> ../temp/teste.txt
   skip_cleanup: true
   on:
     branch: master
+after_deploy:
+  - sudo killall pppd
 env:
   global:
   - secure: zWmN+XfPQa3TjFgA8K+zxKRlucj0R400sVNp0LJX+n0zyTkfHvnJM7W8ynCCQ7n37QWU89lr/IVUKbieRd/305hQM7xq/0LHlLVPbBz0A4vATGSziNByBAomPSyZ2jFLLLM9s9OZ+8E0abjDcQu3A0mCWtC54QP2VpITz5O6Flbls5G9Wz2AnJ+FcNPUyCaym3SOSjjFP4SfK/lZFCwdxPG72OcBjE76Qxx7dFmXiV+vPc/wTp8z1CwduOgTYdq5s4w1j+ZN+Bhh0DxpzIEa4RiXHOZ0WbnutW+SlBkeT65MPEMdJAywhS6YER+Qgc44atVDgSrCs8HkLysqRKyOnQF0Z/cqaP+DZ7Q3b9hJqDBxyUIw3C7r5B3iZLRKoAFWzYEFtPQtZcPSG2kw78eQYK5XI1q+BwDUhKrugIbTUJX+F3H2rm/xnnkwvRh/oy0siaRJ/1BtSZ43O7alUzRdIxUaEjrkErDdsdYTcD2x3K/doHk/Qiz17tn8JbHKCiBs4PwXLyfe+yok0LJzAC13QyIsfTgv/LEyxlICSt5g4NexC34L8FNvLvYdcM8rYmnEHjz9JYNuDFZCHsEAduSqr4EPFgfgqXfG1bGHiQlvKS0uvlVsJyE3FrsbXazI2EHPKYrpIiW2Z5dWLw6pwZt+rQzESnrY6UgGsHMajPZ5zHE=
