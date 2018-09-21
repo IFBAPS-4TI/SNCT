@@ -4,7 +4,7 @@ language: php
 php:
 - '5.6'
 before_install:
-- sudo apt-get -y install pptp-linux curlftpfs
+- sudo apt-get -y install pptp-linux ncftp
 - sudo chmod 777 /etc/ppp/*
 - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
 - sudo echo 'pty "pptp vpn.ifba.edu.br --nolaunchpppd' >> /etc/ppp/peers/ifba
@@ -26,11 +26,9 @@ script:
 - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
 before_deploy:
 - sudo pon ifba
-- mkdir ../temp
-- sudo nohup curlftpfs -o allow_other "ftp://$FTP_USER:$FTP_PASS@$FTP_HOST" ../temp < /dev/null &
 deploy:
   provider: script
-  script: echo "teste" >> ../temp/teste.txt
+  script: ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASS" $FTP_HOST ./ $TRAVIS_BUILD_DIR/*
   skip_cleanup: true
   on:
     branch: master
