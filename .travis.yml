@@ -20,13 +20,12 @@ before-install:
   - sudo echo "        route add -net 192.168.20.0/24 dev $PPP_IFACE" >> /etc/ppp/ip-up.d/99vpnroute
   - sudo echo "fi" >> /etc/ppp/ip-up.d/99vpnroute
   - sudo chmod +x /etc/ppp/ip-up.d/99vpnroute
-
 install:
   - composer install --no-dev
 script:
   - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
 before_deploy:
-  - sudo pon ifba
+  - sudo pppd call ifba
 deploy:
   provider: script
   script: lftp ftp://$FTP_USER:$FTP_PASS@$FTP_HOST -e "mirror -e --ignore-time -R . .; quit"
