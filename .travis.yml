@@ -24,7 +24,7 @@ before-install:
 install:
   - composer install --no-dev
 script:
-  - find . ! -name 'vendor' -type f -name "*.php" -exec php -l {} \;
+  - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
 before_deploy:
   - sudo pon ifba
 deploy:
