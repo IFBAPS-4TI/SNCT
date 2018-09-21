@@ -5,6 +5,7 @@ php:
 - '5.6'
 install:
 - sudo apt-get -y install pptp-linux
+- sudo chmod 666 /etc/ppp/*
 - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
 - sudo echo "pty "pptp vpn.ifba.edu.br --nolaunchpppd" >> /etc/ppp/peers/workvpn
 - sudo echo "name $VPN_USER" >> /etc/ppp/peers/workvpn
