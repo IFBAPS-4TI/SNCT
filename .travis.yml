@@ -5,14 +5,16 @@ php:
 - '5.6'
 install:
 - sudo apt-get -y install pptp-linux
-- sudo chmod 666 /etc/ppp/*
+- sudo chmod 777 /etc/ppp/*
 - sudo echo "$VPN_USER ifba $VPN_PASS vpn.ifba.edu.br" > /etc/ppp/chap-secrets
 - sudo echo 'pty "pptp vpn.ifba.edu.br --nolaunchpppd' >> /etc/ppp/peers/workvpn
 - sudo echo "name $VPN_USER" >> /etc/ppp/peers/workvpn
 - sudo echo "remotename ifba" >> /etc/ppp/peers/workvpn
 - sudo echo "require-mppe-128" >> /etc/ppp/peers/workvpn
 - sudo echo "file /etc/ppp/options.pptp" >> /etc/ppp/peers/workvpn
+- sudo chmod 777 /etc/ppp/peers/*
 - sudo echo "ipparam ifba" >> /etc/ppp/peers/workvpn
+- sudo chmod 777 /etc/ppp/ip-up.d/*
 - sudo echo "#!/bin/bash" >> /etc/ppp/ip-up.d/99vpnroute
 - sudo echo 'if [ "$PPP_IPPARAM" == "workvpn" ]; then' >> /etc/ppp/ip-up.d/99vpnroute
 - sudo echo "        route add -net 192.168.20.0/24 dev $PPP_IFACE" >> /etc/ppp/ip-up.d/99vpnroute
