@@ -12,6 +12,7 @@ class Usuario
     private $nascimento;
     private $cpf;
     private $senha;
+    private $isAdministrador = false;
 
     function better_crypt($input, $rounds = 7)
     {
@@ -117,16 +118,34 @@ class Usuario
      */
     public function setSenha($senha, $raw = false)
     {
-        if(!$raw){
-        $senha_hash = $this->better_crypt($senha);
-        unset($senha);
-        $this->senha = $senha_hash;
-        }else{
+        if (!$raw) {
+            $senha_hash = $this->better_crypt($senha);
+            unset($senha);
+            $this->senha = $senha_hash;
+        } else {
             $this->senha = $senha;
         }
     }
-    public function erasePass(){
+
+    public function erasePass()
+    {
         unset($this->senha);
         $this->senha = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisAdministrador()
+    {
+        return $this->isAdministrador;
+    }
+
+    /**
+     * @param mixed $isAdministrador
+     */
+    public function setIsAdministrador($isAdministrador)
+    {
+        $this->isAdministrador = $isAdministrador;
     }
 }

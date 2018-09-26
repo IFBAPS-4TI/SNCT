@@ -76,6 +76,15 @@ class DatabaseHandler
         return $stmt->fetch();
     }
 
+    public function checkAdmin($id_usuario)
+    {
+        $select = $this->pdo->select()
+            ->from('Administradores')
+            ->where('id_usuario', '=', $id_usuario);
+        $stmt = $select->execute();
+        return $stmt->fetch();
+    }
+
     public function authUsuario(\Models\Usuario $usuario)
     {
         $data = $this->getDataByEmail($usuario->getEmail());
@@ -83,6 +92,9 @@ class DatabaseHandler
             $usuario->setNascimento($data['nascimento']);
             $usuario->setCpf($data['cpf']);
             $usuario->setId($data['id_usuario']);
+            if (count($this->checkAdmin($data['id_usuario'])) > 1) {
+                $usuario->setIsAdministrador(true);
+            }
             $usuario->setNome($data['nome']);
             $usuario->erasePass(); # Apagar senha, pq não precisamos mais dela.
         } else {

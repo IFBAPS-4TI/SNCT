@@ -49,6 +49,7 @@ class Painel
             $usuario = $handler->authUsuario($usuario);
             $token = array(
                 "email" => $usuario->getEmail(),
+                "isAdmin" => $usuario->getisAdministrador(),
                 "iss" => $_SERVER['SERVER_NAME']
             );
             $this->session->set('jwt_token', Util::encodeToken($token));
@@ -182,7 +183,9 @@ class Painel
         } catch (Exception $e) {
             return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
-        return $this->container->view->render($response, 'panel/painel/panel.html', $args);
+        return $this->container->view->render($response, 'panel/painel/panel.html', [
+            'isAdmin' => $token['isAdmin']
+        ]);
     }
 
     public function registerView($request, $response, $args)

@@ -14,8 +14,9 @@ senha text NOT NULL
 
 CREATE TABLE Administradores
 (
-id_administrador integer primary key AUTO_INCREMENT,
+id_administrador integer AUTO_INCREMENT,
 id_usuario integer,
+PRIMARY KEY (id_administrador, id_usuario),
 FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 ON DELETE CASCADE
 );
