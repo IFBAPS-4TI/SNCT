@@ -1,43 +1,8 @@
-sudo: required
 dist: trusty
 language: php
 php:
 - '5.6'
-before_install:
-- sudo apt-get -y install pptp-linux ncftp
-- sudo chmod 777 /etc/ppp/*
-- sudo echo "$VPN_USER ifba $VPN_PASS 200.128.35.6" > /etc/ppp/chap-secrets
-- sudo echo 'pty "pptp 200.128.35.6 --nolaunchpppd' >> /etc/ppp/peers/ifba
-- sudo echo "name $VPN_USER" >> /etc/ppp/peers/ifba
-- sudo echo "remotename ifba" >> /etc/ppp/peers/ifba
-- sudo echo "require-mppe-128" >> /etc/ppp/peers/ifba
-- sudo echo "file /etc/ppp/options.pptp" >> /etc/ppp/peers/ifba
-- sudo chmod 777 /etc/ppp/peers/*
-- sudo echo "ipparam ifba" >> /etc/ppp/peers/ifba
-- sudo chmod 777 /etc/ppp/ip-up.d/*
-- sudo echo "#!/bin/bash" >> /etc/ppp/ip-up.d/99vpnroute
-- sudo echo 'if [ "$PPP_IPPARAM" == "ifba" ]; then' >> /etc/ppp/ip-up.d/99vpnroute
-- sudo echo "        route add -net 192.168.20.0/24 dev $PPP_IFACE" >> /etc/ppp/ip-up.d/99vpnroute
-- sudo echo "fi" >> /etc/ppp/ip-up.d/99vpnroute
-- sudo chmod +x /etc/ppp/ip-up.d/99vpnroute
 install:
 - composer install --no-dev
 script:
 - find . -path ./vendor -prune -o -type f -name "*.php" -exec php -l {} \;
-before_deploy:
-- sudo pppd call ifba
-deploy:
-  provider: script
-  script: ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASS" $FTP_HOST ./ $TRAVIS_BUILD_DIR/*
-  skip_cleanup: true
-  on:
-    branch: master
-after_deploy:
-- sudo killall pppd
-env:
-  global:
-  - secure: RTqBnSkr0exCI7yWTpbph+1J6eefGL8R7t+GYGmv4b5ZZ+o+T3bGmKc3Fd10luGNPeJN9Trm7zW/9dkqGXQLrycSpcQHg2hDlCP6SE20v+JzAx8lu6YyXuTtEz2HwGJKo1mhVSoGx32Oi0fCgPHch4T056WUkPF8XI2dGH3izNhvGrqtyUBOqhDylPNgwm0hnU2IRmiR9Zt7/MUUSInFrx2vVf+qzHUHdy41fIXCbIZ8SKmPQX6d662WJzzLKQ0VLlJerkNhNcV85kvz6Fci82OFVcrct0F4A/wB6mjF1e48T/hldW/zB0BLuabav/PWo92Z1GmivC5Zmrz6eXZmqazKKMrS5hxMHBl14IiXoAQWskyxllyaBCfmCzbarvziAtJMi5k+1ayf5Ua/p6mzHob4HIIuOLQBdzCY0fK4+kwRZUueZ4XEtME53jJT0+C2sdIfyrKYD4MGIcJ4QyKwqyXCXfQw1qGIe6iZGyzYR5tmpnVn9S6eYh4bmLGfXk6lefIG1RCIVO3ZJHyUQAEZYEu5yzWfEL1WsQIk2iF+keON4nmgYqgpOvOhkZoW6yKixueRGRvgIubeMD6yauHgjIAHnLc06lDH7mYQf38sBZf3dbpzPpTn8obGQHx48QjWwwfiuQXDBIAMTNfyeYZznScW4VyC6TEA+elvezurq2o=
-  - secure: p5RuYnsozt4rcrJok5JRK6B3awlw7MH8FdnSfsLg30BwCZ1Sjgiya93gmcGyMuTIWX3J1AHTIqs84s9Dh4QjUjNlUjdaRaZUBL46+4ZugldoCwE4a88OVqxbl+jrjr8ompItm7R3KB3lOljHOL9KEAf2H28Z4Q+fBTpssSmd/VSh8AD9lNHpUHkHd9T6W7fW+MSfHy0zCuN85+DU3yumSbIov0e9uKqqcHse/xPwRaYTqYDwS/g/8663SJaR14k4DBfOu8g18i2R06bJQfvnFXgSJLxuhIy9Q4VanlH7MgU6SdoHFdE2XWC9XIzkR4RhhCBuFuiqDBsx3cAQsRcT8WePqqA2/CxYTVnnx90nGO/sHxcJjJmQov9vEzuAdgW0MKY5jVbQ2+Ed8d6Pa71BJ0g1SElov2YbiOQuXpNmxxJ8tHTGoNxoMjosZKPOaypoNVz8YfcpaXraoq9K7YCswjYV7vmPBtQCgcBLlaNOcUmgRipscPmZuvbSF8MjAAfNK+Bd56z/vKzbGmxw6pZVC1SnjaZBKUrrpOVYo81b1qPu4qwUF9by9mVRC15oKfWbwAwNOgiyer4sBOjmzSC7lgwdbNOkVSJDQLAQ4dWxJxBkNy4u3nw/JIe3ogdrUEiOkdgNB0lvf2qqEOPPXXSRB0SbcTA1x6DM+cv96pbc6dA=
-  - secure: nAwXvSk1R1JYWgpNiSDYcztVhc1scqb6WgIvszu4tddBmEhn+KlARojlokyx2Kdct7yOu2td8Gt7oyPZtW4fT8mtZqGZGfbkwwOJTBrmvA58jDnZcqXKa+dsryZ//9tEGsZTvYFkqzx93kKYXIGAjQXT/L2p0uofCtTnNFUjE98UDXVAS8WvkNc8XmSbHx8BPRZfRLqLyfcMUVgaiR2v9EJEs7EyXlpsf0Up8jTM3UGJNZrxXK/+hDk4eTK57RzKVzl/esqVdGeQfOAr2w4AXhJTfMWBvJH/0WbFGUbkAjmqYMS3s7ADk8ohc5s//qdzjqnZLtv6ge7dDcyOcohVhqdLSTBfaQsGZaoMRTTg+g40jR9Wf2F4FHZu6dtLqo1Y1S1xlAi57utJ4hWbGsWYeQD9jg4MuZ8GuMFQaxf4691I+wvCuujKXUCRfPBoA/OVnjVzF5cGcwETgxnIBCL6VK5/SNYc/9NKb9da9CzNe0zIrRzIVKQBGVuqynx1BaJral090AkVOTw42khBbhz848iQaqnxrutwbNoL4Sevq4SIZH14cZMw/0rjq6uK1F/SfMBuoVFWK9ERjhoFdHtIy6eEO0CLZQPuNpEsdTsJp1+JfqkQmj1C7atzJmV/8LMnBBs/1N6+5KAsu+Ya7e7eWm27vns8RsSb6AjR34Loz4I=
-  - secure: dYFZXuWcBOEJdi+6Dm3+30u7pQUGq93/6/ywTKR9aZCmTShSJIM2kLb96COnd6y8JU7LkqfrU/m5OfhErholYOfxekW7D59yYhqlzV6WB2gb3CfywS/sqRh+ufWi0PQ5XHbh1npeako1frWKnTJPue95L5dGvGQnH7S38aW3dx8oWY960Z+8Y47QGr1rMTc7HlfxSE3aAmO0ohHGjFjA1ry0Ka8uVN3qidYghXe1NgW5jym0zuaWoxXDZgk6hxgH37u5fDcA+wfI8sA3WN0qFfhbSDFLCGJf4N2QNeo9klV3iN3FruWJWx0bwTRRC9YQgRFKBReLAzeWmiG8hy4e3Fr8IaYTF3fKv4wl4Nc4E4SfRtB+OClDGF5rqlv2JRYHPn7t4I2Z5bVkqKtpc0kIz2gES09UPPJsML1YSalh1VYBEtBZjVvxlFt2bLMNW+AmuaFGPgwzlnwSJf2hTbmNbr8bl6iXD0T0gF9c0hwahmaeslih6roQIISpGMTEm9XyllnfypbL/2rNFGAdz/rcVUufP7udiADNOjnVswbKUPZOoazfESvETSOF4s+OVRi7BaTCifuuUDf2W34wRYI2je0lfdczg7YqC4kqfdPUJJE6XKBIhqSyOx2M8gjOYWEA+av7sL4q6PZSMsw5OEg2kzHvApFtMhkQy/vV5cnN+Ks=
-  - secure: cb2wdGRHqIeXAlAEzG+W1Eo0zAti8xm11sZOmcvbDlTF5R5EMMoWbw8bu6SXbphwnusWFmYurFHgaoyEVA65lqa6OhdCYl+gQnyEhUafspPdptSQimj985SJixOIPmXBTbuzXzogxMqcAjIDyAuKqYezNRSlnTnbxMsH6JnDU5bTl+er8DSx+klReGMH56mIkNqP8w5YVhI+WEP8G6XxHvHkd5IaW5kQQad8X9jUnEiUzn1VIpGoikl8NjANe/bsc/vWM5VtBAGSDPeBokIuaotkZPJND/jdrUnxRna215LOBAH0YDCw6rKCGgMjaJn3pz5kSn7ssPUg/3UtU+Sw+APO82QgJFrhFcsSQWF0HjSN1TtFEa+5MYy/DNt79s4VjZGXyrSexgqnaexF9mC8PUfBHjkpI1tM8muQkm/6oX4KX6LUWiYTzVo+n2M4fuAb82csLASXi6+h2/TPk6+WLlnliaijXApkl95GGb9zQs4AKCwDKmZXkqO3zKVS+aqiEPgtlYaVdid2l66UBGioUfGFNuLOtY2zfdzClC3iDUaqmt+C6UeoqF3OST5GWAKSe+YjWqmVL2eOIWiP4guWxQFfwGGMi/7oz7cVXPtLWDo0KOoJ0EB+m0NOrwGFlZjhbbkh0NhK6VjlBtEN5p+KTOCXx8R+bloqdW1UWc3NHQY=
