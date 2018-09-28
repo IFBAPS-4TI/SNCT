@@ -16,6 +16,12 @@ class Sessao
      */
     public function __construct($data, $hora)
     {
+        if (!\Respect\Validation\Validator::date('d/m/Y')->notEmpty()->validate($data)) {
+            throw new Exception("Data inválida.");
+        }
+        if (!\Respect\Validation\Validator::stringType()->notEmpty()->length(5, 5)->validate($hora)) {
+            throw new Exception("Horá inválida, ela deve vir no formato 24 horas.");
+        }
         $this->data = $data;
         $this->hora = $hora;
     }
