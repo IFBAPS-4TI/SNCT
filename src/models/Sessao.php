@@ -4,6 +4,8 @@
 namespace Models;
 
 
+use Exception;
+
 class Sessao
 {
     private $data;
@@ -13,10 +15,12 @@ class Sessao
      * Sessao constructor.
      * @param $data
      * @param $hora
+     * @throws Exception
      */
     public function __construct($data, $hora)
     {
         if (!\Respect\Validation\Validator::date('d/m/Y')->notEmpty()->validate($data)) {
+            die(var_dump($data));
             throw new Exception("Data inválida.");
         }
         if (!\Respect\Validation\Validator::stringType()->notEmpty()->length(5, 5)->validate($hora)) {

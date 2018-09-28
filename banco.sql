@@ -23,9 +23,10 @@ ON DELETE CASCADE
 CREATE TABLE Atividade
 (
 id_atividade integer primary key AUTO_INCREMENT,
-nome varchar(50) NOT NULL UNIQUE,
+nome varchar(255) NOT NULL UNIQUE,
 descricao varchar(8000) NOT NULL,
-tipo int NOT NULL, #Exemplo: Oficina, Minicurso, Palestra, Sala Temática
+certificado bool NOT NULL,
+tipo int(1) NOT NULL, #Exemplo: Oficina, Minicurso, Palestra, Sala Temática
 capacidade integer NOT NULL, #Exemplo: Em um torneio de truco com até 16 duplas participantes a capacidade seria 16
 duracao integer NOT NULL
 );
@@ -35,14 +36,15 @@ CREATE TABLE Monitor
 id_monitor integer primary key AUTO_INCREMENT,
 id_usuario integer,
 id_atividade integer unique,
-foreign key(id_usuario) references Participante(id_participante),
-foreign key(id_atividade) references Atividade(id_atividade)
+foreign key(id_usuario) references Participante(id_participante) ON DELETE CASCADE,
+foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
 );
 
 CREATE TABLE Sessoes
 (
 id_sessao integer primary key AUTO_INCREMENT,
 id_atividade integer,
+local_ativ varchar(255),
 timestamp_ativ varchar(16) unique,
-foreign key(id_atividade) references Atividade(id_atividade)
+foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
 );

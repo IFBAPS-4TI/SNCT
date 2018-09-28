@@ -35,7 +35,7 @@
         <label for="desc">Descrição <a href="https://learnxinyminutes.com/docs/pt-br/markdown-pt/" target="_blank"><i
                 class="fab fa-markdown" data-toggle="tooltip" data-placement="top"
                 title="Compatível com Markdown. Clique para saber mais!"></i></a></label>
-        <textarea class="form-control" id="desc" rows="3" maxlength="3000" required></textarea>
+        <textarea class="form-control" id="desc" name="desc" rows="3" maxlength="3000" required></textarea>
     </div>
     <h5 class="mt-4">Visualização da descrição</h5>
     <span id="markdown"></span>
@@ -68,8 +68,8 @@
     <div id="sessions">
         <div class="input-group mb-3 w-25">
             <div class="session-1"></div>
-            <div class="input-group-prepend">
-                <input type="date" id="data" name="data-1" class="form-control" placeholder="Data">
+            <div class="input-group-prepend w-25">
+                <input type="text" id="data" name="data-1" class="form-control" placeholder="Data">
             </div>
             <input type="text" id="hora" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
             <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
@@ -78,8 +78,8 @@
     <button type="button" id="add-more" class="btn btn-light"><i class="fas fa-plus"></i></button>
     <button type="button" id="remove" class="btn btn-dark"><i class="fas fa-minus"></i></button>
     <div class="form-group form-check mt-3">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Esta atividade fornece certificado.</label>
+        <input type="checkbox" class="form-check-input" id="certificado" name="certificado">
+        <label class="form-check-label" for="certificado">Esta atividade fornece certificado.</label>
     </div>
     <button type="submit" class="btn btn-primary">Adicionar atividade</button>
 </form>
@@ -91,7 +91,7 @@
 <script>
     $('#desc').bind('input propertychange', function () {
         var converter = new showdown.Converter(),
-            text = this.value,
+            text = this.value.replace(/<(?:.|\n)*?>/gm, ''),
             html = converter.makeHtml(text);
         $('#markdown').html(html);
     });

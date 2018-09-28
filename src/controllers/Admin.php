@@ -13,6 +13,38 @@ class Admin
         $this->session = new \SlimSession\Helper;
     }
 
+    public function addAtiv($request, $response, $args)
+    {
+        $params = $request->getParams();
+        try {
+            $atividade = new \Models\Atividade();
+            $atividade->setNome($params['title']);
+            $atividade->setDescricao(nl2br($params['desc']));
+            $atividade->setTipo($params['tipo']);
+            $atividade->setDuracao($params['duration']);
+            $atividade->setOrganizador($params['email']);
+            $atividade->setCapacidade($params['capacity']);
+            if ($params['certificado'] == "on") {
+                $atividade->setCertificado(true);
+            }
+            /*
+             * Adicionar sessões depois
+             */
+            $sessoes = array();
+            for ($i = 1; $i <= 5; $i++) {
+                if (isset($params['hora-' . $i]) && isset($params['data-' . $i])) {
+                    $sessao = new \Models\Sessao($params['data-' . $i], $params['hora-' . $i]);
+                    $sessoes[] = $sessao;
+                }
+            }
+            $atividade->setSessoes($sessoes);
+            Flash::message("<strong>Sucesso!</strong> Atividade criada com sucesso.", $type = "success");
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+        }
+        return $this->container->view->render($response, 'panel/admin/addAtiv.html', $request->getAttributes());
+    }
+
     public function addAdmin($request, $response, $args)
     {
         $params = $request->getParams();
@@ -28,7 +60,7 @@ class Admin
                 }
                 if ($handler->addAdmin($data["id_usuario"])) {
                     Flash::message("<strong>Ok!</strong> Garantido permissões de administrador para o usuário escolhido.", $type = "success");
-                }else{
+                } else {
                     throw new Exception("Algo deu errado. Não foi possível elevar os privilégios deste usuário");
                 }
             } else {
@@ -45,38 +77,43 @@ class Admin
     {
         return $this->container->view->render($response, 'panel/admin/addAdmin.html', $request->getAttributes());
     }
+
     public function addAtivView($request, $response, $args)
     {
         return $this->container->view->render($response, 'panel/admin/addAtiv.html', $request->getAttributes());
     }
+
     public function listAdminView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
         $request = $request->withAttribute("adminList", $handler->listAdmin());
         return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
     }
+
     public function listUsersView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
         $request = $request->withAttribute("userList", $handler->listUsers());
         return $this->container->view->render($response, 'panel/admin/listUsers.html', $request->getAttributes());
     }
+
     public function removeUser($request, $response, $args)
     {
         $handler = new DatabaseHandler();
-        if($handler->removeUser($args['id'])){
+        if ($handler->removeUser($args['id'])) {
             Flash::message("<strong>Sucesso!</strong> Usuário foi removido.", $type = "success");
-        }else{
+        } else {
             Flash::message("<strong>Erro!</strong> Não foi possível remover o usuário indicado.", $type = "error");
         }
         return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.users', []));
     }
+
     public function removeAdmin($request, $response, $args)
     {
         $handler = new DatabaseHandler();
-        if($handler->removeAdmin($args['id'])){
+        if ($handler->removeAdmin($args['id'])) {
             Flash::message("<strong>Sucesso!</strong> Usuário foi removido do grupo de administradores", $type = "success");
-        }else{
+        } else {
             Flash::message("<strong>Erro!</strong> Não foi possível remover as permissões do usuário indicado.", $type = "error");
         }
         return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list', []));

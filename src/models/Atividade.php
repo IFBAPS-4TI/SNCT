@@ -4,6 +4,8 @@
 namespace Models;
 
 
+use Exception;
+
 class Atividade
 {
     private $nome;
@@ -13,7 +15,7 @@ class Atividade
     private $duracao;
     private $organizador;
     private $sessoes = array();
-
+    private $certificado;
     /**
      * @return mixed
      */
@@ -24,6 +26,7 @@ class Atividade
 
     /**
      * @param mixed $nome
+     * @throws Exception
      */
     public function setNome($nome)
     {
@@ -44,6 +47,7 @@ class Atividade
 
     /**
      * @param mixed $descricao
+     * @throws Exception
      */
     public function setDescricao($descricao)
     {
@@ -64,10 +68,11 @@ class Atividade
 
     /**
      * @param mixed $tipo
+     * @throws Exception
      */
     public function setTipo($tipo)
     {
-        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(1, 4)->validate($tipo)) {
+        if (!\Respect\Validation\Validator::intVal()->notEmpty()->min(1)->max(4)->validate($tipo)) {
             throw new Exception("Tipo de atividade inválido.");
         }
         $this->tipo = $tipo;
@@ -83,11 +88,12 @@ class Atividade
 
     /**
      * @param mixed $capacidade
+     * @throws Exception
      */
     public function setCapacidade($capacidade)
     {
-        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(0, null)->validate($capacidade)) {
-            throw new Exception("Tipo de atividade inválido");
+        if (!\Respect\Validation\Validator::intVal()->min(0)->validate($capacidade)) {
+            throw new Exception("Capacidade da atividade inválida");
         }
         $this->capacidade = $capacidade;
     }
@@ -102,10 +108,11 @@ class Atividade
 
     /**
      * @param mixed $duracao
+     * @throws Exception
      */
     public function setDuracao($duracao)
     {
-        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(0, null)->validate($duracao)) {
+        if (!\Respect\Validation\Validator::intVal()->notEmpty()->min(1)->validate($duracao)) {
             throw new Exception("Duração da atividade inválida.");
         }
         $this->duracao = $duracao;
@@ -156,7 +163,24 @@ class Atividade
      */
     public function __construct()
     {
-        $sessoes = array();
+        $this->sessoes = array();
+        $this->certificado = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCertificado()
+    {
+        return $this->certificado;
+    }
+
+    /**
+     * @param bool $certificado
+     */
+    public function setCertificado($certificado)
+    {
+        $this->certificado = $certificado;
     }
 
 }

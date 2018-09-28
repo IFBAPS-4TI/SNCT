@@ -34,5 +34,6 @@ $app->group('/painel/admin', function () {
     $this->get('/list/remove/{id}', \Admin::class . ':removeAdmin')->setName('admin.remove');
     $this->get('/list/remove/user/{id}', \Admin::class . ':removeUser')->setName('admin.remove.users');
     /* POST rotas */
+    $this->post('/add/ativ', \Admin::class . ':addAtiv');
     $this->post('/add', \Admin::class . ':addAdmin');
 })->add($adminOnly);
