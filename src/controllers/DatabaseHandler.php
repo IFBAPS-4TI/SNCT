@@ -5,6 +5,7 @@ class DatabaseHandler
 {
     protected $config;
     private $pdo;
+
     /**
      * DatabaseHandler constructor.
      */
@@ -74,6 +75,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetch();
     }
+
     public function getDataById($id_usuario)
     {
         $select = $this->pdo->select()
@@ -110,59 +112,70 @@ class DatabaseHandler
         }
         return $usuario;
     }
-    public function TokenTranslation($token){
+
+    public function TokenTranslation($token)
+    {
         $usuario = new \Models\Usuario();
         $data = $this->getDataByEmail($token['email']);
-        if(count($data) > 1){
+        if (count($data) > 1) {
             $usuario->setNascimento($data['nascimento']);
             $usuario->setCpf($data['cpf']);
             $usuario->setId($data['id_usuario']);
             if (count($this->checkAdmin($data['id_usuario'])) > 1) {
                 $usuario->setIsAdministrador(true);
-            }else{
+            } else {
                 $usuario->setIsAdministrador(false);
             }
             $usuario->setNome($data['nome']);
             return $usuario;
-        }else{
+        } else {
             session_destroy();
             header("Location:", "/painel");
             return null;
         }
     }
-    public function addAdmin($id_usuario){
+
+    public function addAdmin($id_usuario)
+    {
         $insert = $this->pdo->insert(array('id_usuario'))
             ->into('Administradores')
             ->values(array($id_usuario));
         return $insert->execute(false);
     }
 
-    public function listAdmin(){
+    public function listAdmin()
+    {
         $select = $this->pdo->select()
             ->from('Administradores');
         $stmt = $select->execute();
         $data_admin = $stmt->fetchAll();
         $data = array();
-        foreach($data_admin as $admin){
+        foreach ($data_admin as $admin) {
 
             $data[] = $this->getDataById($admin['id_usuario']);
         }
         return $data;
     }
-    public function listUsers(){
+
+    public function listUsers()
+    {
         $select = $this->pdo->select()
             ->from('Usuario');
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
-    public function removeAdmin($id_usuario){
+
+    public function removeAdmin($id_usuario)
+    {
         $deleteStatement = $this->pdo->delete()
             ->from('Administradores')
             ->where('id_usuario', '=', $id_usuario);
 
         return $deleteStatement->execute();
     }
-    public function removeUser($id_usuario){
+
+    public function removeUser($id_usuario)
+    {
         $deleteStatement = $this->pdo->delete()
             ->from('Usuario')
             ->where('id_usuario', '=', $id_usuario);
@@ -170,4 +183,40 @@ class DatabaseHandler
         return $deleteStatement->execute();
     }
 
+    public function addAtividade(\Models\Atividade $atividade)
+    {
+
+        $insert = $this->pdo->insert(array('nome', 'descricao', 'certificado', 'tipo', 'capacidade', 'duracao'))
+            ->into('Atividade')
+            ->values(array($atividade->getNome(), $atividade->getDescricao(), $atividade->isCertificado(),
+                $atividade->getTipo(), $atividade->getCapacidade(), $atividade->getDuracao()));
+        $insert_id = $insert->execute(true);
+        if ($atividade->getOrganizador() != 0) {
+            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
+                ->into('Monitor')
+                ->values(array($insert_id, $atividade->getOrganizador()));
+        } else {
+            $admins = $this->listAdmin();
+            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
+                ->into('Monitor')
+                ->values(array($insert_id, $admins[0]['id_usuario']));
+        }
+        $insert->execute(false);
+        if ($insert_id) {
+            $sessoes = $atividade->getSessoes();
+            foreach ($sessoes as $sessao) {
+                $insert = $this->pdo->insert(array('id_atividade', 'local_ativ', 'timestamp_ativ'))
+                    ->into('Sessoes')
+                    ->values(array($insert_id, $sessao->getLocal(), $sessao->buildTimestamp()));
+                if (!$insert->execute(false)) {
+                    throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
+                }
+
+            }
+
+        } else {
+            throw new Exception("Não foi possível adicionar a atividade. Ela já existe ou é inválida.");
+        }
+        return true;
+    }
 }

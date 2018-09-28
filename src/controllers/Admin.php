@@ -22,7 +22,9 @@ class Admin
             $atividade->setDescricao(nl2br($params['desc']));
             $atividade->setTipo($params['tipo']);
             $atividade->setDuracao($params['duration']);
+            if(isset($params['email'])){
             $atividade->setOrganizador($params['email']);
+            }
             $atividade->setCapacidade($params['capacity']);
             if ($params['certificado'] == "on") {
                 $atividade->setCertificado(true);
@@ -33,11 +35,13 @@ class Admin
             $sessoes = array();
             for ($i = 1; $i <= 5; $i++) {
                 if (isset($params['hora-' . $i]) && isset($params['data-' . $i])) {
-                    $sessao = new \Models\Sessao($params['data-' . $i], $params['hora-' . $i]);
+                    $sessao = new \Models\Sessao($params['data-' . $i], $params['hora-' . $i], $params['local-' . $i]);
                     $sessoes[] = $sessao;
                 }
             }
             $atividade->setSessoes($sessoes);
+            $handler = new DatabaseHandler();
+            $handler->addAtividade($atividade);
             Flash::message("<strong>Sucesso!</strong> Atividade criada com sucesso.", $type = "success");
         } catch (Exception $e) {
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");

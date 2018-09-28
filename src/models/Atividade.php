@@ -165,6 +165,7 @@ class Atividade
     {
         $this->sessoes = array();
         $this->certificado = false;
+        $this->organizador = 0;
     }
 
     /**
