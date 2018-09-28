@@ -68,6 +68,14 @@
                             <a class="dropdown-item" href="{{ path_for('admin.list.users') }}">Listar/Remover Usuários</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-certificate mr-1"></i> Atividades</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ path_for('admin.add.ativ') }}">Adicionar Atividade</a>
+                            <a class="dropdown-item" href="{{ path_for('admin.list.users') }}">Listar/Editar Atividades</a>
+                        </div>
+                    </li>
                 </ul>
                 {% endif %}
             </div>
@@ -88,11 +96,16 @@
         crossorigin="anonymous"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Icons -->
-<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<!-- Markdown -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
-    feather.replace()
-</script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
 
+    })
+</script>
+{% block customjs %}
+{% endblock %}
 </body>
 </html>
