@@ -27,7 +27,11 @@ class Atividade
      */
     public function setNome($nome)
     {
+        if (!\Respect\Validation\Validator::stringType()->notEmpty()->validate($nome)) {
+            throw new Exception("Nome não pode estar vazio!");
+        }
         $this->nome = $nome;
+
     }
 
     /**
@@ -43,6 +47,9 @@ class Atividade
      */
     public function setDescricao($descricao)
     {
+        if (!\Respect\Validation\Validator::stringType()->notEmpty()->length(1, 3000)->validate($descricao)) {
+            throw new Exception("Descrição não pode estar vazia e não pode ter mais de 3000 caracteres.");
+        }
         $this->descricao = $descricao;
     }
 
@@ -51,6 +58,7 @@ class Atividade
      */
     public function getTipo()
     {
+
         return $this->tipo;
     }
 
@@ -59,6 +67,9 @@ class Atividade
      */
     public function setTipo($tipo)
     {
+        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(1, 4)->validate($tipo)) {
+            throw new Exception("Tipo de atividade inválido.");
+        }
         $this->tipo = $tipo;
     }
 
@@ -75,6 +86,9 @@ class Atividade
      */
     public function setCapacidade($capacidade)
     {
+        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(0, null)->validate($capacidade)) {
+            throw new Exception("Tipo de atividade inválido");
+        }
         $this->capacidade = $capacidade;
     }
 
@@ -91,6 +105,9 @@ class Atividade
      */
     public function setDuracao($duracao)
     {
+        if (!\Respect\Validation\Validator::intType()->notEmpty()->length(0, null)->validate($duracao)) {
+            throw new Exception("Duração da atividade inválida.");
+        }
         $this->duracao = $duracao;
     }
 
@@ -104,9 +121,17 @@ class Atividade
 
     /**
      * @param mixed $organizador
+     * @throws \Exception
      */
     public function setOrganizador($organizador)
     {
+        if (!\Respect\Validation\Validator::email()->validate($organizador)) {
+            throw new Exception("Email inválido.");
+        }
+        $handler = new \DatabaseHandler();
+        if (!count($handler->getDataByEmail($organizador)) > 1) {
+            throw new \Exception("Organizador não encontrado. Certifique-se que ele está registrado no sistema.");
+        }
         $this->organizador = $organizador;
     }
 
