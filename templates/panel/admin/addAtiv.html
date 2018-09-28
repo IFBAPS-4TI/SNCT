@@ -1,0 +1,129 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Adicionar atividade</h4>
+<div class="alert alert-info" role="alert">
+    Antes de adicionar uma atividade é aconselhado que o organizador da atividade esteja cadastrado no sistema para ser
+    adicionado ao cargo de monitor.
+    <br>Se ele não estiver cadastrado, não se preocupe, iremos associar o seu usuário como monitor.
+    <hr>
+    <p class="mb-0">Você pode posteriormente trocar este usuário, e adicionar o correto, ao editar uma atividade.</p>
+</div>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Título da Atividade</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Título da atividade" required>
+    </div>
+    <div class="form-group">
+        <label for="duration">Duração de cada sessão (em minutos)</label>
+        <input type="number" min="1" class="form-control" id="duration" name="duration" placeholder="Duração" required>
+    </div>
+    <div class="form-group">
+        <label for="capacity">Capacidade</label>
+        <input type="number" min="0" class="form-control" id="capacity" name="capacity" placeholder="Capacidade de pessoas" required>
+        <small id="capacityHelp" class="form-text text-muted">O número de pessoas que sua atividade suporta. Deixe 0 para ilimitado.
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="email">Endereço de Email do Organizador</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email cadastrado">
+        <small id="emailHelp" class="form-text text-muted">O endereço de email do organizador da atividade. Deixe em
+            branco se não houver.
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="desc">Descrição <a href="https://learnxinyminutes.com/docs/pt-br/markdown-pt/" target="_blank"><i
+                class="fab fa-markdown" data-toggle="tooltip" data-placement="top"
+                title="Compatível com Markdown. Clique para saber mais!"></i></a></label>
+        <textarea class="form-control" id="desc" rows="3" maxlength="3000" required></textarea>
+    </div>
+    <h5 class="mt-4">Visualização da descrição</h5>
+    <span id="markdown"></span>
+    <h4 class="mb-1">Tipo de atividade</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipo" id="tipo1" value="1" checked>
+        <label class="form-check-label" for="tipo1">
+            Oficina/Minicurso
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipo" id="tipo2" value="2">
+        <label class="form-check-label" for="tipo2">
+            Sala Temática
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipo" id="tipo3" value="3">
+        <label class="form-check-label" for="tipo3">
+            Palestra
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipo" id="tipo4" value="4">
+        <label class="form-check-label" for="tipo4">
+            Outro
+        </label>
+    </div>
+    <h4>Sessões</h4>
+    <div id="sessions">
+        <div class="input-group mb-3 w-25">
+            <div class="session-1"></div>
+            <div class="input-group-prepend">
+                <input type="date" id="data" name="data-1" class="form-control" placeholder="Data">
+            </div>
+            <input type="text" id="hora" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
+            <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
+        </div>
+    </div>
+    <button type="button" id="add-more" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" id="remove" class="btn btn-dark"><i class="fas fa-minus"></i></button>
+    <div class="form-group form-check mt-3">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Esta atividade fornece certificado.</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Adicionar atividade</button>
+</form>
+
+
+{% endblock %}
+
+{% block customjs %}
+<script>
+    $('#desc').bind('input propertychange', function () {
+        var converter = new showdown.Converter(),
+            text = this.value,
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#data").mask('00/00/0000', {reverse: false});
+        $("#hora").mask('00:00', {reverse: false});
+    });
+
+    $(function () {
+        var next = 1;
+        var model = $("#sessions").clone().html();
+        $("#add-more").click(function (e) {
+            e.preventDefault();
+            if (next < 5) {
+                next = next + 1;
+                var new_model = $(model).clone().html($(model).clone().html().replace('hora-1', "hora-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('data-1', "data-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('local-1', "local-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('session-1', "session-" + next));
+                $("#sessions").append(new_model);
+            }
+        });
+        $("#remove").click(function (e) {
+            e.preventDefault();
+            if (next > 1) {
+                $("div.session-" + (next)).parent().remove();
+                next = next - 1;
+            }
+        });
+    });
+
+
+</script>
+{% endblock %}
