@@ -45,6 +45,10 @@ class Admin
     {
         return $this->container->view->render($response, 'panel/admin/addAdmin.html', $request->getAttributes());
     }
+    public function addAtivView($request, $response, $args)
+    {
+        return $this->container->view->render($response, 'panel/admin/addAtiv.html', $request->getAttributes());
+    }
     public function listAdminView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
