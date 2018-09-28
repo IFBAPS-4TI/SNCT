@@ -27,6 +27,7 @@ $app->group('/painel', function () {
 
 $app->group('/painel/admin', function () {
     $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
+    $this->get('/add/ativ', \Admin::class . ':addAtivView')->setName('admin.add.ativ');
     $this->get('/list', \Admin::class . ':listAdminView')->setName('admin.list');
     $this->get('/list/users', \Admin::class . ':listUsersView')->setName('admin.list.users');
     /* API */
