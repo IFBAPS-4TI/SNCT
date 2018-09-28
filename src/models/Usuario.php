@@ -12,7 +12,16 @@ class Usuario
     private $nascimento;
     private $cpf;
     private $senha;
-    private $isAdministrador = false;
+    private $isAdministrador;
+
+    /**
+     * Usuario constructor.
+     */
+    public function __construct()
+    {
+        $this->setIsAdministrador(false);
+    }
+
 
     function better_crypt($input, $rounds = 7)
     {

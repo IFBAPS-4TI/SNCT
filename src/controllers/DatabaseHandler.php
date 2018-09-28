@@ -5,7 +5,6 @@ class DatabaseHandler
 {
     protected $config;
     private $pdo;
-
     /**
      * DatabaseHandler constructor.
      */
@@ -101,5 +100,25 @@ class DatabaseHandler
             throw new Exception("Usuário ou senha incorretos.");
         }
         return $usuario;
+    }
+    public function TokenTranslation($token){
+        $usuario = new \Models\Usuario();
+        $data = $this->getDataByEmail($token['email']);
+        if(count($data) > 1){
+            $usuario->setNascimento($data['nascimento']);
+            $usuario->setCpf($data['cpf']);
+            $usuario->setId($data['id_usuario']);
+            if (count($this->checkAdmin($data['id_usuario'])) > 1) {
+                $usuario->setIsAdministrador(true);
+            }else{
+                $usuario->setIsAdministrador(false);
+            }
+            $usuario->setNome($data['nome']);
+            return $usuario;
+        }else{
+            session_destroy();
+            header("Location:", "/painel");
+            return null;
+        }
     }
 }
