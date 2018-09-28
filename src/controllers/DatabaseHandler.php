@@ -121,4 +121,10 @@ class DatabaseHandler
             return null;
         }
     }
+    public function addAdmin($id_usuario){
+        $insert = $this->pdo->insert(array('id_usuario'))
+            ->into('Administradores')
+            ->values(array($id_usuario));
+        return $insert->execute(false);
+    }
 }

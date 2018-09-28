@@ -53,11 +53,13 @@
                     <span>Administrador</span>
                 </h6>
                 <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-home mr-1"></i>
-                            Calendário
-                        </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-id-badge mr-1"></i> Administradores</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ path_for('admin.add') }}">Adicionar Administradores</a>
+                            <a class="dropdown-item" href="#">Listar/Remover Administradores</a>
+                        </div>
                     </li>
                 </ul>
                 {% endif %}

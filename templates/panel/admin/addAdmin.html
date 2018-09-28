@@ -1,0 +1,16 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Adicionar administradores</h4>
+<div class="alert alert-info" role="alert">
+    Antes de adicionar um administrador solicite que o mesmo crie uma conta no sistema. Não será possível adicionar um administrador se a conta não existir.
+</div>
+
+<form method="post">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Endereço de Email</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Email cadastrado">
+        <small id="emailHelp" class="form-text text-muted">O administrador terá total controle do sistema. Use com precaução.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Adicionar</button>
+</form>
+{% endblock %}

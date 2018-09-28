@@ -26,5 +26,7 @@ $app->group('/painel', function () {
 });
 
 $app->group('/painel/admin', function () {
-    $this->get('[/]', \Painel::class . ':indexView');
+    $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
+    /* POST rotas */
+    $this->post('/add', \Admin::class . ':addAdmin');
 })->add($adminOnly);
