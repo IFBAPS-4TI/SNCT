@@ -1,0 +1,29 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Listar administradores</h4>
+<div class="alert alert-info" role="alert">
+    Remover um administrador <strong>não deletará sua conta do sistema</strong>. O usuário apenas terá seus privilégios revogados.
+    É possível que o painel ainda esteja visível para ele, mas ele não poderá acessá-lo ou efetuar modificações. Isto é temporário.
+</div>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Email</th>
+        <th scope="col">Remover?</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for admin in adminList %}
+    <tr>
+        <td>{{ admin['id_usuario'] }}</td>
+        <td>{{ admin['nome'] }}</td>
+        <td>{{ admin['email'] }}</td>
+        <td><a href="{{ path_for('admin.remove', { 'id': admin['id_usuario'] }) }}" class="btn btn-danger btn-sm" role="button"><i class="fas fa-times"></i></a></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}

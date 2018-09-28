@@ -74,6 +74,15 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetch();
     }
+    public function getDataById($id_usuario)
+    {
+        $select = $this->pdo->select()
+            ->from('Usuario')
+            ->where('id_usuario', '=', $id_usuario);
+        $stmt = $select->execute();
+        return $stmt->fetch();
+    }
+
 
     public function checkAdmin($id_usuario)
     {
@@ -127,4 +136,25 @@ class DatabaseHandler
             ->values(array($id_usuario));
         return $insert->execute(false);
     }
+
+    public function listAdmin(){
+        $select = $this->pdo->select()
+            ->from('Administradores');
+        $stmt = $select->execute();
+        $data_admin = $stmt->fetchAll();
+        $data = array();
+        foreach($data_admin as $admin){
+
+            $data[] = $this->getDataById($admin['id_usuario']);
+        }
+        return $data;
+    }
+    public function removeAdmin($id_usuario){
+        $deleteStatement = $this->pdo->delete()
+            ->from('Administradores')
+            ->where('id_usuario', '=', $id_usuario);
+
+        return $deleteStatement->execute();
+    }
+
 }

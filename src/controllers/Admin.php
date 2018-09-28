@@ -45,4 +45,20 @@ class Admin
     {
         return $this->container->view->render($response, 'panel/admin/addAdmin.html', $request->getAttributes());
     }
+    public function listAdminView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("adminList", $handler->listAdmin());
+        return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
+    }
+    public function removeAdmin($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if($handler->removeAdmin($args['id'])){
+            Flash::message("<strong>Sucesso!</strong> Usuário foi removido do grupo de administradores", $type = "success");
+        }else{
+            Flash::message("<strong>Erro!</strong> Não foi possível remover as permissões do usuário indicado.", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list', []));
+    }
 }
