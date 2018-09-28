@@ -28,7 +28,10 @@ $app->group('/painel', function () {
 $app->group('/painel/admin', function () {
     $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
     $this->get('/list', \Admin::class . ':listAdminView')->setName('admin.list');
+    $this->get('/list/users', \Admin::class . ':listUsersView')->setName('admin.list.users');
+    /* API */
     $this->get('/list/remove/{id}', \Admin::class . ':removeAdmin')->setName('admin.remove');
+    $this->get('/list/remove/user/{id}', \Admin::class . ':removeUser')->setName('admin.remove.users');
     /* POST rotas */
     $this->post('/add', \Admin::class . ':addAdmin');
 })->add($adminOnly);

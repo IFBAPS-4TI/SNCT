@@ -149,9 +149,22 @@ class DatabaseHandler
         }
         return $data;
     }
+    public function listUsers(){
+        $select = $this->pdo->select()
+            ->from('Usuario');
+        $stmt = $select->execute();
+        return $stmt->fetchAll();;
+    }
     public function removeAdmin($id_usuario){
         $deleteStatement = $this->pdo->delete()
             ->from('Administradores')
+            ->where('id_usuario', '=', $id_usuario);
+
+        return $deleteStatement->execute();
+    }
+    public function removeUser($id_usuario){
+        $deleteStatement = $this->pdo->delete()
+            ->from('Usuario')
             ->where('id_usuario', '=', $id_usuario);
 
         return $deleteStatement->execute();

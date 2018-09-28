@@ -51,6 +51,22 @@ class Admin
         $request = $request->withAttribute("adminList", $handler->listAdmin());
         return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
     }
+    public function listUsersView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("userList", $handler->listUsers());
+        return $this->container->view->render($response, 'panel/admin/listUsers.html', $request->getAttributes());
+    }
+    public function removeUser($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if($handler->removeUser($args['id'])){
+            Flash::message("<strong>Sucesso!</strong> Usuário foi removido.", $type = "success");
+        }else{
+            Flash::message("<strong>Erro!</strong> Não foi possível remover o usuário indicado.", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.users', []));
+    }
     public function removeAdmin($request, $response, $args)
     {
         $handler = new DatabaseHandler();
