@@ -35,7 +35,7 @@ CREATE TABLE Monitor
 (
 id_monitor integer primary key AUTO_INCREMENT,
 id_usuario integer,
-id_atividade integer unique,
+id_atividade integer,
 foreign key(id_usuario) references Usuario(id_usuario) ON DELETE CASCADE,
 foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
 );
