@@ -93,6 +93,13 @@ class Admin
         $request = $request->withAttribute("adminList", $handler->listAdmin());
         return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
     }
+    public function listAtivView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("ativList", $handler->listAtividades());
+        return $this->container->view->render($response, 'panel/admin/listAtiv.html', $request->getAttributes());
+    }
+
 
     public function listUsersView($request, $response, $args)
     {
@@ -121,5 +128,15 @@ class Admin
             Flash::message("<strong>Erro!</strong> Não foi possível remover as permissões do usuário indicado.", $type = "error");
         }
         return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list', []));
+    }
+    public function removeAtiv($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if ($handler->removeAtiv($args['id'])) {
+            Flash::message("<strong>Sucesso!</strong> Atividade foi removida", $type = "success");
+        } else {
+            Flash::message("<strong>Erro!</strong> Não foi possível remover a atividade.", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.ativ', []));
     }
 }

@@ -164,7 +164,21 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
-
+    public function listAtividades()
+    {
+        $select = $this->pdo->select()
+            ->from('Atividade');
+        $stmt = $select->execute();
+        return $stmt->fetchAll();;
+    }
+    public function listSessoesPorId($id)
+    {
+        $select = $this->pdo->select()
+            ->from('Sessoes')
+            ->where('id_atividade', '=', $id);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();;
+    }
     public function removeAdmin($id_usuario)
     {
         $deleteStatement = $this->pdo->delete()
@@ -179,6 +193,15 @@ class DatabaseHandler
         $deleteStatement = $this->pdo->delete()
             ->from('Usuario')
             ->where('id_usuario', '=', $id_usuario);
+
+        return $deleteStatement->execute();
+    }
+
+    public function removeAtiv($id)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Atividade')
+            ->where('id_atividade', '=', $id);
 
         return $deleteStatement->execute();
     }

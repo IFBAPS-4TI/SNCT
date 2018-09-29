@@ -1,0 +1,54 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Listar atividades</h4>
+<div class="alert alert-danger" role="alert">
+    Remover uma atividade irá também <strong>remover suas respectivas sessões</strong>, e <strong>irá eliminar todas as
+    inscrições para a atividade</strong>. Isto é irreversível.
+</div>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Capacidade</th>
+        <th scope="col">Certificado</th>
+        <th scope="col">Opções</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for ativ in ativList %}
+    <tr>
+        <td>{{ ativ['id_atividade'] }}</td>
+        <td>{{ ativ['nome'] }}</td>
+        {% if ativ['tipo'] == 1 %}
+        <td>Oficina/Minicurso</td>
+        {% elseif ativ['tipo'] == 2 %}
+        <td>Sala Temática</td>
+        {% elseif ativ['tipo'] == 2 %}
+        <td>Palestra/Apresentação</td>
+        {% else %}
+        <td>Outra</td>
+        {% endif %}
+        {% if ativ['capacidade'] == 0 %}
+        <td>Ilimitado</td>
+        {% else %}
+        <td>{{ ativ['capacidade'] }}</td>
+        {% endif %}
+        {% if ativ['certificado'] %}
+        <td><i class="fas fa-check"></i></td>
+        {% else %}
+        <td><i class="fas fa-times"></i></td>
+        {% endif %}
+        <td>
+            <a href="{{ path_for('admin.edit.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
+               role="button"><i class="fas fa-edit"></i></a>
+            <a href="{{ path_for('admin.remove.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-danger btn-sm"
+               role="button"><i class="fas fa-times"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}

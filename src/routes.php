@@ -28,11 +28,14 @@ $app->group('/painel', function () {
 $app->group('/painel/admin', function () {
     $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
     $this->get('/add/ativ', \Admin::class . ':addAtivView')->setName('admin.add.ativ');
+    $this->get('/list/ativ', \Admin::class . ':listAtivView')->setName('admin.list.ativ');
     $this->get('/list', \Admin::class . ':listAdminView')->setName('admin.list');
     $this->get('/list/users', \Admin::class . ':listUsersView')->setName('admin.list.users');
+    $this->get('/edit/ativ/{id}', \Admin::class . ':editAtivView')->setName('admin.edit.ativ');
     /* API */
     $this->get('/list/remove/{id}', \Admin::class . ':removeAdmin')->setName('admin.remove');
     $this->get('/list/remove/user/{id}', \Admin::class . ':removeUser')->setName('admin.remove.users');
+    $this->get('/list/remove/ativ/{id}', \Admin::class . ':removeAtiv')->setName('admin.remove.ativ');
     /* POST rotas */
     $this->post('/add/ativ', \Admin::class . ':addAtiv');
     $this->post('/add', \Admin::class . ':addAdmin');
