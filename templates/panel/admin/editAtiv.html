@@ -1,0 +1,125 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Editar atividade</h4>
+<form method="post">
+    <div class="form-group">
+        <label for="title">Título da Atividade</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Título da atividade"
+               value="{{ ativInfo['nome'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="duration">Duração de cada sessão (em minutos)</label>
+        <input type="number" min="1" class="form-control" id="duration" name="duration" placeholder="Duração"
+               value="{{ ativInfo['duracao'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="capacity">Capacidade</label>
+        <input type="number" min="0" class="form-control" id="capacity" name="capacity"
+               placeholder="Capacidade de pessoas" value="{{ ativInfo['capacidade'] }}" required>
+        <small id="capacityHelp" class="form-text text-muted">O número de pessoas que sua atividade suporta. Deixe 0
+            para ilimitado.
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="desc">Descrição <a href="https://docs.microsoft.com/pt-br/contribute/how-to-write-use-markdown"
+                                       target="_blank"><i
+                class="fab fa-markdown" data-toggle="tooltip" data-placement="top"
+                title="Compatível com Markdown. Clique para saber mais!"></i></a></label>
+        <textarea class="form-control" id="desc" name="desc" rows="3" maxlength="3000" required>{{ ativInfo['descricao'] }}</textarea>
+    </div>
+    <h5 class="mt-4">Visualização da descrição</h5>
+    <span id="markdown"></span>
+    <h5 class="mt-4">Sessões</h5>
+    <div class="alert alert-danger" role="alert">
+        Remover uma sessão da lista abaixo irá automaticamente remover todos os inscritos nela. Para edita-lá basta editar os campos, sem removê-los. Editar não irá desinscrever os usuários.
+    </div>
+    <div id="sessions_model" style="display:none">
+        <div class="input-group mb-3 w-25">
+            <div class="session-1"></div>
+            <div class="input-group-prepend w-25">
+                <input type="text" id="data" name="data-1" class="form-control" placeholder="Data">
+            </div>
+            <input type="text" id="hora" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
+            <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
+        </div>
+    </div>
+    <div id="sessions">
+        {% for sessao in sessoesInfo %}
+        <div class="input-group mb-3 w-25">
+            <div class="session-{{loop.index}}">
+                <input type="hidden" id="sessionId" name="sessionId" value="{{ sessao['id_sessao'] }}">
+            </div>
+            {% set data = sessao['timestamp_ativ']|split('U') %}
+            <div class="input-group-prepend w-25">
+                <input type="text" id="data" name="data-{{loop.index}}" class="form-control" value="{{ data[0] }}"
+                       placeholder="Data">
+            </div>
+            <input type="text" id="hora" name="hora-{{loop.index}}" class="form-control" value="{{ data[1] }}"
+                   placeholder="Hora (Ex:. 17:35)">
+            <input type="text" name="local-{{loop.index}}" class="form-control" value="{{ sessao['local_ativ'] }}"
+                   placeholder="Local (Ex:. Lab 01)">
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-more" class="btn btn-light"><i class="fas fa-plus"></i></button>
+    <button type="button" id="remove" class="btn btn-dark"><i class="fas fa-minus"></i></button>
+    <hr/>
+    <div class="form-group form-check mt-3">
+        {% if ativInfo['certificado'] %}
+        <input type="checkbox" class="form-check-input" id="certificado" name="certificado" checked>
+        {% else %}
+        <input type="checkbox" class="form-check-input" id="certificado" name="certificado">
+        {% endif %}
+        <label class="form-check-label" for="certificado">Esta atividade fornece certificado.</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar atividade</button>
+</form>
+
+
+{% endblock %}
+
+{% block customjs %}
+<script>
+    $('#desc').bind('input propertychange', function () {
+        var converter = new showdown.Converter(),
+            text = this.value.replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+    });
+    $(function () {
+        var converter = new showdown.Converter(),
+            text = $('#desc').text().replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#data").mask('00/00/0000', {reverse: false});
+        $("#hora").mask('00:00', {reverse: false});
+    });
+
+    $(function () {
+        var next = {{sessoesInfo | length}};
+        var model = $("#sessions_model").clone().html();
+        $("#add-more").click(function (e) {
+            e.preventDefault();
+            if (next < 5) {
+                next = next + 1;
+                var new_model = $(model).clone().html($(model).clone().html().replace('hora-1', "hora-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('data-1', "data-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('local-1', "local-" + next));
+                new_model = $(new_model).html($(new_model).html().replace('session-1', "session-" + next));
+                $("#sessions").append(new_model);
+            }
+        });
+        $("#remove").click(function (e) {
+            e.preventDefault();
+            if (next > 1) {
+                $("div.session-" + (next)).parent().remove();
+                next = next - 1;
+            }
+        });
+    });
+
+
+</script>
+{% endblock %}

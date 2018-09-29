@@ -84,8 +84,30 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetch();
     }
-
-
+    public function getAtivDataById($id_atividade)
+    {
+        $select = $this->pdo->select()
+            ->from('Atividade')
+            ->where('id_atividade', '=', $id_atividade);
+        $stmt = $select->execute();
+        return $stmt->fetch();
+    }
+    public function getSessaoDataById($id_atividade)
+    {
+        $select = $this->pdo->select()
+            ->from('Sessoes')
+            ->where('id_atividade', '=', $id_atividade);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();
+    }
+    public function getMonitorDataByAtividade($id_atividade)
+    {
+        $select = $this->pdo->select()
+            ->from('Monitor')
+            ->where('id_atividade', '=', $id_atividade);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();
+    }
     public function checkAdmin($id_usuario)
     {
         $select = $this->pdo->select()

@@ -19,11 +19,11 @@ class Admin
         try {
             $atividade = new \Models\Atividade();
             $atividade->setNome($params['title']);
-            $atividade->setDescricao(nl2br($params['desc']));
+            $atividade->setDescricao($params['desc']);
             $atividade->setTipo($params['tipo']);
             $atividade->setDuracao($params['duration']);
-            if(isset($params['email'])){
-            $atividade->setOrganizador($params['email']);
+            if (isset($params['email'])) {
+                $atividade->setOrganizador($params['email']);
             }
             $atividade->setCapacidade($params['capacity']);
             if ($params['certificado'] == "on") {
@@ -87,12 +87,22 @@ class Admin
         return $this->container->view->render($response, 'panel/admin/addAtiv.html', $request->getAttributes());
     }
 
+    public function editAtivView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id']));
+        $request = $request->withAttribute("sessoesInfo", $handler->getSessaoDataById($args['id']));
+        $request = $request->withAttribute("monitorInfo", $handler->getDataById($handler->getMonitorDataByAtividade($args['id'])[0]['id_usuario']));
+        return $this->container->view->render($response, 'panel/admin/editAtiv.html', $request->getAttributes());
+    }
+
     public function listAdminView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
         $request = $request->withAttribute("adminList", $handler->listAdmin());
         return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
     }
+
     public function listAtivView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
@@ -129,6 +139,7 @@ class Admin
         }
         return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list', []));
     }
+
     public function removeAtiv($request, $response, $args)
     {
         $handler = new DatabaseHandler();
