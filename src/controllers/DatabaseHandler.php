@@ -191,10 +191,10 @@ class DatabaseHandler
             ->values(array($atividade->getNome(), $atividade->getDescricao(), $atividade->isCertificado(),
                 $atividade->getTipo(), $atividade->getCapacidade(), $atividade->getDuracao()));
         $insert_id = $insert->execute(true);
-        if ($atividade->getOrganizador() != 0) {
+        if ($atividade->getOrganizador() != 0 && (count($this->getDataByEmail($atividade->getOrganizador())) > 1)) {
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into('Monitor')
-                ->values(array($insert_id, $atividade->getOrganizador()));
+                ->values(array($insert_id, $this->getDataByEmail($atividade->getOrganizador())['email']));
         } else {
             $admins = $this->listAdmin();
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
