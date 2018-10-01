@@ -109,7 +109,6 @@ class Admin
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
         }
         $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id']));
-        $request = $request->withAttribute("sessoesInfo", $handler->getSessaoDataById($args['id']));
         $request = $request->withAttribute("monitorInfo", $handler->getDataById($handler->getMonitorDataByAtividade($args['id'])[0]['id_usuario']));
 
         return $this->container->view->render($response, 'panel/admin/editAtiv.html', $request->getAttributes());
@@ -118,7 +117,6 @@ class Admin
     {
         $handler = new DatabaseHandler();
         $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id']));
-        $request = $request->withAttribute("sessoesInfo", $handler->getSessaoDataById($args['id']));
         $request = $request->withAttribute("monitorInfo", $handler->getDataById($handler->getMonitorDataByAtividade($args['id'])[0]['id_usuario']));
         return $this->container->view->render($response, 'panel/admin/editAtiv.html', $request->getAttributes());
     }
