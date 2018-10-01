@@ -29,40 +29,11 @@
     </div>
     <h5 class="mt-4">Visualização da descrição</h5>
     <span id="markdown"></span>
-    <h5 class="mt-4">Sessões</h5>
-    <div class="alert alert-danger" role="alert">
-        Remover uma sessão da lista abaixo irá automaticamente remover todos os inscritos nela. Para edita-lá basta editar os campos, sem removê-los. Editar não irá desinscrever os usuários.
+    <hr />
+    <h5 class="mt-2">Sessões</h5>
+    <div class="alert alert-primary" role="alert">
+        As sessões são editadas em uma área diferente para comodidade.
     </div>
-    <div id="sessions_model" style="display:none">
-        <div class="input-group mb-3 w-25">
-            <div class="session-1"></div>
-            <div class="input-group-prepend w-25">
-                <input type="text" id="data" name="data-1" class="form-control" placeholder="Data">
-            </div>
-            <input type="text" id="hora" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
-            <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
-        </div>
-    </div>
-    <div id="sessions">
-        {% for sessao in sessoesInfo %}
-        <div class="input-group mb-3 w-25">
-            <div class="session-{{loop.index}}">
-                <input type="hidden" id="sessionId" name="sessionId" value="{{ sessao['id_sessao'] }}">
-            </div>
-            {% set data = sessao['timestamp_ativ']|split('U') %}
-            <div class="input-group-prepend w-25">
-                <input type="text" id="data" name="data-{{loop.index}}" class="form-control" value="{{ data[0] }}"
-                       placeholder="Data">
-            </div>
-            <input type="text" id="hora" name="hora-{{loop.index}}" class="form-control" value="{{ data[1] }}"
-                   placeholder="Hora (Ex:. 17:35)">
-            <input type="text" name="local-{{loop.index}}" class="form-control" value="{{ sessao['local_ativ'] }}"
-                   placeholder="Local (Ex:. Lab 01)">
-        </div>
-        {% endfor %}
-    </div>
-    <button type="button" id="add-more" class="btn btn-light"><i class="fas fa-plus"></i></button>
-    <button type="button" id="remove" class="btn btn-dark"><i class="fas fa-minus"></i></button>
     <hr/>
     <div class="form-group form-check mt-3">
         {% if ativInfo['certificado'] %}
@@ -95,29 +66,6 @@
         $('[data-toggle="tooltip"]').tooltip();
         $("#data").mask('00/00/0000', {reverse: false});
         $("#hora").mask('00:00', {reverse: false});
-    });
-
-    $(function () {
-        var next = {{sessoesInfo | length}};
-        var model = $("#sessions_model").clone().html();
-        $("#add-more").click(function (e) {
-            e.preventDefault();
-            if (next < 5) {
-                next = next + 1;
-                var new_model = $(model).clone().html($(model).clone().html().replace('hora-1', "hora-" + next));
-                new_model = $(new_model).html($(new_model).html().replace('data-1', "data-" + next));
-                new_model = $(new_model).html($(new_model).html().replace('local-1', "local-" + next));
-                new_model = $(new_model).html($(new_model).html().replace('session-1', "session-" + next));
-                $("#sessions").append(new_model);
-            }
-        });
-        $("#remove").click(function (e) {
-            e.preventDefault();
-            if (next > 1) {
-                $("div.session-" + (next)).parent().remove();
-                next = next - 1;
-            }
-        });
     });
 
 
