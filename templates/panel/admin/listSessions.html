@@ -1,6 +1,13 @@
 {% extends "/panel/templates/panel.html" %}
 {% block content %}
 <h4>Listar sessões da atividade</h4>
+<div class="alert alert-danger" role="alert">
+    <strong>Cuidado!</strong> Deletar uma sessão irá <strong>remover todas as inscrições associadas a ela</strong>. Isto é irreversível.
+</div>
+<div class="alert alert-warning" role="alert">
+    <strong>Atenção!</strong> Modificar a data/horário de uma sessão poderá ocasionar choque de horários em usuários já registrados em uma sessão. Os mesmos devem ser notificados pela comissão por qualquer alterações nas datas.
+    <br> Os usuários <strong>não serão notificados automaticamente</strong> de choques ou modificações no horário pelo sistema.
+</div>
 <div class="row">
     {% for session in sessionsList %}
     {% set data = session['timestamp_ativ']|split('U') %}
@@ -10,11 +17,13 @@
                 <h5 class="card-title">Sessão {{ loop.index }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ session["local_ativ"] }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ data [0] }} ({{ data [1] }})</h6>
-                <a href="#" class="card-link ">Editar</a>
-                <a href="#" class="card-link">Remover</a>
+                <a href="{{ path_for('admin.edit.sessions', { 'id_session': session['id_sessao'], 'id_ativ': sessionsList[0]['id_atividade']  }) }}" class="card-link ">Editar</a>
+                <a href="{{ path_for('admin.remove.session', { 'id_session': session['id_sessao'], 'id_ativ': sessionsList[0]['id_atividade']  }) }}" class="card-link">Remover</a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
+<a href="{{ path_for('admin.edit.sessions', { 'id_session': '0', 'id_ativ': sessionsList[0]['id_atividade']  }) }}"
+   class="btn btn-light" role="button"><i class="fas fa-plus"></i></a>
 {% endblock %}

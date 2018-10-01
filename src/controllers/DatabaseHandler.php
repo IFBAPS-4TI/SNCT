@@ -103,6 +103,15 @@ class DatabaseHandler
         return $stmt->fetchAll();
     }
 
+    public function getSessaoDataByIdSessao($id_sessao)
+    {
+        $select = $this->pdo->select()
+            ->from('Sessoes')
+            ->where('id_sessao', '=', $id_sessao);
+        $stmt = $select->execute();
+        return $stmt->fetch();
+    }
+
     public function getMonitorDataByAtividade($id_atividade)
     {
         $select = $this->pdo->select()
@@ -235,6 +244,15 @@ class DatabaseHandler
         return $deleteStatement->execute();
     }
 
+    public function removeSession($id)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Sessoes')
+            ->where('id_sessao', '=', $id);
+
+        return $deleteStatement->execute();
+    }
+
     public function addAtividade(\Models\Atividade $atividade)
     {
 
@@ -283,14 +301,43 @@ class DatabaseHandler
                 'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao()))
                 ->table('Atividade')
                 ->where('id_atividade', '=', $atividade->getId());
-            if($update->execute() < 1){
+            if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a atividade");
             }
         } else {
             throw new Exception("Atividade não foi encontrada");
         }
     }
-    public function getInscritosBySessionId($id_sessao){
+
+    public function editOrCreateSession(\Models\Sessao $sessao, $insertId = 0)
+    {
+        if ($sessao->getId() != 0) {
+            if (count($this->getSessaoDataByIdSessao($sessao->getId())) > 1) {
+                $update = $this->pdo->update(array('local_ativ' => $sessao->getLocal(), 'timestamp_ativ' => $sessao->buildTimestamp()))
+                    ->table('Sessoes')
+                    ->where('id_sessao', '=', $sessao->getId());
+                if ($update->execute() < 1) {
+                    throw new Exception("Algo deu errado ao atualizar a sessão");
+                }
+            } else {
+                throw new Exception("Atividade não foi encontrada");
+            }
+        } else {
+            if ($insertId != 0) {
+                $insert = $this->pdo->insert(array('id_atividade', 'local_ativ', 'timestamp_ativ'))
+                    ->into('Sessoes')
+                    ->values(array($insertId, $sessao->getLocal(), $sessao->buildTimestamp()));
+                if (!$insert->execute(false)) {
+                    throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
+                }
+            } else {
+                throw new Exception("Você deve fornecer o id da atividade para criar uma sessão");
+            }
+        }
+    }
+
+    public function getInscritosBySessionId($id_sessao)
+    {
         $select = $this->pdo->select()
             ->from('Inscricoes')
             ->where('id_sessao', '=', $id_sessao);

@@ -1,0 +1,41 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Editar sessão</h4>
+<form method="post">
+    <div class="input-group mb-3 w-25">
+        <div class="input-group-prepend">
+            {% set data = sessionInfo['timestamp_ativ']|split('U') %}
+            <input type="text" id="data" name="data" class="form-control" placeholder="Data (00/00/0000)" value="{{ data[0] }}">
+        </div>
+        <input type="text" id="hora" name="hora" class="form-control" placeholder="Hora (Ex:. 17:35)" value="{{ data[1] }}">
+        <input type="text" name="local" class="form-control" placeholder="Local (Ex:. Lab 01)" value="{{ sessionInfo['local_ativ'] }}">
+    </div>
+    <hr/>
+    <button type="submit" class="btn btn-primary">Salvar sessão</button>
+</form>
+
+
+{% endblock %}
+
+{% block customjs %}
+<script>
+    $('#desc').bind('input propertychange', function () {
+        var converter = new showdown.Converter(),
+            text = this.value.replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+    });
+    $(function () {
+        var converter = new showdown.Converter(),
+            text = $('#desc').text().replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#data").mask('00/00/0000', {reverse: false});
+        $("#hora").mask('00:00', {reverse: false});
+    });
+
+
+</script>
+{% endblock %}

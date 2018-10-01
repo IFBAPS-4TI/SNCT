@@ -119,9 +119,47 @@ class Admin
     public function editAtivView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
+        if(count($handler->getAtivDataById($args['id'])) <= 1){
+            Flash::message("<strong>Erro!</strong> Atividade não encontrada", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.ativ', []));
+        }
         $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id']));
         $request = $request->withAttribute("monitorInfo", $handler->getDataById($handler->getMonitorDataByAtividade($args['id'])[0]['id_usuario']));
         return $this->container->view->render($response, 'panel/admin/editAtiv.html', $request->getAttributes());
+    }
+    public function editSessionView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if($args['id_session'] != 0){ // 0 é reservado para criação de sessão
+            if(count($handler->getSessaoDataByIdSessao($args['id_session'])) <= 1
+                || count($handler->getAtivDataById($args['id_ativ'])) <= 1){
+                Flash::message("<strong>Erro!</strong> Sessão não encontrada", $type = "error");
+                return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.sessions', [
+                    'id' => $args['id_ativ']
+                ]));
+            }
+            $request = $request->withAttribute("sessionInfo", $handler->getSessaoDataByIdSessao($args['id_session']));
+        }
+        return $this->container->view->render($response, 'panel/admin/editSession.html', $request->getAttributes());
+    }
+    public function editSession($request, $response, $args){
+        $handler = new DatabaseHandler();
+        $params = $request->getParams();
+        try{
+            $sessao = new \Models\Sessao($params['data'], $params['hora'], $params['local']);
+            $sessao->setId($args['id_session']);
+            $handler->editOrCreateSession($sessao, $args['id_ativ']);
+        }catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.sessions', [
+                'id' => $args['id_ativ']
+            ]));
+        }
+
+        Flash::message("<strong>Sucesso!</strong> Sessão atualizada com sucesso.", $type = "success");
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.sessions', [
+            'id' => $args['id_ativ']
+        ]));
     }
 
     public function listAdminView($request, $response, $args)
@@ -134,6 +172,10 @@ class Admin
     public function listSessionsView($request, $response, $args)
     {
         $handler = new DatabaseHandler();
+        if(count($handler->getAtivDataById($args['id'])) <= 1){
+            Flash::message("<strong>Erro!</strong> Atividade não encontrada", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.ativ', []));
+        }
         $request = $request->withAttribute("sessionsList", $handler->listSessoesPorId($args['id']));
         return $this->container->view->render($response, 'panel/admin/listSessions.html', $request->getAttributes());
     }
@@ -184,5 +226,18 @@ class Admin
             Flash::message("<strong>Erro!</strong> Não foi possível remover a atividade.", $type = "error");
         }
         return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.ativ', []));
+    }
+
+    public function removeSession($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if ($handler->removeSession($args['id_session'])) {
+            Flash::message("<strong>Sucesso!</strong> Sessão foi removida", $type = "success");
+        } else {
+            Flash::message("<strong>Erro!</strong> Não foi possível remover a sessão.", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.sessions', [
+            'id' => $args['id_ativ']
+        ]));
     }
 }
