@@ -39,4 +39,5 @@ $app->group('/painel/admin', function () {
     /* POST rotas */
     $this->post('/add/ativ', \Admin::class . ':addAtiv');
     $this->post('/add', \Admin::class . ':addAdmin');
+    $this->post('/edit/ativ/{id}', \Admin::class . ':editAtiv');
 })->add($adminOnly);

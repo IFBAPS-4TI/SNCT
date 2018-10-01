@@ -86,7 +86,34 @@ class Admin
     {
         return $this->container->view->render($response, 'panel/admin/addAtiv.html', $request->getAttributes());
     }
+    public function editAtiv($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $params = $request->getParams();
+        try {
+            $atividade = new \Models\Atividade();
+            $atividade->setId($args['id']);
+            $atividade->setNome($params['title']);
+            $atividade->setDescricao($params['desc']);
+            $atividade->setDuracao($params['duration']);
+            if (isset($params['email'])) {
+                $atividade->setOrganizador($params['email']);
+            }
+            $atividade->setCapacidade($params['capacity']);
+            if ($params['certificado'] == "on") {
+                $atividade->setCertificado(true);
+            }
+            $handler->editAtiv($atividade);
+            Flash::message("<strong>Sucesso!</strong> Atividade atualizada com sucesso.", $type = "success");
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+        }
+        $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id']));
+        $request = $request->withAttribute("sessoesInfo", $handler->getSessaoDataById($args['id']));
+        $request = $request->withAttribute("monitorInfo", $handler->getDataById($handler->getMonitorDataByAtividade($args['id'])[0]['id_usuario']));
 
+        return $this->container->view->render($response, 'panel/admin/editAtiv.html', $request->getAttributes());
+    }
     public function editAtivView($request, $response, $args)
     {
         $handler = new DatabaseHandler();

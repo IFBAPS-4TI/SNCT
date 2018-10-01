@@ -84,6 +84,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetch();
     }
+
     public function getAtivDataById($id_atividade)
     {
         $select = $this->pdo->select()
@@ -92,6 +93,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetch();
     }
+
     public function getSessaoDataById($id_atividade)
     {
         $select = $this->pdo->select()
@@ -100,6 +102,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
+
     public function getMonitorDataByAtividade($id_atividade)
     {
         $select = $this->pdo->select()
@@ -108,6 +111,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
+
     public function checkAdmin($id_usuario)
     {
         $select = $this->pdo->select()
@@ -186,6 +190,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
+
     public function listAtividades()
     {
         $select = $this->pdo->select()
@@ -193,6 +198,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
+
     public function listSessoesPorId($id)
     {
         $select = $this->pdo->select()
@@ -201,6 +207,7 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
+
     public function removeAdmin($id_usuario)
     {
         $deleteStatement = $this->pdo->delete()
@@ -263,5 +270,24 @@ class DatabaseHandler
             throw new Exception("Não foi possível adicionar a atividade. Ela já existe ou é inválida.");
         }
         return true;
+    }
+
+    /**
+     * @param \Models\Atividade $atividade
+     * @throws Exception
+     */
+    public function editAtiv(\Models\Atividade $atividade)
+    {
+        if (count($this->getAtivDataById($atividade->getId())) > 1) {
+            $update = $this->pdo->update(array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
+                'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao()))
+                ->table('Atividade')
+                ->where('id_atividade', '=', $atividade->getId());
+            if($update->execute() < 1){
+                throw new Exception("Algo deu errado ao atualizar a atividade");
+            }
+        } else {
+            throw new Exception("Atividade não foi encontrada");
+        }
     }
 }

@@ -8,6 +8,7 @@ use Exception;
 
 class Atividade
 {
+    private $id;
     private $nome;
     private $descricao;
     private $tipo;
@@ -183,5 +184,22 @@ class Atividade
     {
         $this->certificado = $certificado;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 
 }
