@@ -40,6 +40,9 @@ class Admin
                 }
             }
             $atividade->setSessoes($sessoes);
+            if(count($atividade->getSessoes()) < 1){
+                throw new Exception("É necessário adicionar uma sessão no mínimo.");
+            }
             $handler = new DatabaseHandler();
             $handler->addAtividade($atividade);
             Flash::message("<strong>Sucesso!</strong> Atividade criada com sucesso.", $type = "success");
