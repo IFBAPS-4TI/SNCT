@@ -1,0 +1,20 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Listar sessões da atividade</h4>
+<div class="row">
+    {% for session in sessionsList %}
+    {% set data = session['timestamp_ativ']|split('U') %}
+    <div class="column m-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Sessão {{ loop.index }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ session["local_ativ"] }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ data [0] }} ({{ data [1] }})</h6>
+                <a href="#" class="card-link ">Editar</a>
+                <a href="#" class="card-link">Remover</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

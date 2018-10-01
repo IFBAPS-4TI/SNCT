@@ -29,6 +29,7 @@ $app->group('/painel/admin', function () {
     $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
     $this->get('/add/ativ', \Admin::class . ':addAtivView')->setName('admin.add.ativ');
     $this->get('/list/ativ', \Admin::class . ':listAtivView')->setName('admin.list.ativ');
+    $this->get('/list/ativ/{id}/sessions', \Admin::class . ':listSessionsView')->setName('admin.list.sessions');
     $this->get('/list', \Admin::class . ':listAdminView')->setName('admin.list');
     $this->get('/list/users', \Admin::class . ':listUsersView')->setName('admin.list.users');
     $this->get('/edit/ativ/{id}', \Admin::class . ':editAtivView')->setName('admin.edit.ativ');

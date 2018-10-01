@@ -290,4 +290,11 @@ class DatabaseHandler
             throw new Exception("Atividade não foi encontrada");
         }
     }
+    public function getInscritosBySessionId($id_sessao){
+        $select = $this->pdo->select()
+            ->from('Inscricoes')
+            ->where('id_sessao', '=', $id_sessao);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();
+    }
 }

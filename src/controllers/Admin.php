@@ -131,6 +131,13 @@ class Admin
         return $this->container->view->render($response, 'panel/admin/listAdmin.html', $request->getAttributes());
     }
 
+    public function listSessionsView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("sessionsList", $handler->listSessoesPorId($args['id']));
+        return $this->container->view->render($response, 'panel/admin/listSessions.html', $request->getAttributes());
+    }
+
     public function listAtivView($request, $response, $args)
     {
         $handler = new DatabaseHandler();

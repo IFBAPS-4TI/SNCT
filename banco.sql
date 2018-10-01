@@ -26,8 +26,8 @@ id_atividade integer primary key AUTO_INCREMENT,
 nome varchar(255) NOT NULL UNIQUE,
 descricao varchar(8000) NOT NULL,
 certificado bool NOT NULL,
-tipo int(1) NOT NULL, #Exemplo: Oficina, Minicurso, Palestra, Sala Temática
-capacidade integer NOT NULL, #Exemplo: Em um torneio de truco com até 16 duplas participantes a capacidade seria 16
+tipo int(1) NOT NULL,
+capacidade integer NOT NULL,
 duracao integer NOT NULL
 );
 
@@ -47,4 +47,13 @@ id_atividade integer,
 local_ativ varchar(255),
 timestamp_ativ varchar(16),
 foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
+);
+
+CREATE TABLE Inscricoes
+(
+  id_inscricao integer primary key auto_increment,
+  id_usuario integer,
+  id_sessao integer,
+  foreign key (id_usuario) references Usuario(id_usuario) on delete cascade,
+  foreign key (id_sessao) references Sessoes(id_sessao) on delete cascade
 );
