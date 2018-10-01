@@ -8,6 +8,7 @@ use Exception;
 
 class Sessao
 {
+    private $id;
     private $data;
     private $hora;
     private $local;
@@ -48,4 +49,21 @@ class Sessao
     {
         return $this->data . "U" . $this->hora;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 }
