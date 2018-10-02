@@ -57,3 +57,5 @@ CREATE TABLE Inscricoes
   foreign key (id_usuario) references Usuario(id_usuario) on delete cascade,
   foreign key (id_sessao) references Sessoes(id_sessao) on delete cascade
 );
+
+SELECT * FROM Monitor;

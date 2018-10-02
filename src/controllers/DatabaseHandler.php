@@ -120,7 +120,14 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
-
+    public function getMonitorDataByIdUsuario($id_usuario)
+    {
+        $select = $this->pdo->select()
+            ->from('Monitor')
+            ->where('id_usuario', '=', $id_usuario);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();
+    }
     public function checkAdmin($id_usuario)
     {
         $select = $this->pdo->select()
@@ -234,7 +241,14 @@ class DatabaseHandler
 
         return $deleteStatement->execute();
     }
+    public function removeMonitorFromAtiv($id_usuario, $id_ativ)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Monitor')
+            ->whereMany(array('id_usuario' => $id_usuario, 'id_atividade' => $id_ativ), '=');
 
+        return $deleteStatement->execute();
+    }
     public function removeAtiv($id)
     {
         $deleteStatement = $this->pdo->delete()
@@ -343,5 +357,13 @@ class DatabaseHandler
             ->where('id_sessao', '=', $id_sessao);
         $stmt = $select->execute();
         return $stmt->fetchAll();
+    }
+    public function addMonitor($id_usuario, $id_ativ){
+        $insert = $this->pdo->insert(array('id_atividade', 'id_usuario'))
+            ->into('Monitor')
+            ->values(array($id_ativ, $id_usuario));
+        if (!$insert->execute(false)) {
+            throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
+        }
     }
 }

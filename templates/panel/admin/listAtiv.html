@@ -41,7 +41,7 @@
         <td><i class="fas fa-times"></i></td>
         {% endif %}
         <td>
-            <a href="{{ path_for('admin.remove.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
+            <a href="{{ path_for('admin.list.monitor', { 'id': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Monitores"><i class="fas fa-user-shield"></i></a>
             <a href="{{ path_for('admin.edit.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Editar atividade"><i class="fas fa-edit"></i></a>

@@ -32,16 +32,19 @@ $app->group('/painel/admin', function () {
     $this->get('/list/ativ/sessions/{id}', \Admin::class . ':listSessionsView')->setName('admin.list.sessions');
     $this->get('/list', \Admin::class . ':listAdminView')->setName('admin.list');
     $this->get('/list/users', \Admin::class . ':listUsersView')->setName('admin.list.users');
+    $this->get('/list/monitor/{id}', \Admin::class . ':listMonitorView')->setName('admin.list.monitor');
     $this->get('/edit/ativ/{id}', \Admin::class . ':editAtivView')->setName('admin.edit.ativ');
     $this->get('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSessionView')->setName('admin.edit.sessions');
     /* API */
     $this->get('/remove/{id}', \Admin::class . ':removeAdmin')->setName('admin.remove');
     $this->get('/remove/user/{id}', \Admin::class . ':removeUser')->setName('admin.remove.users');
+    $this->get('/remove/monitor/{id_ativ}/{id_usuario}', \Admin::class . ':removeMonitor')->setName('admin.remove.monitor');
     $this->get('/remove/ativ/{id}', \Admin::class . ':removeAtiv')->setName('admin.remove.ativ');
     $this->get('/remove/session/{id_ativ}/{id_session}', \Admin::class . ':removeSession')->setName('admin.remove.session');
     /* POST rotas */
     $this->post('/add/ativ', \Admin::class . ':addAtiv');
     $this->post('/add', \Admin::class . ':addAdmin');
     $this->post('/edit/ativ/{id}', \Admin::class . ':editAtiv');
+    $this->post('/list/monitor/{id}', \Admin::class . ':addMonitor');
     $this->post('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSession');
 })->add($adminOnly);

@@ -1,0 +1,35 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Controle de Monitores</h4>
+<form method="post">
+    <h6>Adicionar monitor para essa atividade</h6>
+    <div class="form-group">
+        <label for="email">Endereço de Email do Monitor</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+        <small id="emailHelp" class="form-text text-muted">O monitor precisa estar cadastrado no sistema.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Adicionar monitor</button>
+</form>
+<hr />
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Email</th>
+        <th scope="col">Remover?</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in monitorList %}
+    <tr>
+        <td>{{ user['id_usuario'] }}</td>
+        <td>{{ user['nome'] }}</td>
+        <td>{{ user['email'] }}</td>
+        <td><a href="{{ path_for('admin.remove.monitor', { 'id_usuario': user['id_usuario'], 'id_ativ': ativid }) }}" class="btn btn-danger btn-sm" role="button"><i class="fas fa-times"></i></a></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}
