@@ -6,7 +6,7 @@
     inscrições para a atividade</strong>. Isto é irreversível.
 </div>
 <table class="table">
-    <thead class="thead-dark">
+    <thead class="thead-light">
     <tr>
         <th scope="col">#</th>
         <th scope="col">Nome</th>
@@ -41,12 +41,14 @@
         <td><i class="fas fa-times"></i></td>
         {% endif %}
         <td>
+            <a href="{{ path_for('admin.remove.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
+               role="button" data-toggle="tooltip" data-placement="top" title="Monitores"><i class="fas fa-user-shield"></i></a>
             <a href="{{ path_for('admin.edit.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
-               role="button"><i class="fas fa-edit"></i></a>
+               role="button" data-toggle="tooltip" data-placement="top" title="Editar atividade"><i class="fas fa-edit"></i></a>
             <a href="{{ path_for('admin.list.sessions', { 'id': ativ['id_atividade'] }) }}" class="btn btn-primary btn-sm"
-               role="button"><i class="far fa-clock"></i></a>
+               role="button" data-toggle="tooltip" data-placement="top" title="Editar sessões"><i class="far fa-clock"></i></a>
             <a href="{{ path_for('admin.remove.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-danger btn-sm"
-               role="button"><i class="fas fa-times"></i></a>
+               role="button" data-toggle="tooltip" data-placement="top" title="Excluir atividade"><i class="fas fa-times"></i></a>
         </td>
     </tr>
     {% endfor %}
