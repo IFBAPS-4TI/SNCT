@@ -311,8 +311,9 @@ class DatabaseHandler
     public function editAtiv(\Models\Atividade $atividade)
     {
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
-            $update = $this->pdo->update(array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
-                'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao()))
+            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
+                'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao());
+            $update = $this->pdo->update($dados)
                 ->table('Atividade')
                 ->where('id_atividade', '=', $atividade->getId());
             if ($update->execute() < 1) {

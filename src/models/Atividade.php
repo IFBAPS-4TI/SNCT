@@ -174,7 +174,11 @@ class Atividade
      */
     public function isCertificado()
     {
-        return $this->certificado;
+      if($this->certificado){
+          return 1;
+      }else{
+          return 0;
+      }
     }
 
     /**
