@@ -26,7 +26,17 @@
 </div>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">{{ ativInfo['nome'] }}</h1>
+    <h1 class="display-4">{{ ativInfo['nome'] }}
+        {% if ativInfo['tipo'] == 1 %}
+        <span class="badge badge-primary">Oficina/Minicurso</span>
+        {% elseif ativInfo['tipo'] == 2 %}
+        <span class="badge badge-primary">Sala Temática</span>
+        {% elseif ativInfo['tipo'] == 2 %}
+        <span class="badge badge-primary">Palestra/Apresentação</span>
+        {% else %}
+        <span class="badge badge-primary">Outra</span>
+        {% endif %}
+    </h1>
 </div>
 
 <div class="container">
@@ -49,7 +59,11 @@
                     {% else %}
                     <li><span class="badge badge-danger">Certificado</span></li>
                     {% endif %}
+                    {% if ativInfo['capacidade'] == 0 %}
+                    <li>Máximo de inscritos: Ilimitado</li>
+                    {% else %}
                     <li>Máximo de inscritos: {{ ativInfo['capacidade'] }}</li>
+                    {% endif %}
                     <li>Carga Horária: {{ ativInfo['duracao'] }} minutos</li>
                 </ul>
                 <button type="button" class="btn btn-lg btn-block btn-outline-primary">Inscrever-se</button>
