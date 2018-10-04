@@ -48,6 +48,7 @@ class Painel
         try {
             $usuario = $handler->authUsuario($usuario);
             $token = array(
+                "id_usuario" => $usuario->getId(),
                 "email" => $usuario->getEmail(),
                 "isAdmin" => $usuario->getisAdministrador(),
                 "iss" => $_SERVER['SERVER_NAME']
