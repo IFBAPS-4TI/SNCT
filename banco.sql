@@ -54,6 +54,7 @@ CREATE TABLE Inscricoes
   id_inscricao integer primary key auto_increment,
   id_usuario integer,
   id_sessao integer,
+  compareceu bool,
   foreign key (id_usuario) references Usuario(id_usuario) on delete cascade,
   foreign key (id_sessao) references Sessoes(id_sessao) on delete cascade
 );
