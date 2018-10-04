@@ -168,7 +168,12 @@ class DatabaseHandler
             } else {
                 $usuario->setIsAdministrador(false);
             }
-            $usuario->setMonitorias($this->getMonitorDataByIdUsuario($data['id_usuario']));
+            $monitorias = array();
+            $monitoriadata = $this->getMonitorDataByIdUsuario($data['id_usuario']);
+            foreach($monitoriadata as $monitoria){
+                $monitorias[] = $monitoria['id_atividade'];
+            }
+            $usuario->setMonitorias($monitorias);
             $usuario->setNome($data['nome']);
             return $usuario;
         } else {

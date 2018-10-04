@@ -183,9 +183,7 @@ class Painel
         } catch (Exception $e) {
             return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
-        return $this->container->view->render($response, 'panel/painel/panel.html', [
-            'isAdmin' => $token['isAdmin']
-        ]);
+        return $this->container->view->render($response, 'panel/painel/panel.html', $request->getAttributes());
     }
 
     public function registerView($request, $response, $args)
