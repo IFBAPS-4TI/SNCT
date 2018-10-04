@@ -53,6 +53,9 @@ $app->group('/painel/monitor', function () use ($monitorOP) {
     $this->get('/list', \Monitor::class . ':listAtivView')->setName('monitor.list');
     $this->group("/{id_atividade}", function(){
         $this->get('/edit', \Monitor::class . ':editAtivView')->setName('monitor.edit.ativ');
+        $this->get('/inscritos', \Monitor::class . ':listInscriView')->setName('monitor.list.inscri');
+        /* API */
+        $this->get('/inscritos/delete/{id_inscricao}', \Monitor::class . ':deletarInscricao')->setName('monitor.inscricao.deletar');
         /* POST rotas */
         $this->post('/edit', \Monitor::class . ':editAtiv');
     })->add($monitorOP);

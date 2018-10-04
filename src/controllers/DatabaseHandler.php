@@ -247,6 +247,14 @@ class DatabaseHandler
 
         return $deleteStatement->execute();
     }
+    public function removeInscricao($id_inscricao)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Inscricoes')
+            ->where('id_inscricao', '=', $id_inscricao);
+
+        return $deleteStatement->execute();
+    }
     public function removeMonitorFromAtiv($id_usuario, $id_ativ)
     {
         $deleteStatement = $this->pdo->delete()

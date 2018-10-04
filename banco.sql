@@ -25,7 +25,7 @@ CREATE TABLE Atividade
 id_atividade integer primary key AUTO_INCREMENT,
 nome varchar(255) NOT NULL UNIQUE,
 descricao varchar(8000) NOT NULL,
-certificado bool NOT NULL,
+certificado bit NOT NULL,
 tipo int(1) NOT NULL,
 capacidade integer NOT NULL,
 duracao integer NOT NULL
@@ -52,9 +52,9 @@ foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
 CREATE TABLE Inscricoes
 (
   id_inscricao integer primary key auto_increment,
-  id_usuario integer,
-  id_sessao integer,
-  compareceu bool,
+  id_usuario integer NOT NULL,
+  id_sessao integer NOT NULL,
+  compareceu bit NOT NULL,
   foreign key (id_usuario) references Usuario(id_usuario) on delete cascade,
   foreign key (id_sessao) references Sessoes(id_sessao) on delete cascade
 );

@@ -33,6 +33,29 @@ class Monitor
         $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id_atividade']));
         return $this->container->view->render($response, 'panel/monitor/editAtiv.html', $request->getAttributes());
     }
+    public function listInscriView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if (count($handler->getAtivDataById($args['id_atividade'])) <= 1) {
+            Flash::message("<strong>Erro!</strong> Atividade não encontrada", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('monitor.list', []));
+        }
+        $dados = array();
+        $sessoes =  $handler->getSessaoDataById($args['id_atividade']);
+        foreach($sessoes as $sessao){
+            $inscritos = $handler->getInscritosBySessionId($sessao['id_sessao']);
+            foreach($inscritos as $inscrito){
+                $dado = array($handler->getDataById($inscrito['id_usuario']));
+                $dado[0]['compareceu'] = $inscrito['compareceu'];
+                $dado[0]['sessao'] = $sessao['id_sessao'];
+                $dado[0]['id_inscricao'] = $inscrito['id_inscricao'];
+                $dados[] = $dado;
+            }
+        }
+        $request = $request->withAttribute("inscritos", $dados);
+        $request = $request->withAttribute("id_atividade", $args['id_atividade']);
+        return $this->container->view->render($response, 'panel/monitor/listInscri.html', $request->getAttributes());
+    }
     public function editAtiv($request, $response, $args)
     {
         $handler = new DatabaseHandler();
@@ -49,5 +72,21 @@ class Monitor
         }
         $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id_atividade']));
         return $this->container->view->render($response, 'panel/monitor/editAtiv.html', $request->getAttributes());
+    }
+    public function deletarInscricao($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        try {
+            if(!$handler->removeInscricao($args['id_inscricao'])){
+                throw new Exception("Não foi possível remover a inscrição");
+            }
+
+            Flash::message("<strong>Sucesso!</strong> Inscrição removida com sucesso.", $type = "success");
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('monitor.list.inscri', [
+            'id_atividade' => $args['id_atividade']
+        ]));
     }
 }
