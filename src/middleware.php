@@ -80,6 +80,11 @@ $userdata = function ($request, $response, $next) use ($app) {
             $token = (array) Util::decodeToken($this->session->get('jwt_token'));
             $handler = new DatabaseHandler();
             $user = $handler->TokenTranslation($token);
+
+            if(!count($handler->getDataById($user->getId())) > 1){
+                $this->session->delete('jwt_token');
+                throw new Exception("Usuário não existe");
+            }
             if($user->getisAdministrador()){
                 $request = $request->withAttribute('isAdmin', $user->getisAdministrador());
             }
