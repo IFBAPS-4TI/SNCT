@@ -8,14 +8,31 @@
     <hr>
     <p class="mb-0">Se você não está vendo alguma áreas de acesso e você acredita que isto é um erro, consulte a comissão da SNCT.</p>
 </div>
-<h4>Acesso rápido</h4>
+<h4>Atividades</h4>
+{% for ativ in ativList %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
+        <h5 class="card-title">{{ ativ['nome'] }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            {% if ativ['tipo'] == 1 %}
+            Oficina/Minicurso
+            {% elseif ativ['tipo'] == 2 %}
+            Sala Temática
+            {% elseif ativ['tipo'] == 2 %}
+            Palestra/Apresentação
+            {% else %}
+            Outra
+            {% endif %}
+        </h6>
+        <p class="card-text">
+            {% if ativ['certificado'] %}
+        <span class="badge badge-success">Certificado</span>
+        {% else %}
+        <span class="badge badge-danger">Certificado</span>
+        {% endif %}
+        </p>
+        <a href="{{ path_for('atividade', {'id_atividade': ativ['id_atividade']}) }}" target="_blank" class="card-link">Saber mais</a>
     </div>
 </div>
+{% endfor %}
 {% endblock %}

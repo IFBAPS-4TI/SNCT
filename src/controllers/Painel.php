@@ -176,16 +176,8 @@ class Painel
 
     public function indexView($request, $response, $args)
     {
-        try {
-            if ($this->session->exists('jwt_token')) {
-                $token = (array)Util::decodeToken($this->session->get('jwt_token'));
-            } else {
-
-                throw new Exception('Token não existe');
-            }
-        } catch (Exception $e) {
-            return $response->withStatus(302)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
-        }
+        $handler = new DatabaseHandler();
+        $request = $request->withAttribute("ativList", $handler->listAtividades());
         return $this->container->view->render($response, 'panel/painel/panel.html', $request->getAttributes());
     }
 
