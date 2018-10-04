@@ -44,8 +44,8 @@ CREATE TABLE Sessoes
 (
 id_sessao integer primary key AUTO_INCREMENT,
 id_atividade integer,
-local_ativ varchar(255),
-timestamp_ativ varchar(16),
+local_ativ varchar(255) NOT NULL,
+timestamp_ativ varchar(16) NOT NULL,
 foreign key(id_atividade) references Atividade(id_atividade) ON DELETE CASCADE
 );
 
