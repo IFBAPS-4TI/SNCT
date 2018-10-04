@@ -56,7 +56,23 @@ $monitorOnly = function ($request, $response, $next) use ($app) {
     return $next($request, $response);
 };
 $monitorOP = function ($request, $response, $next) use ($app) {
-
+        try {
+            $token = (array) Util::decodeToken($this->session->get('jwt_token'));
+            $handler = new DatabaseHandler();
+            $user = $handler->TokenTranslation($token);
+            if(!count($user->getMonitorias()) >= 1){
+                throw new Exception("Monitores apenas.");
+            }else{
+                $args = $request->getAttribute('routeInfo')[2];
+                if (!in_array($args['id_atividade'], $user->getMonitorias())) {
+                    throw new Exception("Monitor não tem acesso a essa atividade.");
+                }
+            }
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
+            return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('painel', []));
+        }
+    return $next($request, $response);
 };
 $userdata = function ($request, $response, $next) use ($app) {
     if ($this->session->exists('jwt_token')) {
