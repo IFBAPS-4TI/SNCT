@@ -48,3 +48,7 @@ $app->group('/painel/admin', function () {
     $this->post('/list/monitor/{id}', \Admin::class . ':addMonitor');
     $this->post('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSession');
 })->add($userdata)->add($adminOnly);
+
+$app->group('/painel/monitor', function () {
+    $this->get('/list', \Monitor::class . ':listAtivView')->setName('monitor.list');
+})->add($userdata)->add($monitorOnly);
