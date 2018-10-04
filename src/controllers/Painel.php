@@ -20,7 +20,7 @@ class Painel
     {
         // Armengue para corrigir data no formato inglês
         $data = str_replace('/', '-', $data);
-        $data = date('Y-m-d', strtotime($data));
+        $data = date('d-m-Y', strtotime($data));
         // Data corrigida, testando.
         $data = strtotime($data);
         $min = strtotime('+13 years', $data);
