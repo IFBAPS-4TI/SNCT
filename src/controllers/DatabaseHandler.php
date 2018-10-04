@@ -168,6 +168,7 @@ class DatabaseHandler
             } else {
                 $usuario->setIsAdministrador(false);
             }
+            $usuario->setMonitorias($this->getMonitorDataByIdUsuario($data['id_usuario']));
             $usuario->setNome($data['nome']);
             return $usuario;
         } else {

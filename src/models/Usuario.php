@@ -13,7 +13,7 @@ class Usuario
     private $cpf;
     private $senha;
     private $isAdministrador;
-
+    private $monitorias;
     /**
      * Usuario constructor.
      */
@@ -157,4 +157,21 @@ class Usuario
     {
         $this->isAdministrador = $isAdministrador;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMonitorias()
+    {
+        return $this->monitorias;
+    }
+
+    /**
+     * @param mixed $monitorias
+     */
+    public function setMonitorias($monitorias)
+    {
+        $this->monitorias = $monitorias;
+    }
+
 }
