@@ -20,6 +20,7 @@ PRIMARY KEY (id_administrador, id_usuario),
 FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
 ON DELETE CASCADE
 );
+
 CREATE TABLE Atividade
 (
 id_atividade integer primary key AUTO_INCREMENT,

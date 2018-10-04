@@ -22,7 +22,7 @@ class Admin
             $atividade->setDescricao($params['desc']);
             $atividade->setTipo($params['tipo']);
             $atividade->setDuracao($params['duration']);
-            if (isset($params['email'])) {
+            if (isset($params['email']) && $params['email'] != "") {
                 $atividade->setOrganizador($params['email']);
             }
             $atividade->setCapacidade($params['capacity']);
