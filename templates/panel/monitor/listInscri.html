@@ -1,7 +1,8 @@
 {% extends "/panel/templates/panel.html" %}
 {% block content %}
-<h4>Listar inscrições</h4>
-<hr />
+<h4>Listar inscrições <a href="{{ path_for('monitor.list.presenca', { 'id_atividade': id_atividade }) }}"
+                         target="_blank" class="btn btn-primary btn-sm" role="button"  data-toggle="tooltip" data-placement="bottom" title="Emitir lista de presença para impressão"><i class="fas fa-file-pdf"></i></a></h4>
+<hr/>
 {% for sessao in inscritos %}
 <h4>Sessão {{ loop.index }}</h4>
 <table class="table">
@@ -24,12 +25,16 @@
         <td><i class="fas fa-times"></i></td>
         {% endif %}
         <td>
-            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 1, 'id_atividade': id_atividade }) }}" class="btn btn-success btn-sm"
+            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 1, 'id_atividade': id_atividade }) }}"
+               class="btn btn-success btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Compareceu"><i class="fas fa-check"></i></a>
-            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 0, 'id_atividade': id_atividade }) }}" class="btn btn-danger btn-sm"
-               role="button" data-toggle="tooltip" data-placement="top" title="Não compareceu"><i class="fas fa-times"></i></a>
+            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 0, 'id_atividade': id_atividade }) }}"
+               class="btn btn-danger btn-sm"
+               role="button" data-toggle="tooltip" data-placement="top" title="Não compareceu"><i
+                    class="fas fa-times"></i></a>
             <a href="{{ path_for('monitor.inscricao.deletar', { 'id_inscricao': user['id_inscricao'], 'id_atividade': id_atividade }) }}"
-               class="btn btn-dark btn-sm" role="button" data-toggle="tooltip" data-placement="top" title="Deletar inscrição"><i class="fas fa-trash"></i></a>
+               class="btn btn-dark btn-sm" role="button" data-toggle="tooltip" data-placement="top"
+               title="Deletar inscrição"><i class="fas fa-trash"></i></a>
         </td>
     </tr>
     {% endfor %}

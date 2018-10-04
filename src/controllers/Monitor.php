@@ -56,6 +56,27 @@ class Monitor
         $request = $request->withAttribute("id_atividade", $args['id_atividade']);
         return $this->container->view->render($response, 'panel/monitor/listInscri.html', $request->getAttributes());
     }
+    public function listPresencaView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        if (count($handler->getAtivDataById($args['id_atividade'])) <= 1) {
+            Flash::message("<strong>Erro!</strong> Atividade não encontrada", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('monitor.list', []));
+        }
+        $dados = array();
+        $sessoes =  $handler->getSessaoDataById($args['id_atividade']);
+        foreach($sessoes as $sessao){
+            $inscritos = $handler->getInscritosBySessionId($sessao['id_sessao']);
+            foreach($inscritos as $inscrito){
+                $dado = array($handler->getDataById($inscrito['id_usuario']));
+                $dado[0]['sessao'] = $sessao['id_sessao'];
+                $dados[] = $dado;
+            }
+        }
+        $request = $request->withAttribute("inscritos", $dados);
+        $request = $request->withAttribute("id_atividade", $args['id_atividade']);
+        return $this->container->view->render($response, 'panel/monitor/listPresenca.html', $request->getAttributes());
+    }
     public function editAtiv($request, $response, $args)
     {
         $handler = new DatabaseHandler();
