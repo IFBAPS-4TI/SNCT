@@ -8,19 +8,6 @@
                value="{{ ativInfo['nome'] }}" required>
     </div>
     <div class="form-group">
-        <label for="duration">Duração de cada sessão (em minutos)</label>
-        <input type="number" min="1" class="form-control" id="duration" name="duration" placeholder="Duração"
-               value="{{ ativInfo['duracao'] }}" required>
-    </div>
-    <div class="form-group">
-        <label for="capacity">Capacidade</label>
-        <input type="number" min="0" class="form-control" id="capacity" name="capacity"
-               placeholder="Capacidade de pessoas" value="{{ ativInfo['capacidade'] }}" required>
-        <small id="capacityHelp" class="form-text text-muted">O número de pessoas que cada <strong>sessão</strong> suporta. Deixe 0
-            para ilimitado.
-        </small>
-    </div>
-    <div class="form-group">
         <label for="desc">Descrição <a href="https://docs.microsoft.com/pt-br/contribute/how-to-write-use-markdown"
                                        target="_blank"><i
                 class="fab fa-markdown" data-toggle="tooltip" data-placement="top"
@@ -32,18 +19,11 @@
     <hr />
     <h5 class="mt-2">Sessões</h5>
     <div class="alert alert-primary" role="alert">
-        As sessões são editadas em uma área diferente para comodidade.
+        As sessões são editadas pela comissão. Entre em contato para mais informações.
     </div>
     <hr/>
-    <div class="form-group form-check mt-3">
-        {% if ativInfo['certificado'] %}
-        <input type="checkbox" class="form-check-input" id="certificado" name="certificado" checked>
-        {% else %}
-        <input type="checkbox" class="form-check-input" id="certificado" name="certificado">
-        {% endif %}
-        <label class="form-check-label" for="certificado">Esta atividade fornece certificado.</label>
-    </div>
     <button type="submit" class="btn btn-primary">Salvar atividade</button>
+    <a href="{{ path_for('monitor.list') }}" class="btn btn-dark" role="button">Voltar</a>
 </form>
 
 

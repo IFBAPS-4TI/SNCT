@@ -168,6 +168,12 @@ class DatabaseHandler
             } else {
                 $usuario->setIsAdministrador(false);
             }
+            $monitorias = array();
+            $monitoriadata = $this->getMonitorDataByIdUsuario($data['id_usuario']);
+            foreach($monitoriadata as $monitoria){
+                $monitorias[] = $monitoria['id_atividade'];
+            }
+            $usuario->setMonitorias($monitorias);
             $usuario->setNome($data['nome']);
             return $usuario;
         } else {
@@ -238,6 +244,14 @@ class DatabaseHandler
         $deleteStatement = $this->pdo->delete()
             ->from('Usuario')
             ->where('id_usuario', '=', $id_usuario);
+
+        return $deleteStatement->execute();
+    }
+    public function removeInscricao($id_inscricao)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Inscricoes')
+            ->where('id_inscricao', '=', $id_inscricao);
 
         return $deleteStatement->execute();
     }
@@ -323,6 +337,20 @@ class DatabaseHandler
             throw new Exception("Atividade não foi encontrada");
         }
     }
+    public function editAtivMonitor(\Models\Atividade $atividade)
+    {
+        if (count($this->getAtivDataById($atividade->getId())) > 1) {
+            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao());
+            $update = $this->pdo->update($dados)
+                ->table('Atividade')
+                ->where('id_atividade', '=', $atividade->getId());
+            if ($update->execute() < 1) {
+                throw new Exception("Algo deu errado ao atualizar a atividade");
+            }
+        } else {
+            throw new Exception("Atividade não foi encontrada");
+        }
+    }
 
     public function editOrCreateSession(\Models\Sessao $sessao, $insertId = 0)
     {
@@ -366,5 +394,18 @@ class DatabaseHandler
         if (!$insert->execute(false)) {
             throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
         }
+    }
+    public function atualizarFrequencia($id_inscricao, $valor){
+            if($valor != 1 && $valor != 0){
+                throw new Exception("Impossível mudar estado da inscrição.");
+            }
+            $dados = array('compareceu' => (int)$valor);
+            $update = $this->pdo->update($dados)
+                ->table('Inscricoes')
+                ->where('id_inscricao', '=', $id_inscricao);
+            if ($update->execute() < 1) {
+                throw new Exception("Algo deu errado ao atualizar a inscrição.");
+            }
+
     }
 }

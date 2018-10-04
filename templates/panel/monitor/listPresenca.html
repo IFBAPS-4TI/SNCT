@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Painel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div class="container">
+    <a class="btn btn-info mt-2 mb-2 d-print-none" href="{{ path_for('monitor.list.inscri', { 'id_atividade': id_atividade }) }}" role="button">Voltar</a>
+    {% for sessao in inscritos %}
+    <h4>Sessão {{ loop.index }}</h4>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Assinatura</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in sessao %}
+        <tr>
+            <td>{{ user['nome'] }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+
+</body>
+</html>

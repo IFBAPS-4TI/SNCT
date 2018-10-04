@@ -13,10 +13,10 @@ $app->get('/', function (Request $request, Response $response, array $args) {
     return $this->view->render($response, 'home/index.html', $args);
 });
 
-$app->group('/painel', function () {
+$app->group('/painel', function () use ($userdata) {
     $this->get('/entrar', \Painel::class . ':loginView')->setName('entrar');
     $this->get('/registrar', \Painel::class . ':registerView')->setName('registrar');
-    $this->get('[/]', \Painel::class . ':indexView')->setName('painel');
+    $this->get('[/]', \Painel::class . ':indexView')->add($userdata)->setName('painel');
     $this->get('/sair', \Painel::class . ':logoutView')->setName('sair');
     $this->get('/recuperar', \Painel::class . ':forgotView')->setName('resetar');
     /* POST rotas */
@@ -47,4 +47,18 @@ $app->group('/painel/admin', function () {
     $this->post('/edit/ativ/{id}', \Admin::class . ':editAtiv');
     $this->post('/list/monitor/{id}', \Admin::class . ':addMonitor');
     $this->post('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSession');
-})->add($adminOnly);
+})->add($userdata)->add($adminOnly);
+
+$app->group('/painel/monitor', function () use ($monitorOP) {
+    $this->get('/list', \Monitor::class . ':listAtivView')->setName('monitor.list');
+    $this->group("/{id_atividade}", function(){
+        $this->get('/edit', \Monitor::class . ':editAtivView')->setName('monitor.edit.ativ');
+        $this->get('/inscritos', \Monitor::class . ':listInscriView')->setName('monitor.list.inscri');
+        $this->get('/lista', \Monitor::class . ':listPresencaView')->setName('monitor.list.presenca');
+        /* API */
+        $this->get('/inscritos/delete/{id_inscricao}', \Monitor::class . ':deletarInscricao')->setName('monitor.inscricao.deletar');
+        $this->get('/inscritos/update/{id_inscricao}/{valor}', \Monitor::class . ':atualizarFrequencia')->setName('monitor.inscricao.atualizar');
+        /* POST rotas */
+        $this->post('/edit', \Monitor::class . ':editAtiv');
+    })->add($monitorOP);
+})->add($userdata)->add($monitorOnly);

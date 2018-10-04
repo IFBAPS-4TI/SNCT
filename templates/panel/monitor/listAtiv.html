@@ -1,0 +1,53 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Atividades que você monitora</h4>
+<div class="alert alert-info" role="alert">
+    Algumas funções foram desabilitadas para sua segurança. Caso necessite alterar a <strong>data e local</strong> das sessões, adicionar uma sessão, modificar capacidade, emissão de certificados e outros, entre em contato com a comissão.
+</div>
+<table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Capacidade</th>
+        <th scope="col">Certificado</th>
+        <th scope="col">Opções</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for ativ in monitorList %}
+    <tr>
+        <td>{{ ativ['id_atividade'] }}</td>
+        <td>{{ ativ['nome'] }}</td>
+        {% if ativ['tipo'] == 1 %}
+        <td>Oficina/Minicurso</td>
+        {% elseif ativ['tipo'] == 2 %}
+        <td>Sala Temática</td>
+        {% elseif ativ['tipo'] == 2 %}
+        <td>Palestra/Apresentação</td>
+        {% else %}
+        <td>Outra</td>
+        {% endif %}
+        {% if ativ['capacidade'] == 0 %}
+        <td>Ilimitado</td>
+        {% else %}
+        <td>{{ ativ['capacidade'] }}</td>
+        {% endif %}
+        {% if ativ['certificado'] %}
+        <td><i class="fas fa-check"></i></td>
+        {% else %}
+        <td><i class="fas fa-times"></i></td>
+        {% endif %}
+        <td>
+            <a href="{{ path_for('monitor.list.inscri', { 'id_atividade': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
+               role="button" data-toggle="tooltip" data-placement="top" title="Inscrições"><i class="fas fa-user"></i></a>
+            <a href="{{ path_for('monitor.edit.ativ', { 'id_atividade': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
+               role="button" data-toggle="tooltip" data-placement="top" title="Editar atividade"><i class="fas fa-edit"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}
