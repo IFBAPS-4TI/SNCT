@@ -11,7 +11,9 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 
     // Render index view
     return $this->view->render($response, 'home/index.html', $args);
-});
+})->setName('home');
+
+$app->get('/view/{id_atividade}', \Painel::class . ':atividadeShare')->setName('atividade');
 
 $app->group('/painel', function () use ($userdata) {
     $this->get('/entrar', \Painel::class . ':loginView')->setName('entrar');
