@@ -275,6 +275,9 @@ class Admin
         $handler = new DatabaseHandler();
         $params = $request->getParams();
         try{
+            if (!\Respect\Validation\Validator::email()->validate($params['inputEmail'])) {
+                throw new Exception("Email inválido.");
+            }
             if(count($handler->getDataByEmail($params['email'])) <= 1){
                 throw new Exception("Usuário não existe");
             }
