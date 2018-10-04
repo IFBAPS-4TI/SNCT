@@ -49,6 +49,11 @@ $app->group('/painel/admin', function () {
     $this->post('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSession');
 })->add($userdata)->add($adminOnly);
 
-$app->group('/painel/monitor', function () {
+$app->group('/painel/monitor', function () use ($monitorOP) {
     $this->get('/list', \Monitor::class . ':listAtivView')->setName('monitor.list');
+    $this->group("/{id_atividade}", function(){
+        $this->get('/edit', \Monitor::class . ':editAtivView')->setName('monitor.edit.ativ');
+        /* POST rotas */
+        $this->post('/edit', \Monitor::class . ':editAtiv');
+    })->add($monitorOP);
 })->add($userdata)->add($monitorOnly);

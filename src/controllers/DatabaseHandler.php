@@ -329,6 +329,20 @@ class DatabaseHandler
             throw new Exception("Atividade não foi encontrada");
         }
     }
+    public function editAtivMonitor(\Models\Atividade $atividade)
+    {
+        if (count($this->getAtivDataById($atividade->getId())) > 1) {
+            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao());
+            $update = $this->pdo->update($dados)
+                ->table('Atividade')
+                ->where('id_atividade', '=', $atividade->getId());
+            if ($update->execute() < 1) {
+                throw new Exception("Algo deu errado ao atualizar a atividade");
+            }
+        } else {
+            throw new Exception("Atividade não foi encontrada");
+        }
+    }
 
     public function editOrCreateSession(\Models\Sessao $sessao, $insertId = 0)
     {

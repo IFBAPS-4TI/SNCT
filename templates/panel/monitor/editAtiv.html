@@ -1,0 +1,53 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Editar atividade</h4>
+<form method="post">
+    <div class="form-group">
+        <label for="title">Título da Atividade</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Título da atividade"
+               value="{{ ativInfo['nome'] }}" required>
+    </div>
+    <div class="form-group">
+        <label for="desc">Descrição <a href="https://docs.microsoft.com/pt-br/contribute/how-to-write-use-markdown"
+                                       target="_blank"><i
+                class="fab fa-markdown" data-toggle="tooltip" data-placement="top"
+                title="Compatível com Markdown. Clique para saber mais!"></i></a></label>
+        <textarea class="form-control" id="desc" name="desc" rows="3" maxlength="3000" required>{{ ativInfo['descricao'] }}</textarea>
+    </div>
+    <h5 class="mt-4">Visualização da descrição</h5>
+    <span id="markdown"></span>
+    <hr />
+    <h5 class="mt-2">Sessões</h5>
+    <div class="alert alert-primary" role="alert">
+        As sessões são editadas pela comissão. Entre em contato para mais informações.
+    </div>
+    <hr/>
+    <button type="submit" class="btn btn-primary">Salvar atividade</button>
+    <a href="{{ path_for('monitor.list') }}" class="btn btn-dark" role="button">Voltar</a>
+</form>
+
+
+{% endblock %}
+
+{% block customjs %}
+<script>
+    $('#desc').bind('input propertychange', function () {
+        var converter = new showdown.Converter(),
+            text = this.value.replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+    });
+    $(function () {
+        var converter = new showdown.Converter(),
+            text = $('#desc').text().replace(/<(?:.|\n)*?>/gm, ''),
+            html = converter.makeHtml(text);
+        $('#markdown').html(html);
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#data").mask('00/00/0000', {reverse: false});
+        $("#hora").mask('00:00', {reverse: false});
+    });
+
+
+</script>
+{% endblock %}

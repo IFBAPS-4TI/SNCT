@@ -2,7 +2,7 @@
 {% block content %}
 <h4>Atividades que você monitora</h4>
 <div class="alert alert-info" role="alert">
-    Algumas funções foram desabilitadas para sua segurança. Caso necessite alterar a <strong>data e local</strong> das sessões, ou até mesmo adicionar uma, entre em contato com a comissão.
+    Algumas funções foram desabilitadas para sua segurança. Caso necessite alterar a <strong>data e local</strong> das sessões, adicionar uma sessão, modificar capacidade, emissão de certificados e outros, entre em contato com a comissão.
 </div>
 <table class="table">
     <thead class="thead-light">
@@ -42,7 +42,7 @@
         <td>
             <a href="{{ path_for('admin.list.monitor', { 'id': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Inscrições"><i class="fas fa-user"></i></a>
-            <a href="{{ path_for('admin.edit.ativ', { 'id': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
+            <a href="{{ path_for('monitor.edit.ativ', { 'id_atividade': ativ['id_atividade'] }) }}" class="btn btn-info btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Editar atividade"><i class="fas fa-edit"></i></a>
         </td>
     </tr>
