@@ -395,4 +395,17 @@ class DatabaseHandler
             throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
         }
     }
+    public function atualizarFrequencia($id_inscricao, $valor){
+            if($valor != 1 && $valor != 0){
+                throw new Exception("Impossível mudar estado da inscrição.");
+            }
+            $dados = array('compareceu' => (int)$valor);
+            $update = $this->pdo->update($dados)
+                ->table('Inscricoes')
+                ->where('id_inscricao', '=', $id_inscricao);
+            if ($update->execute() < 1) {
+                throw new Exception("Algo deu errado ao atualizar a inscrição.");
+            }
+
+    }
 }

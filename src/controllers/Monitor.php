@@ -89,4 +89,18 @@ class Monitor
             'id_atividade' => $args['id_atividade']
         ]));
     }
+    public function atualizarFrequencia($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        try {
+            $handler->atualizarFrequencia($args['id_inscricao'], $args['valor']);
+
+            Flash::message("<strong>Sucesso!</strong> Inscrição atualizada com sucesso.", $type = "success");
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('monitor.list.inscri', [
+            'id_atividade' => $args['id_atividade']
+        ]));
+    }
 }

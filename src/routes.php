@@ -56,6 +56,7 @@ $app->group('/painel/monitor', function () use ($monitorOP) {
         $this->get('/inscritos', \Monitor::class . ':listInscriView')->setName('monitor.list.inscri');
         /* API */
         $this->get('/inscritos/delete/{id_inscricao}', \Monitor::class . ':deletarInscricao')->setName('monitor.inscricao.deletar');
+        $this->get('/inscritos/update/{id_inscricao}/{valor}', \Monitor::class . ':atualizarFrequencia')->setName('monitor.inscricao.atualizar');
         /* POST rotas */
         $this->post('/edit', \Monitor::class . ':editAtiv');
     })->add($monitorOP);
