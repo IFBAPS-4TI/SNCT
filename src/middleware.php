@@ -36,7 +36,28 @@ $adminOnly = function ($request, $response, $next) use ($app) {
         return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('entrar', []));
     }
 };
+$monitorOnly = function ($request, $response, $next) use ($app) {
+    if ($this->session->exists('jwt_token')) {
+        try {
+            $token = (array) Util::decodeToken($this->session->get('jwt_token'));
+            $handler = new DatabaseHandler();
+            $user = $handler->TokenTranslation($token);
+            if(!count($user->getMonitorias()) >= 1){
+                throw new Exception("Monitor apenas.");
+            }
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> Você não tem permissão para acessar esta área." . "{$e->getMessage()}", $type="error");
+            return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('painel', []));
+        }
+    }else{
+        Flash::message("<strong>Erro!</strong> Você não tem permissão para acessar esta área.", $type="error");
+        return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('entrar', []));
+    }
+    return $next($request, $response);
+};
+$monitorOP = function ($request, $response, $next) use ($app) {
 
+};
 $userdata = function ($request, $response, $next) use ($app) {
     if ($this->session->exists('jwt_token')) {
         try {
