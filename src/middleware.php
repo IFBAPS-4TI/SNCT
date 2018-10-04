@@ -20,7 +20,6 @@ $adminOnly = function ($request, $response, $next) use ($app) {
             $handler = new DatabaseHandler();
             $user = $handler->TokenTranslation($token);
             if($user->getisAdministrador()){
-                $request = $request->withAttribute('isAdmin', $user->getisAdministrador());
                 return $next($request, $response);
             }else{
                 Flash::message("<strong>Erro!</strong> Você não tem permissão para acessar esta área.", $type="error");

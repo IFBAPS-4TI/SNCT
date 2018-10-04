@@ -47,4 +47,4 @@ $app->group('/painel/admin', function () {
     $this->post('/edit/ativ/{id}', \Admin::class . ':editAtiv');
     $this->post('/list/monitor/{id}', \Admin::class . ':addMonitor');
     $this->post('/edit/ativ/sessions/{id_ativ}/{id_session}', \Admin::class . ':editSession');
-})->add($adminOnly);
+})->add($userdata)->add($adminOnly);
