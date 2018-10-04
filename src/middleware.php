@@ -70,7 +70,7 @@ $monitorOP = function ($request, $response, $next) use ($app) {
             }
         } catch (Exception $e) {
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
-            return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('painel', []));
+            return $response->withStatus(302)->withHeader('Location', $app->getContainer()->get('router')->pathFor('monitor.list', []));
         }
     return $next($request, $response);
 };
