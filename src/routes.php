@@ -26,6 +26,12 @@ $app->group('/painel', function () use ($userdata) {
     $this->post('/registrar', \Painel::class . ':registrarUsuario');
     $this->post('/entrar', \Painel::class . ':logarUsuario');
 });
+$app->group('/painel/visitante', function () use ($userdata) {
+    $this->get('/lista', \Visitante::class . ':listInscricoesView')->setName('visitante.lista');
+    $this->post('/recuperar', \Painel::class . ':resetarSenha');
+    $this->post('/registrar', \Painel::class . ':registrarUsuario');
+    $this->post('/entrar', \Painel::class . ':logarUsuario');
+})->add($userdata);
 
 $app->group('/painel/admin', function () {
     $this->get('/add', \Admin::class . ':addAdminView')->setName('admin.add');
