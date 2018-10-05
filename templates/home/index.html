@@ -24,26 +24,7 @@
 </head>
 
 <body id="page-top">
-<!-- Navigation -->
-<a class="menu-toggle rounded" href="#">
-    <i class="fas fa-bars"></i>
-</a>
-<nav id="sidebar-wrapper">
-    <ul class="sidebar-nav">
-        <li class="sidebar-brand">
-            <a class="js-scroll-trigger" href="#page-top">SNCT 2018</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#page-top">Início</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#about">Entrar</a>
-        </li>
-        <li class="sidebar-nav-item">
-            <a class="js-scroll-trigger" href="#services">Registrar</a>
-        </li>
-    </ul>
-</nav>
+
 
 <!-- Header -->
 <header class="masthead d-flex">
@@ -54,7 +35,7 @@
         </h3>
         <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about"><i class="fas fa-globe-americas"></i> Descubra
             um mundo novo</a><br>
-        <a class="btn btn-dark btn-xl mt-3" href="/painel"><i class="fas fa-key"></i> Painel do Usuário</a>
+        <a class="btn btn-dark btn-xl mt-3" href="{{ path_for('entrar') }}"><i class="fas fa-key"></i> Painel do Usuário</a>
     </div>
     <div class="overlay"></div>
 </header>
@@ -85,7 +66,7 @@
                     </div>
                 </div>
                 <br/>
-                <a class="btn btn-dark btn-xl" href="#">Inscrição de Atividades</a>
+                <a class="btn btn-dark btn-xl" href="https://goo.gl/forms/PkZEt23AmxVNvYZ42">Inscrição de Atividades</a>
                 <a class="btn btn-dark btn-xl" href="#">Inscrição de Monitores (Em breve)</a>
             </div>
         </div>
@@ -171,7 +152,7 @@
     <div class="container text-center">
         <h2 class="mb-4">Informações extras</h2>
         <a href="#" class="btn btn-xl btn-light mr-4"><i class="fas fa-file-pdf"></i> Edital</a>
-        <a href="#" class="btn btn-xl btn-dark"><i class="fas fa-life-ring"></i> Suporte</a>
+        <a href="mailto:4ti2018@gmail.com" class="btn btn-xl btn-dark"><i class="fas fa-life-ring"></i> Suporte</a>
     </div>
 </section>
 
@@ -190,17 +171,12 @@
     <div class="container">
         <ul class="list-inline mb-5">
             <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white mr-3" href="#">
+                <a class="social-link rounded-circle text-white mr-3" href="https://www.facebook.com/ifbaportoseguro/">
                     <i class="fab fa-facebook-square"></i>
                 </a>
             </li>
             <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white mr-3" href="#">
-                    <i class="fab fa-twitter-square"></i>
-                </a>
-            </li>
-            <li class="list-inline-item">
-                <a class="social-link rounded-circle text-white" href="#">
+                <a class="social-link rounded-circle text-white" href="https://github.com/IFBAPS-4TI/">
                     <i class="fab fa-github"></i>
                 </a>
             </li>
