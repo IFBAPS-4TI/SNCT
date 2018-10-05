@@ -51,17 +51,17 @@ class Visitante
                 throw new Exception("Sessão não encontrada");
             }
             $ativData = $handler->getAtivDataById($sessaoData['id_atividade']);
-            $sessao_timestamp = str_replace("U", " ", $sessaoData['timestamp_ativ']);
-            $sessao_timestamp = str_replace('/', '-', $sessao_timestamp);
-            $sessao_inicio = date('d/m/Y H:i', strtotime($sessao_timestamp));
-            $sessao_fim = strtotime("+{$ativData['duracao']} minutes", $sessao_inicio);
             foreach ($inscricoes as $inscricao) {
-                $data = str_replace("U", " ", $inscricao['timestamp_ativ']);
-                $data_inicio = date('d/m/Y H:i', strtotime($data));
-                $data_fim = strtotime("+{$inscricao['duracao']} minutes", $data_inicio);
-                if(($data_inicio > $sessao_inicio &&  $data_inicio < $sessao_fim) || ($data_fim > $sessao_inicio &&  $data_fim < $sessao_fim)){
-                    throw new Exception("Você possui uma sessão com horários conflitantes.");
+                if($inscricao['id_sessao'] == $args['id_sessao']){
+                    throw new Exception("Você já se registrou nessa sessão.");
                 }
+            }
+            $inscritos = $handler->getInscritosBySessionId($args['id_sessao']);
+            if(count($inscritos) >= $ativData['capacidade']){
+                throw new Exception("Atividade lotada");
+            }
+            if(!$handler->addInscricao($usuario->getId(), (int)$args['id_sessao'])){
+                throw new Exception("Algo deu errado ao adicionar inscrição");
             }
             Flash::message("<strong>Sucesso!</strong> Você foi inscrito.", $type = "success");
         } catch (Exception $e) {

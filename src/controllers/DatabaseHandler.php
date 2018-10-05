@@ -428,4 +428,10 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
+    public function addInscricao($id_usuario, $id_sessao){
+        $insert = $this->pdo->insert(array('id_usuario', 'id_sessao', 'compareceu'))
+            ->into('Inscricoes')
+            ->values(array($id_usuario, $id_sessao, 0));
+        return $insert->execute(false);
+    }
 }
