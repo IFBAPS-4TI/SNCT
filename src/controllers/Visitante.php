@@ -57,7 +57,7 @@ class Visitante
                 }
             }
             $inscritos = $handler->getInscritosBySessionId($args['id_sessao']);
-            if(count($inscritos) >= $ativData['capacidade']){
+            if(count($inscritos) >= $ativData['capacidade'] && (int)$ativData['capacidade'] != 0){
                 throw new Exception("Atividade lotada");
             }
             $sessao_timestamp = str_replace("U", " ", $sessaoData['timestamp_ativ']);
