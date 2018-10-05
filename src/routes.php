@@ -28,6 +28,8 @@ $app->group('/painel', function () use ($userdata) {
 });
 $app->group('/painel/visitante', function () use ($userdata) {
     $this->get('/lista', \Visitante::class . ':listInscricoesView')->setName('visitante.lista');
+    $this->get('/editar', \Visitante::class . ':alterarPefilView')->setName('visitante.editar');
+    $this->post('/editar', \Visitante::class . ':alterarPerfil');
     $this->get('/remover/{id_inscricao}', \Visitante::class . ':removerInscricao')->setName('visitante.remover.inscricao');
     $this->get('/adicionar/{id_sessao}', \Visitante::class . ':adicionarInscricao')->setName('visitante.adicionar.inscricao');
 })->add($userdata);

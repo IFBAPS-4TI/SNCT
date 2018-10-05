@@ -22,6 +22,34 @@ class Visitante
         return $this->container->view->render($response, 'panel/visitante/listInscricoes.html', $request->getAttributes());
     }
 
+    public function alterarPefilView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $token = (array)Util::decodeToken($this->session->get('jwt_token'));
+        $usuario = $handler->TokenTranslation($token);
+        $request = $request->withAttribute("email", $usuario->getEmail());
+        return $this->container->view->render($response, 'panel/visitante/editPerfil.html', $request->getAttributes());
+    }
+    public function alterarPerfil($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $params = $request->getParams();
+        try {
+            $token = (array)Util::decodeToken($this->session->get('jwt_token'));
+            $usuario = $handler->TokenTranslation($token);
+            $usuario->setEmail($params['email']);
+            if(isset($params['senha']) && $params['senha'] != ""){
+            $usuario->setSenha($params['senha']);
+            }
+            $handler->atualizarPerfil($usuario);
+            $this->session->delete('jwt_token');
+            Flash::message("<strong>Sucesso!</strong> Perfil atualizado com sucesso. Você precisa logar novamente", $type = "success");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
+        } catch (Exception $e) {
+            Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
+        }
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('visitante.editar', []));
+    }
     public function removerInscricao($request, $response, $args)
     {
         $handler = new DatabaseHandler();

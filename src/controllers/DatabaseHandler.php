@@ -163,6 +163,7 @@ class DatabaseHandler
             $usuario->setNascimento($data['nascimento']);
             $usuario->setCpf($data['cpf']);
             $usuario->setId($data['id_usuario']);
+            $usuario->setEmail($token['email']);
             if (count($this->checkAdmin($data['id_usuario'])) > 1) {
                 $usuario->setIsAdministrador(true);
             } else {
@@ -433,5 +434,18 @@ class DatabaseHandler
             ->into('Inscricoes')
             ->values(array($id_usuario, $id_sessao, 0));
         return $insert->execute(false);
+    }
+    public function atualizarPerfil(\Models\Usuario $usuario){
+        $dados = array();
+        $dados['email'] = $usuario->getEmail();
+        if($usuario->getSenha() != null || $usuario->getSenha() != ""){
+            $dados['senha'] = $usuario->getSenha();
+        }
+        $update = $this->pdo->update($dados)
+            ->table('Usuario')
+            ->where('id_usuario', '=', $usuario->getId());
+        if ($update->execute() < 1) {
+            throw new Exception("Algo deu errado ao atualizar o perfil");
+        }
     }
 }

@@ -1,0 +1,18 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Editar perfil</h4>
+<form method="post">
+    <div class="form-group">
+        <label for="email">Novo email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Novo email" value="{{ email }}" required>
+    </div>
+    <div class="form-group">
+        <label for="senha">Nova senha</label>
+        <input type="password" id="senha" name="senha" class="form-control" placeholder="Nova senha">
+        <small id="passHelp" class="form-text text-muted">Deixe em branco para não alterar.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar perfil</button>
+</form>
+
+
+{% endblock %}
