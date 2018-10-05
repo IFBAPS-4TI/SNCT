@@ -1,6 +1,7 @@
 {% extends "/panel/templates/panel.html" %}
 {% block content %}
 <h4>Atividades que você está inscrito</h4>
+<div class="card-deck mb-3 text-center">
 {% for inscricao in inscricoes %}
 {% set data = inscricao['timestamp_ativ']|split('U') %}
 <div class="card" style="width: 18rem;">
@@ -13,4 +14,5 @@
     </div>
 </div>
 {% endfor %}
+</div>
 {% endblock %}

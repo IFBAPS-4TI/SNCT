@@ -60,6 +60,13 @@ class Visitante
             if(count($inscritos) >= $ativData['capacidade']){
                 throw new Exception("Atividade lotada");
             }
+            $sessao_timestamp = str_replace("U", " ", $sessaoData['timestamp_ativ']);
+            $sessao_timestamp = str_replace('/', '-', $sessao_timestamp);
+            $sessao_inicio = strtotime(date('d-m-Y H:i', strtotime($sessao_timestamp)));
+            if(time() > $sessao_inicio){
+                throw new Exception("Esta atividade já acabou");
+            }
+
             if(!$handler->addInscricao($usuario->getId(), (int)$args['id_sessao'])){
                 throw new Exception("Algo deu errado ao adicionar inscrição");
             }
