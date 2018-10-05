@@ -255,6 +255,14 @@ class DatabaseHandler
 
         return $deleteStatement->execute();
     }
+    public function removeInscricaoTrava($id_inscricao, $id_usuario)
+    {
+        $deleteStatement = $this->pdo->delete()
+            ->from('Inscricoes')
+            ->whereMany(array('id_inscricao' => $id_inscricao, 'id_usuario' => $id_usuario), "=");
+
+        return $deleteStatement->execute();
+    }
     public function removeMonitorFromAtiv($id_usuario, $id_ativ)
     {
         $deleteStatement = $this->pdo->delete()

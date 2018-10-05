@@ -28,6 +28,7 @@ $app->group('/painel', function () use ($userdata) {
 });
 $app->group('/painel/visitante', function () use ($userdata) {
     $this->get('/lista', \Visitante::class . ':listInscricoesView')->setName('visitante.lista');
+    $this->get('/remover/{id_inscricao}', \Visitante::class . ':removerInscricao')->setName('visitante.remover.inscricao');
     $this->post('/recuperar', \Painel::class . ':resetarSenha');
     $this->post('/registrar', \Painel::class . ':registrarUsuario');
     $this->post('/entrar', \Painel::class . ':logarUsuario');

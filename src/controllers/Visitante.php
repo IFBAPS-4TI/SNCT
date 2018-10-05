@@ -18,21 +18,20 @@ class Visitante
         $request = $request->withAttribute("inscricoes", $handler->getInscricoesByIdUsuario($usuario->getId()));
         return $this->container->view->render($response, 'panel/visitante/listInscricoes.html', $request->getAttributes());
     }
-    public function editAtiv($request, $response, $args)
+    public function removerInscricao($request, $response, $args)
     {
         $handler = new DatabaseHandler();
-        $params = $request->getParams();
         try {
-            $atividade = new \Models\Atividade();
-            $atividade->setId($args['id_atividade']);
-            $atividade->setNome($params['title']);
-            $atividade->setDescricao($params['desc']);
-            $handler->editAtivMonitor($atividade);
+            $token = (array) Util::decodeToken($this->session->get('jwt_token'));
+            $usuario = $handler->TokenTranslation($token);
+            if($handler->removeInscricaoTrava($args['id_inscricao'], $usuario->getId())){
             Flash::message("<strong>Sucesso!</strong> Atividade atualizada com sucesso.", $type = "success");
+            }else{
+                throw new Exception("Não foi possível remover a inscrição.");
+            }
         } catch (Exception $e) {
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
         }
-        $request = $request->withAttribute("ativInfo", $handler->getAtivDataById($args['id_atividade']));
-        return $this->container->view->render($response, 'panel/monitor/editAtiv.html', $request->getAttributes());
+        return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('visitante.lista', []));
     }
 }

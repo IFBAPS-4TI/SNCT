@@ -9,7 +9,7 @@
         <h6 class="card-subtitle mb-2 text-muted">{{ inscricao['local_ativ'] }}</h6>
         <p class="card-text"><span class="badge badge-info">{{ data[0] }}</span> <span class="badge badge-primary">{{ data[1] }}</span></p>
         <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" target="_blank" class="card-link">Saber mais</a>
-        <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" target="_blank" class="card-link">Remover Inscrição</a>
+        <a href="{{ path_for('visitante.remover.inscricao', {'id_inscricao': inscricao['id_inscricao']}) }}" class="card-link">Remover Inscrição</a>
     </div>
 </div>
 {% endfor %}
