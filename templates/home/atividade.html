@@ -66,7 +66,7 @@
                     {% endif %}
                     <li>Carga Horária: {{ ativInfo['duracao'] }} minutos</li>
                 </ul>
-                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Inscrever-se</button>
+                <a href="{{ path_for('visitante.adicionar.inscricao', {'id_sessao': sessao['id_sessao']}) }}" class="btn btn-lg btn-block btn-outline-primary" role="button">Inscrever-se</a>
             </div>
         </div>
         {% endfor %}
