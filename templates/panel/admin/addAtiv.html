@@ -72,9 +72,9 @@
         <div class="input-group mb-3 w-25">
             <div class="session-1"></div>
             <div class="input-group-prepend">
-                <input type="text" id="data" name="data-1" class="form-control" placeholder="Data (00/00/0000)">
+                <input type="text" id="data-1" name="data-1" class="form-control" placeholder="Data (00/00/0000)">
             </div>
-            <input type="text" id="hora" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
+            <input type="text" id="hora-1" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
             <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
         </div>
     </div>
@@ -101,8 +101,8 @@
     });
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
-        $("#data").mask('00/00/0000', {reverse: false});
-        $("#hora").mask('00:00', {reverse: false});
+        $("#data-1").mask('00/00/0000', {reverse: false});
+        $("#hora-1").mask('00:00', {reverse: false});
     });
 
     $(function () {
@@ -117,6 +117,8 @@
                 new_model = $(new_model).html($(new_model).html().replace('local-1', "local-" + next));
                 new_model = $(new_model).html($(new_model).html().replace('session-1', "session-" + next));
                 $("#sessions").append(new_model);
+                $("#data-" + next).mask('00/00/0000', {reverse: false});
+                $("#hora-" + next).mask('00:00', {reverse: false});
             }
         });
         $("#remove").click(function (e) {
