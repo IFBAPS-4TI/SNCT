@@ -1,0 +1,16 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Atividades que você está inscrito</h4>
+{% for inscricao in inscricoes %}
+{% set data = inscricao['timestamp_ativ']|split('U') %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{ inscricao['nome'] }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ inscricao['local_ativ'] }}</h6>
+        <p class="card-text"><span class="badge badge-info">{{ data[0] }}</span> <span class="badge badge-primary">{{ data[1] }}</span></p>
+        <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" target="_blank" class="card-link">Saber mais</a>
+        <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" target="_blank" class="card-link">Remover Inscrição</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -411,4 +411,13 @@ class DatabaseHandler
             }
 
     }
+    public function getInscricoesByIdUsuario($id_usuario){
+        $select = $this->pdo->select()
+            ->from('Inscricoes')
+            ->join('Sessoes', 'Inscricoes.id_sessao', '=', 'Sessoes.id_sessao')
+            ->join('Atividade', 'Atividade.id_atividade', '=', 'Sessoes.id_atividade')
+            ->where('Inscricoes.id_usuario', '=', $id_usuario);
+        $stmt = $select->execute();
+        return $stmt->fetchAll();
+    }
 }
