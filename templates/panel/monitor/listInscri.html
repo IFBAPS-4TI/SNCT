@@ -19,7 +19,7 @@
     <tr>
         <td>{{ user['nome'] }}</td>
         <td>{{ user['email'] }}</td>
-        {% if user['compareceu'] %}
+        {% if user['compareceu'] == 1 %}
         <td><i class="fas fa-check"></i></td>
         {% else %}
         <td><i class="fas fa-times"></i></td>
