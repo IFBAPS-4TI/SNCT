@@ -65,6 +65,7 @@
                     <li>Máximo de inscritos: {{ ativInfo['capacidade'] }}</li>
                     {% endif %}
                     <li>Carga Horária: {{ ativInfo['duracao'] }} minutos</li>
+                    <li>Local: <span class="badge badge-primary">{{ sessao['local_ativ'] }}</span></li>
                 </ul>
                 <a href="{{ path_for('visitante.adicionar.inscricao', {'id_sessao': sessao['id_sessao']}) }}" class="btn btn-lg btn-block btn-outline-primary" role="button">Inscrever-se</a>
             </div>
