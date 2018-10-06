@@ -5,6 +5,7 @@ class DatabaseHandler
 {
     protected $config;
     private $pdo;
+    private $tables;
 
     /**
      * DatabaseHandler constructor.
@@ -13,6 +14,7 @@ class DatabaseHandler
     {
         $this->config = new DatabaseConfig();
         $this->pdo = $this->config->getPdo();
+        $this->tables = new DatabaseTables();
     }
 
     public function alterarSenha(\Models\Usuario $usuario, $novaSenha)
@@ -21,7 +23,7 @@ class DatabaseHandler
         if (count($data) > 1 && $data['cpf'] == $usuario->getCpf()) {
             // Usuário encontrado
             $update = $this->pdo->update(array('senha' => $usuario->getSenha()))
-                ->table('Usuario')
+                ->table($this->tables->getUsuarios())
                 ->whereMany(array('email' => $usuario->getEmail(), 'cpf' => $usuario->getCpf()), '=');
             $afetadas = $update->execute();
             if (count($afetadas) > 0) {
@@ -52,7 +54,7 @@ class DatabaseHandler
     {
         // Verifica se email ou cpf do usuário já existe
         $select = $this->pdo->select()
-            ->from('Usuario')
+            ->from($this->tables->getUsuarios())
             ->where('email', '=', $usuario->getEmail())->orWhere('cpf', "=", $usuario->getCpf());
         $stmt = $select->execute();
         $data = $stmt->fetch();
@@ -62,7 +64,7 @@ class DatabaseHandler
 
         // Tudo certo, inserir usuário
         $insert = $this->pdo->insert(array('nome', 'email', 'nascimento', 'cpf', 'senha'))
-            ->into('Usuario')
+            ->into($this->tables->getUsuarios())
             ->values(array($usuario->getNome(), $usuario->getEmail(), $usuario->getNascimento(), $usuario->getCpf(), $usuario->getSenha()));
         return $insert->execute(false);
     }
@@ -70,7 +72,7 @@ class DatabaseHandler
     public function getDataByEmail($email)
     {
         $select = $this->pdo->select()
-            ->from('Usuario')
+            ->from($this->tables->getUsuarios())
             ->where('email', '=', $email);
         $stmt = $select->execute();
         return $stmt->fetch();
@@ -79,7 +81,7 @@ class DatabaseHandler
     public function getDataById($id_usuario)
     {
         $select = $this->pdo->select()
-            ->from('Usuario')
+            ->from($this->tables->getUsuarios())
             ->where('id_usuario', '=', $id_usuario);
         $stmt = $select->execute();
         return $stmt->fetch();
@@ -88,7 +90,7 @@ class DatabaseHandler
     public function getAtivDataById($id_atividade)
     {
         $select = $this->pdo->select()
-            ->from('Atividade')
+            ->from($this->tables->getAtividades())
             ->where('id_atividade', '=', $id_atividade);
         $stmt = $select->execute();
         return $stmt->fetch();
@@ -97,7 +99,7 @@ class DatabaseHandler
     public function getSessaoDataById($id_atividade)
     {
         $select = $this->pdo->select()
-            ->from('Sessoes')
+            ->from($this->tables->getSessoes())
             ->where('id_atividade', '=', $id_atividade);
         $stmt = $select->execute();
         return $stmt->fetchAll();
@@ -106,7 +108,7 @@ class DatabaseHandler
     public function getSessaoDataByIdSessao($id_sessao)
     {
         $select = $this->pdo->select()
-            ->from('Sessoes')
+            ->from($this->tables->getSessoes())
             ->where('id_sessao', '=', $id_sessao);
         $stmt = $select->execute();
         return $stmt->fetch();
@@ -115,7 +117,7 @@ class DatabaseHandler
     public function getMonitorDataByAtividade($id_atividade)
     {
         $select = $this->pdo->select()
-            ->from('Monitor')
+            ->from($this->tables->getMonitores())
             ->where('id_atividade', '=', $id_atividade);
         $stmt = $select->execute();
         return $stmt->fetchAll();
@@ -123,7 +125,7 @@ class DatabaseHandler
     public function getMonitorDataByIdUsuario($id_usuario)
     {
         $select = $this->pdo->select()
-            ->from('Monitor')
+            ->from($this->tables->getMonitores())
             ->where('id_usuario', '=', $id_usuario);
         $stmt = $select->execute();
         return $stmt->fetchAll();
@@ -131,7 +133,7 @@ class DatabaseHandler
     public function checkAdmin($id_usuario)
     {
         $select = $this->pdo->select()
-            ->from('Administradores')
+            ->from($this->tables->getAdministradores())
             ->where('id_usuario', '=', $id_usuario);
         $stmt = $select->execute();
         return $stmt->fetch();
@@ -187,7 +189,7 @@ class DatabaseHandler
     public function addAdmin($id_usuario)
     {
         $insert = $this->pdo->insert(array('id_usuario'))
-            ->into('Administradores')
+            ->into($this->tables->getAdministradores())
             ->values(array($id_usuario));
         return $insert->execute(false);
     }
@@ -195,7 +197,7 @@ class DatabaseHandler
     public function listAdmin()
     {
         $select = $this->pdo->select()
-            ->from('Administradores');
+            ->from($this->tables->getAdministradores());
         $stmt = $select->execute();
         $data_admin = $stmt->fetchAll();
         $data = array();
@@ -209,7 +211,7 @@ class DatabaseHandler
     public function listUsers()
     {
         $select = $this->pdo->select()
-            ->from('Usuario');
+            ->from($this->tables->getUsuarios());
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
@@ -217,7 +219,7 @@ class DatabaseHandler
     public function listAtividades()
     {
         $select = $this->pdo->select()
-            ->from('Atividade');
+            ->from($this->tables->getAtividades());
         $stmt = $select->execute();
         return $stmt->fetchAll();;
     }
@@ -225,7 +227,7 @@ class DatabaseHandler
     public function listSessoesPorId($id)
     {
         $select = $this->pdo->select()
-            ->from('Sessoes')
+            ->from($this->tables->getSessoes())
             ->where('id_atividade', '=', $id);
         $stmt = $select->execute();
         return $stmt->fetchAll();;
@@ -234,7 +236,7 @@ class DatabaseHandler
     public function removeAdmin($id_usuario)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Administradores')
+            ->from($this->tables->getAdministradores())
             ->where('id_usuario', '=', $id_usuario);
 
         return $deleteStatement->execute();
@@ -243,7 +245,7 @@ class DatabaseHandler
     public function removeUser($id_usuario)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Usuario')
+            ->from($this->tables->getUsuarios())
             ->where('id_usuario', '=', $id_usuario);
 
         return $deleteStatement->execute();
@@ -251,7 +253,7 @@ class DatabaseHandler
     public function removeInscricao($id_inscricao)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Inscricoes')
+            ->from($this->tables->getInscricoes())
             ->where('id_inscricao', '=', $id_inscricao);
 
         return $deleteStatement->execute();
@@ -259,7 +261,7 @@ class DatabaseHandler
     public function removeInscricaoTrava($id_inscricao, $id_usuario)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Inscricoes')
+            ->from($this->tables->getInscricoes())
             ->whereMany(array('id_inscricao' => $id_inscricao, 'id_usuario' => $id_usuario), "=");
 
         return $deleteStatement->execute();
@@ -267,7 +269,7 @@ class DatabaseHandler
     public function removeMonitorFromAtiv($id_usuario, $id_ativ)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Monitor')
+            ->from($this->tables->getMonitores())
             ->whereMany(array('id_usuario' => $id_usuario, 'id_atividade' => $id_ativ), '=');
 
         return $deleteStatement->execute();
@@ -275,7 +277,7 @@ class DatabaseHandler
     public function removeAtiv($id)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Atividade')
+            ->from($this->tables->getAtividades())
             ->where('id_atividade', '=', $id);
 
         return $deleteStatement->execute();
@@ -284,7 +286,7 @@ class DatabaseHandler
     public function removeSession($id)
     {
         $deleteStatement = $this->pdo->delete()
-            ->from('Sessoes')
+            ->from($this->tables->getSessoes())
             ->where('id_sessao', '=', $id);
 
         return $deleteStatement->execute();
@@ -294,7 +296,7 @@ class DatabaseHandler
     {
 
         $insert = $this->pdo->insert(array('nome', 'descricao', 'certificado', 'tipo', 'capacidade', 'duracao'))
-            ->into('Atividade')
+            ->into($this->tables->getAtividades())
             ->values(array($atividade->getNome(), $atividade->getDescricao(), $atividade->isCertificado(),
                 $atividade->getTipo(), $atividade->getCapacidade(), $atividade->getDuracao()));
         $insert_id = $insert->execute(true);
@@ -302,12 +304,12 @@ class DatabaseHandler
         if ($atividade->getOrganizador() === 0) {
             $admins = $this->listAdmin();
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
-                ->into('Monitor')
+                ->into($this->tables->getMonitores())
                 ->values(array($insert_id, $admins[0]['id_usuario']));
         } else {
             $organizador =  $this->getDataByEmail($atividade->getOrganizador());
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
-                ->into('Monitor')
+                ->into($this->tables->getMonitores())
                 ->values(array($organizador['id_usuario'], $insert_id));
 
         }
@@ -316,7 +318,7 @@ class DatabaseHandler
             $sessoes = $atividade->getSessoes();
             foreach ($sessoes as $sessao) {
                 $insert = $this->pdo->insert(array('id_atividade', 'local_ativ', 'timestamp_ativ'))
-                    ->into('Sessoes')
+                    ->into($this->tables->getSessoes())
                     ->values(array($insert_id, $sessao->getLocal(), $sessao->buildTimestamp()));
                 if (!$insert->execute(false)) {
                     throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
@@ -340,7 +342,7 @@ class DatabaseHandler
             $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
                 'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao());
             $update = $this->pdo->update($dados)
-                ->table('Atividade')
+                ->table($this->tables->getAtividades())
                 ->where('id_atividade', '=', $atividade->getId());
             if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a atividade");
@@ -354,7 +356,7 @@ class DatabaseHandler
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
             $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao());
             $update = $this->pdo->update($dados)
-                ->table('Atividade')
+                ->table($this->tables->getAtividades())
                 ->where('id_atividade', '=', $atividade->getId());
             if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a atividade");
@@ -369,7 +371,7 @@ class DatabaseHandler
         if ($sessao->getId() != 0) {
             if (count($this->getSessaoDataByIdSessao($sessao->getId())) > 1) {
                 $update = $this->pdo->update(array('local_ativ' => $sessao->getLocal(), 'timestamp_ativ' => $sessao->buildTimestamp()))
-                    ->table('Sessoes')
+                    ->table($this->tables->getSessoes())
                     ->where('id_sessao', '=', $sessao->getId());
                 if ($update->execute() < 1) {
                     throw new Exception("Algo deu errado ao atualizar a sessão");
@@ -380,7 +382,7 @@ class DatabaseHandler
         } else {
             if ($insertId != 0) {
                 $insert = $this->pdo->insert(array('id_atividade', 'local_ativ', 'timestamp_ativ'))
-                    ->into('Sessoes')
+                    ->into($this->tables->getSessoes())
                     ->values(array($insertId, $sessao->getLocal(), $sessao->buildTimestamp()));
                 if (!$insert->execute(false)) {
                     throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
@@ -394,7 +396,7 @@ class DatabaseHandler
     public function getInscritosBySessionId($id_sessao)
     {
         $select = $this->pdo->select()
-            ->from('Inscricoes')
+            ->from($this->tables->getInscricoes())
             ->where('id_sessao', '=', $id_sessao);
         $stmt = $select->execute();
         return $stmt->fetchAll();
@@ -406,7 +408,7 @@ class DatabaseHandler
             $organizador = 0;
         }
         $insert = $this->pdo->insert(array('id_atividade', 'id_usuario', 'organizador'))
-            ->into('Monitor')
+            ->into($this->tables->getMonitores())
             ->values(array($id_ativ, $id_usuario, $organizador));
         if (!$insert->execute(false)) {
             throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
@@ -418,7 +420,7 @@ class DatabaseHandler
             }
             $dados = array('compareceu' => (int)$valor);
             $update = $this->pdo->update($dados)
-                ->table('Inscricoes')
+                ->table($this->tables->getInscricoes())
                 ->where('id_inscricao', '=', $id_inscricao);
             if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a inscrição.");
@@ -427,16 +429,16 @@ class DatabaseHandler
     }
     public function getInscricoesByIdUsuario($id_usuario){
         $select = $this->pdo->select()
-            ->from('Inscricoes')
-            ->join('Sessoes', 'Inscricoes.id_sessao', '=', 'Sessoes.id_sessao')
-            ->join('Atividade', 'Atividade.id_atividade', '=', 'Sessoes.id_atividade')
-            ->where('Inscricoes.id_usuario', '=', $id_usuario);
+            ->from($this->tables->getInscricoes())
+            ->join($this->tables->getSessoes(), "{$this->tables->getInscricoes()}.id_sessao", '=', "{$this->tables->getSessoes()}.id_sessao")
+            ->join($this->tables->getAtividades(), "{$this->tables->getAtividades()}.id_atividade", '=', "{$this->tables->getSessoes()}.id_atividade")
+            ->where("{$this->tables->getInscricoes()}.id_usuario", '=', $id_usuario);
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
     public function addInscricao($id_usuario, $id_sessao){
         $insert = $this->pdo->insert(array('id_usuario', 'id_sessao', 'compareceu'))
-            ->into('Inscricoes')
+            ->into($this->tables->getInscricoes())
             ->values(array($id_usuario, $id_sessao, 0));
         return $insert->execute(false);
     }
@@ -447,7 +449,7 @@ class DatabaseHandler
             $dados['senha'] = $usuario->getSenha();
         }
         $update = $this->pdo->update($dados)
-            ->table('Usuario')
+            ->table($this->tables->getUsuarios())
             ->where('id_usuario', '=', $usuario->getId());
         if ($update->execute() < 1) {
             throw new Exception("Algo deu errado ao atualizar o perfil");
