@@ -339,7 +339,7 @@ class DatabaseHandler
     public function editAtiv(\Models\Atividade $atividade)
     {
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
-            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
+            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => (int)$atividade->isCertificado(),
                 'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao());
             $update = $this->pdo->update($dados)
                 ->table($this->tables->getAtividades())
@@ -355,9 +355,10 @@ class DatabaseHandler
     {
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
             $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao());
-            $update = $this->pdo->update($dados)
+            $update = $this->pdo->update()
+                ->set($dados)
                 ->table($this->tables->getAtividades())
-                ->where('id_atividade', '=', $atividade->getId());
+                ->where('id_atividade', '=', (int)$atividade->getId());
             if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a atividade");
             }

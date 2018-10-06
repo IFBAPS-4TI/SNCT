@@ -106,6 +106,8 @@ class Admin
             $atividade->setCapacidade($params['capacity']);
             if ($params['certificado'] == "on") {
                 $atividade->setCertificado(true);
+            }else{
+                $atividade->setCertificado(false);
             }
             $handler->editAtiv($atividade);
             Flash::message("<strong>Sucesso!</strong> Atividade atualizada com sucesso.", $type = "success");
