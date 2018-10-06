@@ -34,7 +34,7 @@ class DatabaseHandler
                 $email->addContent(
                     "text/html", "Sua nova senha é <strong>{$novaSenha}</strong>. Lembre-se que você pode altera-la a qualquer momento no seu painel."
                 );
-                $sendgrid = new \SendGrid($_SERVER['SENDGRID_API_KEY']);
+                $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
                 try {
                     $sendgrid->send($email);
                 } catch (Exception $e) {

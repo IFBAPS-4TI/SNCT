@@ -17,7 +17,7 @@ class DatabaseTables
     public function __construct()
     {
         if(getenv("sql_prefix")){
-            $this->prefix = $_SERVER["sql_prefix"] . "_";
+            $this->prefix = getenv("sql_prefix") . "_";
         }else{
             $this->prefix = "";
         }
