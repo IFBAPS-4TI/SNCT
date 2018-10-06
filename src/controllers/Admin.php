@@ -291,8 +291,11 @@ class Admin
                     throw new Exception("Usuário já é monitor desta atividade");
                 }
             }
-
-            $handler->addMonitor($usuario['id_usuario'], $args['id']);
+            $organizador = false;
+            if ($params['organizador'] == "on") {
+                $organizador = true;
+            }
+            $handler->addMonitor($usuario['id_usuario'], $args['id'], $organizador);
             Flash::message("<strong>Sucesso!</strong> Monitor adicionado", $type = "success");
             return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.monitor', [
                 'id' => $args['id']

@@ -399,10 +399,15 @@ class DatabaseHandler
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
-    public function addMonitor($id_usuario, $id_ativ){
-        $insert = $this->pdo->insert(array('id_atividade', 'id_usuario'))
+    public function addMonitor($id_usuario, $id_ativ, $organizador = false){
+        if($organizador){
+            $organizador = 1;
+        }else{
+            $organizador = 0;
+        }
+        $insert = $this->pdo->insert(array('id_atividade', 'id_usuario', 'organizador'))
             ->into('Monitor')
-            ->values(array($id_ativ, $id_usuario));
+            ->values(array($id_ativ, $id_usuario, $organizador));
         if (!$insert->execute(false)) {
             throw new Exception("Não foi possível adicionar uma das sessões. Ela já existe ou é inválida.");
         }
