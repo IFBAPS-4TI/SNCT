@@ -69,13 +69,15 @@
     <h5 class="mt-4">Sessões</h5>
 
     <div id="sessions">
-        <div class="input-group mb-3 w-25">
+        <div class="input-group mb-3 w-50">
             <div class="session-1"></div>
-            <div class="input-group-prepend">
-                <input type="text" id="data-1" name="data-1" class="form-control" placeholder="Data (00/00/0000)">
+            <div class="input-group-prepend mw-25">
+                <input type="text" id="data-1" name="data-1" class="form-control" placeholder="Data" data-toggle="tooltip" data-placement="top" title="Formato: 00/00/0000">
             </div>
-            <input type="text" id="hora-1" name="hora-1" class="form-control" placeholder="Hora (Ex:. 17:35)">
-            <input type="text" name="local-1" class="form-control" placeholder="Local (Ex:. Lab 01)">
+            <div class="input-group-prepend mw-25">
+            <input type="text" id="hora-1" name="hora-1" class="form-control" placeholder="Hora" data-toggle="tooltip" data-placement="top" title="Formato: 00:00 (24 horas)">
+            </div>
+            <input type="text" name="local-1" class="form-control" placeholder="Local" data-toggle="tooltip" data-placement="top" title="Exemplo: Laboratório 1">
         </div>
     </div>
     <button type="button" id="add-more" class="btn btn-light"><i class="fas fa-plus"></i></button>
