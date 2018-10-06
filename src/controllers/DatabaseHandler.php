@@ -297,15 +297,16 @@ class DatabaseHandler
 
         $insert = $this->pdo->insert(array('nome', 'descricao', 'certificado', 'tipo', 'capacidade', 'duracao'))
             ->into($this->tables->getAtividades())
-            ->values(array($atividade->getNome(), $atividade->getDescricao(), $atividade->isCertificado(),
+            ->values(array($atividade->getNome(), $atividade->getDescricao(), (int)$atividade->isCertificado(),
                 $atividade->getTipo(), $atividade->getCapacidade(), $atividade->getDuracao()));
         $insert_id = $insert->execute(true);
 
-        if ($atividade->getOrganizador() === 0) {
-            $admins = $this->listAdmin();
+        if ($atividade->getOrganizador() === 0 || $atividade->getOrganizador() == null || $atividade->getOrganizador() == "") {
+            $token = (array) Util::decodeToken($this->session->get('jwt_token'));
+            $usuario = $this->TokenTranslation($token);
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into($this->tables->getMonitores())
-                ->values(array($insert_id, $admins[0]['id_usuario']));
+                ->values(array($usuario->getId(), $insert_id));
         } else {
             $organizador =  $this->getDataByEmail($atividade->getOrganizador());
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
