@@ -302,13 +302,14 @@ class DatabaseHandler
         $insert_id = $insert->execute(true);
 
         if ($atividade->getOrganizador() === 0 || $atividade->getOrganizador() == null || $atividade->getOrganizador() == "") {
-            $token = (array) Util::decodeToken($this->session->get('jwt_token'));
+            $session = new \SlimSession\Helper;
+            $token = (array)Util::decodeToken($session->get('jwt_token'));
             $usuario = $this->TokenTranslation($token);
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into($this->tables->getMonitores())
                 ->values(array($usuario->getId(), $insert_id));
         } else {
-            $organizador =  $this->getDataByEmail($atividade->getOrganizador());
+            $organizador = $this->getDataByEmail($atividade->getOrganizador());
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into($this->tables->getMonitores())
                 ->values(array($organizador['id_usuario'], $insert_id));

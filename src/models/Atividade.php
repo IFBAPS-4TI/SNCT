@@ -170,7 +170,7 @@ class Atividade
     }
 
     /**
-     * @return bool
+     * @return int
      */
     public function isCertificado()
     {
