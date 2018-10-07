@@ -98,7 +98,7 @@ class Admin
             $atividade = new \Models\Atividade();
             $atividade->setId($args['id']);
             $atividade->setNome($params['title']);
-            $atividade->setDescricao($params['desc']);
+            $atividade->setDescricao("\n".strip_tags($params['desc']));
             $atividade->setDuracao($params['duration']);
             if (isset($params['email'])) {
                 $atividade->setOrganizador($params['email']);
