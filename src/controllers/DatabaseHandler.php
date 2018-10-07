@@ -297,17 +297,19 @@ class DatabaseHandler
 
         $insert = $this->pdo->insert(array('nome', 'descricao', 'certificado', 'tipo', 'capacidade', 'duracao'))
             ->into($this->tables->getAtividades())
-            ->values(array($atividade->getNome(), $atividade->getDescricao(), $atividade->isCertificado(),
+            ->values(array($atividade->getNome(), $atividade->getDescricao(), (int)$atividade->isCertificado(),
                 $atividade->getTipo(), $atividade->getCapacidade(), $atividade->getDuracao()));
         $insert_id = $insert->execute(true);
 
-        if ($atividade->getOrganizador() === 0) {
-            $admins = $this->listAdmin();
+        if ($atividade->getOrganizador() === 0 || $atividade->getOrganizador() == null || $atividade->getOrganizador() == "") {
+            $session = new \SlimSession\Helper;
+            $token = (array)Util::decodeToken($session->get('jwt_token'));
+            $usuario = $this->TokenTranslation($token);
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into($this->tables->getMonitores())
-                ->values(array($insert_id, $admins[0]['id_usuario']));
+                ->values(array($usuario->getId(), $insert_id));
         } else {
-            $organizador =  $this->getDataByEmail($atividade->getOrganizador());
+            $organizador = $this->getDataByEmail($atividade->getOrganizador());
             $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
                 ->into($this->tables->getMonitores())
                 ->values(array($organizador['id_usuario'], $insert_id));
@@ -339,7 +341,7 @@ class DatabaseHandler
     public function editAtiv(\Models\Atividade $atividade)
     {
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
-            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => $atividade->isCertificado(),
+            $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao(), 'certificado' => (int)$atividade->isCertificado(),
                 'capacidade' => $atividade->getCapacidade(), 'duracao' => $atividade->getDuracao());
             $update = $this->pdo->update($dados)
                 ->table($this->tables->getAtividades())
@@ -355,9 +357,10 @@ class DatabaseHandler
     {
         if (count($this->getAtivDataById($atividade->getId())) > 1) {
             $dados = array('nome' => $atividade->getNome(), 'descricao' => $atividade->getDescricao());
-            $update = $this->pdo->update($dados)
+            $update = $this->pdo->update()
+                ->set($dados)
                 ->table($this->tables->getAtividades())
-                ->where('id_atividade', '=', $atividade->getId());
+                ->where('id_atividade', '=', (int)$atividade->getId());
             if ($update->execute() < 1) {
                 throw new Exception("Algo deu errado ao atualizar a atividade");
             }

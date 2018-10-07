@@ -17,13 +17,13 @@
                 <h5 class="card-title">Sessão {{ loop.index }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ session["local_ativ"] }}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{ data [0] }} ({{ data [1] }})</h6>
-                <a href="{{ path_for('admin.edit.sessions', { 'id_session': session['id_sessao'], 'id_ativ': sessionsList[0]['id_atividade']  }) }}" class="card-link ">Editar</a>
+                <a href="{{ path_for('admin.edit.sessions', { 'id_session': session['id_sessao'], 'id_ativ': ativId  }) }}" class="card-link ">Editar</a>
                 <a href="{{ path_for('admin.remove.session', { 'id_session': session['id_sessao'], 'id_ativ': sessionsList[0]['id_atividade']  }) }}" class="card-link">Remover</a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-<a href="{{ path_for('admin.edit.sessions', { 'id_session': '0', 'id_ativ': sessionsList[0]['id_atividade']  }) }}"
+<a href="{{ path_for('admin.edit.sessions', { 'id_session': '0', 'id_ativ': ativId }) }}"
    class="btn btn-light" role="button"><i class="fas fa-plus"></i></a>
 {% endblock %}

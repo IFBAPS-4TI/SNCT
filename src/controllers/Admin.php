@@ -106,6 +106,8 @@ class Admin
             $atividade->setCapacidade($params['capacity']);
             if ($params['certificado'] == "on") {
                 $atividade->setCertificado(true);
+            }else{
+                $atividade->setCertificado(false);
             }
             $handler->editAtiv($atividade);
             Flash::message("<strong>Sucesso!</strong> Atividade atualizada com sucesso.", $type = "success");
@@ -196,6 +198,7 @@ class Admin
             return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('admin.list.ativ', []));
         }
         $request = $request->withAttribute("sessionsList", $handler->listSessoesPorId($args['id']));
+        $request = $request->withAttribute("ativId", $args['id']);
         return $this->container->view->render($response, 'panel/admin/listSessions.html', $request->getAttributes());
     }
 

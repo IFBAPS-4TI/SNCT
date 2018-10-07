@@ -7,7 +7,7 @@ return [
 
         // Renderer settings
         'renderer' => [
-            'cache' => __DIR__ . '/../cache/',
+            'cache' => false,
             'template_path' => __DIR__ . '/../templates/',
         ],
 
