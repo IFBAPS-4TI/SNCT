@@ -9,8 +9,9 @@
     <p class="mb-0">Se você não está vendo alguma áreas de acesso e você acredita que isto é um erro, consulte a comissão da SNCT.</p>
 </div>
 <h4>Atividades</h4>
+<div class="card-deck mb-3 text-center">
 {% for ativ in ativList %}
-<div class="card" style="width: 18rem;">
+<div class="card mb-4 shadow-sm">
     <div class="card-body">
         <h5 class="card-title">{{ ativ['nome'] }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">
@@ -18,7 +19,7 @@
             Oficina/Minicurso
             {% elseif ativ['tipo'] == 2 %}
             Sala Temática
-            {% elseif ativ['tipo'] == 2 %}
+            {% elseif ativ['tipo'] == 3 %}
             Palestra/Apresentação
             {% else %}
             Outra
@@ -35,4 +36,5 @@
     </div>
 </div>
 {% endfor %}
+</div>
 {% endblock %}

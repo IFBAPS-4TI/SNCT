@@ -2,13 +2,15 @@
 {% block content %}
 <h4>Editar sessão</h4>
 <form method="post">
-    <div class="input-group mb-3 w-25">
-        <div class="input-group-prepend">
+    <div class="input-group mb-3 w-50">
+        <div class="input-group-prepend mw-25">
             {% set data = sessionInfo['timestamp_ativ']|split('U') %}
-            <input type="text" id="data" name="data" class="form-control" placeholder="Data (00/00/0000)" value="{{ data[0] }}">
+            <input type="text" id="data" name="data" class="form-control" placeholder="Data" data-toggle="tooltip" data-placement="top" title="Formato: 00/00/0000" value="{{ data[0] }}">
         </div>
-        <input type="text" id="hora" name="hora" class="form-control" placeholder="Hora (Ex:. 17:35)" value="{{ data[1] }}">
-        <input type="text" name="local" class="form-control" placeholder="Local (Ex:. Lab 01)" value="{{ sessionInfo['local_ativ'] }}">
+        <div class="input-group-prepend mw-25">
+        <input type="text" id="hora" name="hora" class="form-control"  placeholder="Hora" data-toggle="tooltip" data-placement="top" title="Formato: 00:00 (24 horas)" value="{{ data[1] }}">
+        </div>
+        <input type="text" name="local" class="form-control" placeholder="Local" data-toggle="tooltip" data-placement="top" title="Exemplo: Laboratório 1" value="{{ sessionInfo['local_ativ'] }}">
     </div>
     <hr/>
     <button type="submit" class="btn btn-primary">Salvar sessão</button>
