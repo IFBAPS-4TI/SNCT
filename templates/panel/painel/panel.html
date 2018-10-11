@@ -6,35 +6,47 @@
         inscrever, e controlar atividades. Não se preocupe, reunimos tudo o que você precisa neste painel seja você um
         visitante ou um administrador. Pode começar utilizando o menu ao lado.</p>
     <hr>
-    <p class="mb-0">Se você não está vendo alguma áreas de acesso e você acredita que isto é um erro, consulte a comissão da SNCT.</p>
+    <p class="mb-0">Se você não está vendo alguma áreas de acesso e você acredita que isto é um erro, consulte a
+        comissão da SNCT.</p>
 </div>
 <h4>Atividades</h4>
 <div class="card-deck mb-3 text-center">
-{% for ativ in ativList %}
-<div class="card mb-4 shadow-sm">
-    <div class="card-body">
-        <h5 class="card-title">{{ ativ['nome'] }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-            {% if ativ['tipo'] == 1 %}
-            Oficina/Minicurso
-            {% elseif ativ['tipo'] == 2 %}
-            Sala Temática
-            {% elseif ativ['tipo'] == 3 %}
-            Palestra/Apresentação
-            {% else %}
-            Outra
-            {% endif %}
-        </h6>
-        <p class="card-text">
-            {% if ativ['certificado'] %}
-        <span class="badge badge-success">Certificado</span>
-        {% else %}
-        <span class="badge badge-danger">Certificado</span>
-        {% endif %}
-        </p>
-        <a href="{{ path_for('atividade', {'id_atividade': ativ['id_atividade']}) }}" class="card-link">Saber mais</a>
+    {% if ativList|length == 0 %}
+    <div class="card mb-4 shadow-sm text-left">
+        <div class="card-body">
+            <h6 class="card-subtitle text-muted">
+                Não existem atividades disponíveis no momento ):
+            </h6>
+        </div>
     </div>
-</div>
-{% endfor %}
+    {% else %}
+    {% for ativ in ativList %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">{{ ativ['nome'] }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                {% if ativ['tipo'] == 1 %}
+                Oficina/Minicurso
+                {% elseif ativ['tipo'] == 2 %}
+                Sala Temática
+                {% elseif ativ['tipo'] == 3 %}
+                Palestra/Apresentação
+                {% else %}
+                Outra
+                {% endif %}
+            </h6>
+            <p class="card-text">
+                {% if ativ['certificado'] %}
+                <span class="badge badge-success">Certificado</span>
+                {% else %}
+                <span class="badge badge-danger">Certificado</span>
+                {% endif %}
+            </p>
+            <a href="{{ path_for('atividade', {'id_atividade': ativ['id_atividade']}) }}" class="card-link">Saber
+                mais</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
