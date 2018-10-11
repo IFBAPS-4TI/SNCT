@@ -305,14 +305,14 @@ class DatabaseHandler
             $session = new \SlimSession\Helper;
             $token = (array)Util::decodeToken($session->get('jwt_token'));
             $usuario = $this->TokenTranslation($token);
-            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
+            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade', 'organizador'))
                 ->into($this->tables->getMonitores())
-                ->values(array($usuario->getId(), $insert_id));
+                ->values(array($usuario->getId(), $insert_id, 1));
         } else {
             $organizador = $this->getDataByEmail($atividade->getOrganizador());
-            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade'))
+            $insert = $this->pdo->insert(array('id_usuario', 'id_atividade', 'organizador'))
                 ->into($this->tables->getMonitores())
-                ->values(array($organizador['id_usuario'], $insert_id));
+                ->values(array($organizador['id_usuario'], $insert_id, 1));
 
         }
         $insert->execute(false);
