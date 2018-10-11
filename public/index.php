@@ -1,13 +1,5 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
-$fp = @fopen("../.env", 'r');
-if ($fp) {
-    $array = explode("\n", fread($fp, filesize("../.env")));
-}
-foreach($array as $env){
-    putenv($env);
-}
-
 $jwt_securekey = getenv("jwt_key"); # Definir jwt_key no ambiente
 if (PHP_SAPI == 'cli-server') {
     // To help the built-in PHP dev server, check if the request was actually for
