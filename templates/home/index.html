@@ -11,16 +11,16 @@
     <title>SNCT 2018 &mdash; IFBA - Campus Porto Seguro</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ base_url() }}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{{ base_url() }}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
           rel="stylesheet" type="text/css">
 
     <!-- Custom CSS -->
-    <link href="/css/theme.css" rel="stylesheet">
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="{{ base_url() }}/css/theme.css" rel="stylesheet">
+    <link href="{{ base_url() }}/css/app.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -35,7 +35,11 @@
         </h3>
         <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about"><i class="fas fa-globe-americas"></i> Descubra
             um mundo novo</a><br>
+        {% if ifba %}
+        <a class="btn btn-dark btn-xl mt-3" href="/snct/index.php/painel/entrar"><i class="fas fa-key"></i> Painel do Usuário</a>
+        {% else %}
         <a class="btn btn-dark btn-xl mt-3" href="{{ path_for('entrar') }}"><i class="fas fa-key"></i> Painel do Usuário</a>
+        {% endif %}
     </div>
     <div class="overlay"></div>
 </header>
@@ -192,15 +196,15 @@
 </a>
 
 <!-- Bootstrap core JavaScript -->
-<script src="/vendor/jquery/jquery.min.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ base_url() }}/vendor/jquery/jquery.min.js"></script>
+<script src="{{ base_url() }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
-<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="{{ base_url() }}/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for this template -->
-<script src="/js/theme.js"></script>
-<script src="/js/app.js"></script>
+<script src="{{ base_url() }}/js/theme.js"></script>
+<script src="{{ base_url() }}/js/app.js"></script>
 <script>
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

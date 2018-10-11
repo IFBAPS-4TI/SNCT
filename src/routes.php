@@ -8,9 +8,11 @@ use Slim\Http\Response;
 $app->get('/', function (Request $request, Response $response, array $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
-
+    if(getenv("production") == "ifba"){
+        $request = $request->withAttribute("ifba", true);
+    }
     // Render index view
-    return $this->view->render($response, 'home/index.html', $args);
+    return $this->view->render($response, 'home/index.html', $request->getAttributes());
 })->setName('home');
 
 $app->get('/view/{id_atividade}', \Painel::class . ':atividadeShare')->setName('atividade');
