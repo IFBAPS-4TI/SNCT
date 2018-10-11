@@ -2,17 +2,30 @@
 {% block content %}
 <h4>Atividades que você está inscrito</h4>
 <div class="card-deck mb-3 text-center">
-{% for inscricao in inscricoes %}
-{% set data = inscricao['timestamp_ativ']|split('U') %}
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">{{ inscricao['nome'] }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ inscricao['local_ativ'] }}</h6>
-        <p class="card-text"><span class="badge badge-info">{{ data[0] }}</span> <span class="badge badge-primary">{{ data[1] }}</span></p>
-        <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" class="card-link">Saber mais</a>
-        <a href="{{ path_for('visitante.remover.inscricao', {'id_inscricao': inscricao['id_inscricao']}) }}" class="card-link">Remover Inscrição</a>
+    {% if inscricoes|length == 0 %}
+    <div class="card shadow-sm text-left">
+        <div class="card-body">
+            <h6 class="card-subtitle text-muted">
+                Você não possui uma inscrição ativa no momento.
+            </h6>
+        </div>
     </div>
-</div>
-{% endfor %}
+    {% else %}
+    {% for inscricao in inscricoes %}
+    {% set data = inscricao['timestamp_ativ']|split('U') %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ inscricao['nome'] }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ inscricao['local_ativ'] }}</h6>
+            <p class="card-text"><span class="badge badge-info">{{ data[0] }}</span> <span class="badge badge-primary">{{ data[1] }}</span>
+            </p>
+            <a href="{{ path_for('atividade', {'id_atividade': inscricao['id_atividade']}) }}" class="card-link">Saber
+                mais</a>
+            <a href="{{ path_for('visitante.remover.inscricao', {'id_inscricao': inscricao['id_inscricao']}) }}"
+               class="card-link">Remover Inscrição</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
