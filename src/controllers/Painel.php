@@ -117,6 +117,12 @@ class Painel
             if (!\Respect\Validation\Validator::stringType()->notEmpty()->validate($params['inputName'])) {
                 throw new Exception("Nome não pode estar vazio!");
             }
+            if (!\Respect\Validation\Validator::stringType()->alnum()->validate($params['inputName'])) {
+                throw new Exception("Nome contêm caracteres inválidos!");
+            }
+            if (!\Respect\Validation\Validator::stringType()->contains(' ')->validate($params['inputName'])) {
+                throw new Exception("Por favor insira o nome completo!");
+            }
             if (!\Respect\Validation\Validator::email()->validate($params['inputEmail'])) {
                 throw new Exception("Email inválido.");
             }
