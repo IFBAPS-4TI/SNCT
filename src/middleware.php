@@ -5,6 +5,10 @@
 use Tamtamchik\SimpleFlash\Flash;
 $settings = $container->get('settings');
 /*
+ * Minify
+ */
+$app->add(new \Slim\Middleware\Minify());
+/*
  * SlimSession
  */
 $app->add(new \Slim\Middleware\Session([
