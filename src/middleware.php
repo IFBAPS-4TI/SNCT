@@ -7,7 +7,7 @@ $settings = $container->get('settings');
 /*
  * Minify
  */
-$app->add(new \Slim\Middleware\Minify());
+#$app->add(new \Slim\Middleware\Minify());
 /*
  * SlimSession
  */
