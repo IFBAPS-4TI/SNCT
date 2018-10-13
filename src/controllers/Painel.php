@@ -182,6 +182,7 @@ class Painel
 
     public function indexView($request, $response, $args)
     {
+        Flash::message("<strong>Importante!</strong> Se você é um <strong>organizador de atividade</strong> você deve solicitar acesso ao <strong>painel de monitor</strong>. Se você é organizador e <strong>não possui acesso</strong> a este painel <strong>não será possível emitir certificado de organizador da atividade no futuro</strong>. Consulte a comissão o mais cedo possível.", $type = "warning");
         $handler = new DatabaseHandler();
         $request = $request->withAttribute("ativList", $handler->listAtividades());
         return $this->container->view->render($response, 'panel/painel/panel.html', $request->getAttributes());
@@ -224,7 +225,7 @@ class Painel
             $request = $request->withAttribute("ativInfo", $dadosAtiv);
             $request = $request->withAttribute("sessionsList", $handler->listSessoesPorId($args['id_atividade']));
             return $this->container->view->render($response, 'home/atividade.html', $request->getAttributes());
-        }catch (Exception $e){
+        } catch (Exception $e) {
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type = "error");
             return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('painel', []));
         }
