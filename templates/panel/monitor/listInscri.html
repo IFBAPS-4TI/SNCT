@@ -17,22 +17,22 @@
     <tbody>
     {% for user in sessao %}
     <tr>
-        <td>{{ user['nome'] }}</td>
-        <td>{{ user['email'] }}</td>
-        {% if user['compareceu'] == 1 %}
+        <td>{{ user[0]['nome'] }}</td>
+        <td>{{ user[0]['email'] }}</td>
+        {% if user[0]['compareceu'] == 1 %}
         <td><i class="fas fa-check"></i></td>
         {% else %}
         <td><i class="fas fa-times"></i></td>
         {% endif %}
         <td>
-            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 1, 'id_atividade': id_atividade }) }}"
+            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user[0]['id_inscricao'], 'valor': 1, 'id_atividade': id_atividade }) }}"
                class="btn btn-success btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Compareceu"><i class="fas fa-check"></i></a>
-            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user['id_inscricao'], 'valor': 0, 'id_atividade': id_atividade }) }}"
+            <a href="{{ path_for('monitor.inscricao.atualizar', { 'id_inscricao': user[0]['id_inscricao'], 'valor': 0, 'id_atividade': id_atividade }) }}"
                class="btn btn-danger btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Não compareceu"><i
                     class="fas fa-times"></i></a>
-            <a href="{{ path_for('monitor.inscricao.deletar', { 'id_inscricao': user['id_inscricao'], 'id_atividade': id_atividade }) }}"
+            <a href="{{ path_for('monitor.inscricao.deletar', { 'id_inscricao': user[0]['id_inscricao'], 'id_atividade': id_atividade }) }}"
                class="btn btn-dark btn-sm" role="button" data-toggle="tooltip" data-placement="top"
                title="Deletar inscrição"><i class="fas fa-trash"></i></a>
         </td>
