@@ -13,12 +13,12 @@
     <link href="{{ base_url() }}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="{{ base_url() }}/css/dashboard.css" rel="stylesheet">
 </head>
-
 <body>
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+<nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow collapse show" id="sidebarmenu" style="z-index: 1000">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/snct/">SNCT </a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
+            <a class="nav-link d-md-block d-lg-none" href="#" data-toggle="collapse" data-target="#sidebarmenu">Menu</a>
             <a class="nav-link" href="{{ path_for('sair') }}">Sair</a>
         </li>
     </ul>
@@ -26,8 +26,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
+        <div class="navbar-expand-lg">
+        <nav class="col-md-2 bg-light sidebar collapse navbar-collapse" id="sidebarmenu">
+            <div class="sidebar-sticky w-100">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path_for('painel') }}">
@@ -92,6 +93,12 @@
                     </li>
                 </ul>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link d-lg-none" href="#" data-toggle="collapse" data-target="#sidebarmenu">
+                        <i class="fas fa-times mr-1"></i>
+                        Fechar Menu
+                    </a>
+                </li>
                 <footer class="footer">
                     <div class="container">
                         <span class="text-muted">Feito com &hearts; pelo 4 TI (2018)</span>
@@ -99,8 +106,8 @@
                 </footer>
             </div>
         </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-5">
+        </div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             {{ flash()|raw }}
             {% block content %}
             {% endblock %}
