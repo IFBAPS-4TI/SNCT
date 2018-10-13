@@ -15,10 +15,10 @@
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow collapse show" id="sidebarmenu" style="z-index: 1000">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/snct/">SNCT </a>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="{{ path_for('home') }}">SNCT </a>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link d-md-block d-lg-none" href="#" data-toggle="collapse" data-target="#sidebarmenu">Menu</a>
+            <a class="nav-link d-md-block d-lg-none" href="#" data-toggle="collapse" data-target="#sidebarmenu"><i class="fas fa-ellipsis-h"></i> Abrir Menu</a>
             <a class="nav-link" href="{{ path_for('sair') }}">Sair</a>
         </li>
     </ul>
