@@ -117,7 +117,7 @@ class Painel
             if (!\Respect\Validation\Validator::stringType()->notEmpty()->validate($params['inputName'])) {
                 throw new Exception("Nome não pode estar vazio!");
             }
-            if (!\Respect\Validation\Validator::stringType()->alnum()->validate($params['inputName'])) {
+            if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $params['inputName'])) {
                 throw new Exception("Nome contêm caracteres inválidos!");
             }
             if (!\Respect\Validation\Validator::stringType()->contains(' ')->validate($params['inputName'])) {
