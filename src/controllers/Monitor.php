@@ -68,13 +68,15 @@ class Monitor
         }
         $dados = array();
         $sessoes =  $handler->getSessaoDataById($args['id_atividade']);
+        $count = 1;
         foreach($sessoes as $sessao){
             $inscritos = $handler->getInscritosBySessionId($sessao['id_sessao']);
             foreach($inscritos as $inscrito){
                 $dado = array($handler->getDataById($inscrito['id_usuario']));
                 $dado[0]['sessao'] = $sessao['id_sessao'];
-                $dados[] = $dado;
+                $dados[$count][] = $dado;
             }
+            $count++;
         }
         $request = $request->withAttribute("inscritos", $dados);
         $request = $request->withAttribute("id_atividade", $args['id_atividade']);
