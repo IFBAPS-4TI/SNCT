@@ -24,7 +24,8 @@
     "sendgrid/sendgrid": "^7.2",
     "tamtamchik/simple-flash": "^1.2",
     "helhum/dotenv-connector": "^1.1.0",
-    "hossamyousef/slim3-minify": "^0.0.1"
+    "hossamyousef/slim3-minify": "^0.0.1",
+    "setasign/fpdf": "1.8.1"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8 < 6.0"
