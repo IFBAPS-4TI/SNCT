@@ -38,26 +38,38 @@ class Painel
             $handler = new DatabaseHandler();
             $certificado = $handler->getCertificadoByHash(base64_decode($args['hash']));
             $usuario = $handler->getDataById($certificado['id_usuario']);
-            $pdf = new CertificadosModel();
-            $pdf->AddPage($orientation = "L", $size = "A4");
-            $pdf->SetFont('Arial', 'B', 16);
-
-            $pdf->SetLineWidth(2);
-            $pdf->SetDrawColor(43, 45, 66);
-            $pdf->Rect(10, 10, $pdf->GetPageWidth() - 20, $pdf->GetPageHeight() - 20);
-
-            $pdf->SetLineWidth(1);
-            $pdf->SetFont('Arial', '', 15);
             $data = explode("U", $certificado['timestamp_ativ'])[0];
-
-            $texto = "Certificamos que {$usuario['nome']} participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro no dia {$data}, e que, durante o referido evento, participou do (a) seguinte atividade:";
-            $pdf->SetXY(25, $pdf->GetPageHeight()/2 - 10);
-            $pdf->MultiCell($pdf->GetPageWidth()-50, 8, Util::textutf($texto), 0, 'C');
-
+            $ano = explode("/", $data)[2];
+            $pdf = new \setasign\Fpdi\Fpdi();
+            $modelo = __DIR__. "/../../public/certs/{$ano}.pdf";
+            $pdf->AddPage();
+            $pdf->setSourceFile($modelo);
+            $tplIdx = $pdf->importPage(1);
+            $pdf->useTemplate($tplIdx, 0, 0, null, null, true);
+            $pdf->SetFont('Arial', '', 16);
+            $pdf->SetY($pdf->GetPageHeight()/2-20);
+            $pdf->SetMargins(20, null, 20);
+            $pdf->SetX(20);
+            if($certificado['tipo_org'] == 3){
+                $atrib = "organizou a";
+            }else if($certificado['tipo_org'] == 2){
+                $atrib = "foi monitor da";
+            }else{
+                $atrib = "participou da";
+            }
+            $texto = "Certificamos que ". strtoupper($usuario['nome']) .", inscrito no CPF sob n.º ". Util::mask($usuario['cpf'],"###.###.###-##") ." participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro, durante o dia {$data}, e que, durante o referido evento, {$atrib} seguinte atividade:";
+            $pdf->MultiCell(0,10, Util::textutf($texto), 0, "C");
+            $pdf->Ln(5);
+            $texto = "\"{$certificado['nome']}\"\ncom carga horária de {$certificado['duracao']} minutos.";
+            $pdf->MultiCell(0,10, Util::textutf($texto) , 0, "C");
+            $pdf->Ln();
+            $link = urlencode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+            $qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={$link}";
+            $pdf->Image($qr,20,$pdf->GetPageHeight()-55,40,null,'PNG');
             $pdf->Output();
             return $response->withHeader('Content-type', 'application/pdf');
         } catch (Exception $e) {
-            print("Certificado inválido.");
+            print("Certificado inválido." . $e->getMessage());
         }
     }
 
