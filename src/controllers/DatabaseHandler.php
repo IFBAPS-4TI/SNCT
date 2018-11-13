@@ -58,7 +58,9 @@ class DatabaseHandler
             if($inscricao['compareceu'] == 1 && $inscricao['certificado'] == 1 && $this->ativAcabou($inscricao['id_atividade'])){
                 $certificado = array();
                 $certificado['id_atividade'] = $inscricao['id_atividade'];
+                $certificado['id_sessao'] = $inscricao['id_sessao'];
                 $certificado['nome'] = $inscricao['nome'];
+
                 $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                 $certificado['duracao'] = $inscricao['duracao'];
                 $certificado['hash'] = md5($inscricao['id_atividade'].$inscricao['id_sessao'].$inscricao['timestamp_ativ']);
@@ -77,6 +79,7 @@ class DatabaseHandler
                 foreach($sessoes as $sessao){
                     $certificado = array();
                     $certificado['id_atividade'] = $dados['id_atividade'];
+                    $certificado['id_sessao'] = $sessao['id_sessao'];
                     $certificado['nome'] = $dados['nome'];
                     $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                     $certificado['duracao'] = $inscricao['duracao'];
