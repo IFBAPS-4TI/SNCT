@@ -53,10 +53,11 @@ class DatabaseHandler
         $token = (array) Util::decodeToken($hash);
         $certificados = $this->getCertificadosByUsuario($token['id_usuario']);
         foreach($certificados as $certificado){
-            if($certificado['hash'] == $hash){
+            if($certificado['hash'] == base64_encode($hash)){
                 return $certificado;
             }
         }
+        return array();
     }
     public function getCertificadosByUsuario($id_usuario){
         $inscricoes = $this->getInscricoesByIdUsuario($id_usuario, $ignoreAntigas = false);
@@ -68,7 +69,7 @@ class DatabaseHandler
                 $certificado['id_atividade'] = $inscricao['id_atividade'];
                 $certificado['id_sessao'] = $inscricao['id_sessao'];
                 $certificado['nome'] = $inscricao['nome'];
-
+                $certificado['id_usuario'] = $id_usuario;
                 $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                 $certificado['duracao'] = $inscricao['duracao'];
                 $certificado['tipo_org'] = 1; // Visitante = 1, Organizador = 2, Monitor = 3;
@@ -92,6 +93,7 @@ class DatabaseHandler
                     $certificado = array();
                     $certificado['id_atividade'] = $dados['id_atividade'];
                     $certificado['id_sessao'] = $sessao['id_sessao'];
+                    $certificado['id_usuario'] = $id_usuario;
                     $certificado['nome'] = $dados['nome'];
                     $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                     $certificado['duracao'] = $inscricao['duracao'];

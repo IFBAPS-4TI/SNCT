@@ -30,4 +30,7 @@ class Util
         }
         return $randomString;
     }
+    public static function textutf($text){
+        return utf8_decode($text);
+    }
 }

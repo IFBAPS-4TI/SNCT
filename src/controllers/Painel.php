@@ -32,14 +32,33 @@ class Painel
         return true;
     }
 
-    public function certificadoGen($request, $response, $args){
+    public function certificadoGen($request, $response, $args)
+    {
+        try {
+            $handler = new DatabaseHandler();
+            $certificado = $handler->getCertificadoByHash(base64_decode($args['hash']));
+            $usuario = $handler->getDataById($certificado['id_usuario']);
+            $pdf = new CertificadosModel();
+            $pdf->AddPage($orientation = "L", $size = "A4");
+            $pdf->SetFont('Arial', 'B', 16);
 
-        $pdf = new FPDF();
-        $pdf->AddPage();
-        $pdf->SetFont('Arial','B',16);
-        $pdf->Cell(40,10,'Hello World!');
-        $pdf->Output();
-        return $response->withHeader('Content-type', 'application/pdf');
+            $pdf->SetLineWidth(2);
+            $pdf->SetDrawColor(43, 45, 66);
+            $pdf->Rect(10, 10, $pdf->GetPageWidth() - 20, $pdf->GetPageHeight() - 20);
+
+            $pdf->SetLineWidth(1);
+            $pdf->SetFont('Arial', '', 15);
+            $data = explode("U", $certificado['timestamp_ativ'])[0];
+
+            $texto = "Certificamos que {$usuario['nome']} participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro no dia {$data}, e que, durante o referido evento, participou do (a) seguinte atividade:";
+            $pdf->SetXY(25, $pdf->GetPageHeight()/2 - 10);
+            $pdf->MultiCell($pdf->GetPageWidth()-50, 8, Util::textutf($texto), 0, 'C');
+
+            $pdf->Output();
+            return $response->withHeader('Content-type', 'application/pdf');
+        } catch (Exception $e) {
+            print("Certificado inválido.");
+        }
     }
 
     /**
