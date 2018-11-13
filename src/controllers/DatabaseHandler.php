@@ -216,14 +216,40 @@ class DatabaseHandler
         return $stmt->fetchAll();;
     }
 
-    public function listAtividades()
+    public function listAtividades($ignorarAntigas = true)
     {
         $select = $this->pdo->select()
             ->from($this->tables->getAtividades());
         $stmt = $select->execute();
-        return $stmt->fetchAll();;
-    }
+        $ativs = $stmt->fetchAll();
+        $resultados = array();
+        if($ignorarAntigas){
+            foreach($ativs as $ativ){
+                if(!$this->ativAcabou($ativ['id_atividade'])){
+                    $resultados[] = $ativ;
+                }
+            }
+        }
 
+        return $resultados;
+    }
+    public function ativAcabou($ativ_id){
+        $select = $this->pdo->select()
+            ->from($this->tables->getSessoes())
+            ->where('id_atividade', '=', $ativ_id);
+        $stmt = $select->execute();
+        $sessoes = $stmt->fetchAll();
+        $acabou = true;
+        foreach($sessoes as $sessao){
+            $timestamp_o = $sessao['timestamp_ativ'];
+            $data = strtotime(date('d/m/Y', strtotime($timestamp_o)));
+            $min = strtotime('+14 days', $data);
+            if (time() < $min) {
+                $acabou = false;
+            }
+        }
+        return $acabou;
+    }
     public function listSessoesPorId($id)
     {
         $select = $this->pdo->select()
@@ -435,7 +461,7 @@ class DatabaseHandler
             ->from($this->tables->getInscricoes())
             ->join($this->tables->getSessoes(), "{$this->tables->getInscricoes()}.id_sessao", '=', "{$this->tables->getSessoes()}.id_sessao")
             ->join($this->tables->getAtividades(), "{$this->tables->getAtividades()}.id_atividade", '=', "{$this->tables->getSessoes()}.id_atividade")
-            ->where("{$this->tables->getInscricoes()}.id_usuario", '=', $id_usuario);
+            ->where("{$this->tables->getInscricoes()}.id_usuario", '=', $id_usuario)->where("{$this->tables->getSessoes()}.timestamp_ativ", ">", date('d/m/y') . "U00:00");
         $stmt = $select->execute();
         return $stmt->fetchAll();
     }
