@@ -70,7 +70,8 @@ class Painel
             $pdf->Output();
             return $response->withHeader('Content-type', 'application/pdf');
         } catch (Exception $e) {
-            print("Certificado inválido." . $e->getMessage());
+            Flash::message("<strong>Erro!</strong> Certificado inválido.", $type = "error");
+            return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
     }
 
