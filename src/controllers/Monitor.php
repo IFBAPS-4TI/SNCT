@@ -18,7 +18,9 @@ class Monitor
         $usuario = $handler->TokenTranslation($token);
         $monitorias = array();
         foreach($usuario->getMonitorias() as $monitoria){
+            if(!$handler->ativAcabou($monitoria)){
             $monitorias[] = $handler->getAtivDataById($monitoria);
+            }
         }
         $request = $request->withAttribute("monitorList", $monitorias);
         return $this->container->view->render($response, 'panel/monitor/listAtiv.html', $request->getAttributes());
