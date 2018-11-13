@@ -58,7 +58,7 @@ class Painel
             }else{
                 $atrib = "participou da";
             }
-            $texto = "Certificamos que ". strtoupper($usuario['nome']) .", inscrito no CPF sob n.º ". Util::mask($usuario['cpf'],"###.###.###-##") ." participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro, durante o dia {$data}, e que, durante o referido evento, {$atrib} seguinte atividade:";
+            $texto = "Certificamos que ". strtoupper($usuario['nome']) .", inscrito no CPF sob n.º ". Util::mask($usuario['cpf'],"###.###.###-##") ." participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro, durante o dia {$data}, e que, no referido evento, {$atrib} seguinte atividade:";
             $pdf->MultiCell(0,10, Util::textutf($texto), 0, "C");
             $pdf->Ln(5);
             $texto = "\"{$certificado['nome']}\"\ncom carga horária de {$certificado['duracao']} minutos.";
