@@ -242,7 +242,8 @@ class DatabaseHandler
         $acabou = true;
         foreach($sessoes as $sessao){
             $timestamp_o = $sessao['timestamp_ativ'];
-            $data = strtotime(date('d/m/Y', strtotime($timestamp_o)));
+            $data = str_replace('/', '-', $timestamp_o);
+            $data = strtotime(date('d-m-Y', strtotime($data)));
             $min = strtotime('+14 days', $data);
             if (time() < $min) {
                 $acabou = false;
@@ -456,14 +457,25 @@ class DatabaseHandler
             }
 
     }
-    public function getInscricoesByIdUsuario($id_usuario){
+    public function getInscricoesByIdUsuario($id_usuario, $ignoreAntigas = true){
         $select = $this->pdo->select()
             ->from($this->tables->getInscricoes())
             ->join($this->tables->getSessoes(), "{$this->tables->getInscricoes()}.id_sessao", '=', "{$this->tables->getSessoes()}.id_sessao")
             ->join($this->tables->getAtividades(), "{$this->tables->getAtividades()}.id_atividade", '=', "{$this->tables->getSessoes()}.id_atividade")
-            ->where("{$this->tables->getInscricoes()}.id_usuario", '=', $id_usuario)->where("{$this->tables->getSessoes()}.timestamp_ativ", ">", date('d/m/y') . "U00:00");
+            ->where("{$this->tables->getInscricoes()}.id_usuario", '=', $id_usuario);
         $stmt = $select->execute();
-        return $stmt->fetchAll();
+        $dados = $stmt->fetchAll();
+        $resultados = array();
+        if($ignoreAntigas){
+            foreach($dados as $dado){
+                if(!$this->ativAcabou($dado['id_atividade'])){
+                    $resultados[] = $dado;
+                }
+            }
+        }else{
+            $resultados = $dados;
+        }
+        return $resultados;
     }
     public function addInscricao($id_usuario, $id_sessao){
         $insert = $this->pdo->insert(array('id_usuario', 'id_sessao', 'compareceu'))
