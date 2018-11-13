@@ -19,7 +19,7 @@ class Monitor
         $monitorias = array();
         foreach($usuario->getMonitorias() as $monitoria){
             if(!$handler->ativAcabou($monitoria)){
-            $monitorias[] = $handler->getAtivDataById($monitoria);
+              $monitorias[] = $handler->getAtivDataById($monitoria);
             }
         }
         $request = $request->withAttribute("monitorList", $monitorias);
