@@ -71,6 +71,9 @@ $monitorOP = function ($request, $response, $next) use ($app) {
                 if (!in_array($args['id_atividade'], $user->getMonitorias())) {
                     throw new Exception("Monitor não tem acesso a essa atividade.");
                 }
+                if($handler->ativAcabou($args['id_atividade'])){
+                    throw new Exception("Esta atividade está bloqueada de realizar alterações.");
+                }
             }
         } catch (Exception $e) {
             Flash::message("<strong>Erro!</strong> {$e->getMessage()}", $type="error");
