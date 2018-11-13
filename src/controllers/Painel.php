@@ -42,6 +42,7 @@ class Painel
             $ano = explode("/", $data)[2];
             $pdf = new \setasign\Fpdi\Fpdi();
             $modelo = __DIR__. "/../../public/certs/{$ano}.pdf";
+            $pdf->SetTitle("Certificado {$certificado['nome']}");
             $pdf->AddPage();
             $pdf->setSourceFile($modelo);
             $tplIdx = $pdf->importPage(1);

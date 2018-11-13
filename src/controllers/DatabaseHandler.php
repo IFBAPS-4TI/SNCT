@@ -86,9 +86,9 @@ class DatabaseHandler
         }
         // Monitorias e Organizadores
         foreach($this->getMonitorDataByIdUsuario($id_usuario) as $monitoria){
-            if($this->ativAcabou($monitoria)){
-                $sessoes = $this->getSessaoDataById($monitoria);
-                $dados = $this->getAtivDataById($monitoria);
+            if($this->ativAcabou($monitoria['id_atividade'])){
+                $sessoes = $this->getSessaoDataById($monitoria['id_atividade']);
+                $dados = $this->getAtivDataById($monitoria['id_atividade']);
                 foreach($sessoes as $sessao){
                     $certificado = array();
                     $certificado['id_atividade'] = $dados['id_atividade'];
