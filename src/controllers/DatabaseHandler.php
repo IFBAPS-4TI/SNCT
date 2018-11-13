@@ -63,8 +63,15 @@ class DatabaseHandler
 
                 $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                 $certificado['duracao'] = $inscricao['duracao'];
-                $certificado['hash'] = md5($inscricao['id_atividade'].$inscricao['id_sessao'].$inscricao['timestamp_ativ']);
                 $certificado['tipo_org'] = 1; // Visitante = 1, Organizador = 2, Monitor = 3;
+                $token = array(
+                    "id_usuario" => $id_usuario,
+                    "id_atividade" => $inscricao['id_atividade'],
+                    "id_sessao" => $inscricao['id_sessao'],
+                    "tipo" => 1,
+                    "iss" => $_SERVER['SERVER_NAME']
+                );
+                $certificado['hash'] = Util::encodeToken($token); // Assinando os certificados
                 $certificados[] = $certificado;
             }
         }
@@ -83,7 +90,6 @@ class DatabaseHandler
                     $certificado['nome'] = $dados['nome'];
                     $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
                     $certificado['duracao'] = $inscricao['duracao'];
-                    $certificado['hash'] = md5($dados['id_atividade'].$sessao['id_sessao'].$sessao['timestamp_ativ']);
                     $dadosMonitores = $this->getMonitorDataByAtividade('id_atividade');
                     $tipo = 3;
                     foreach($dadosMonitores as $monitor){
@@ -92,6 +98,14 @@ class DatabaseHandler
                         }
                     }
                     $certificado['tipo_org'] = $tipo; // Visitante = 1, Organizador = 2, Monitor = 3;
+                    $token = array(
+                        "id_usuario" => $id_usuario,
+                        "id_atividade" => $inscricao['id_atividade'],
+                        "id_sessao" => $inscricao['id_sessao'],
+                        "tipo" => $tipo,
+                        "iss" => $_SERVER['SERVER_NAME']
+                    );
+                    $certificado['hash'] = Util::encodeToken($token); // Assinando os certificados
                     $certificados[] = $certificado;
                 }
             }
