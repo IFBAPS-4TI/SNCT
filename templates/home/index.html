@@ -50,30 +50,14 @@
     <div class="container text-center">
         <div class="row">
             <div class="col-lg-10 mx-auto">
-                <h2>Falta pouco!</h2>
-                <p class="lead mb-5">Você tem um projeto legal para apresentar durante a semana? Este é seu lugar!</p>
-                <div id="clockdiv" class="mb-3">
-                    <div class="mt-2">
-                        <span class="days"></span>
-                        <div class="smalltext">Dias</div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="hours"></span>
-                        <div class="smalltext">Horas</div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="minutes"></span>
-                        <div class="smalltext">Minutos</div>
-                    </div>
-                    <div class="mt-2">
-                        <span class="seconds"></span>
-                        <div class="smalltext">Segundos</div>
-                    </div>
-                </div>
-                <br/>
-                <a class="btn btn-dark btn-xl mt-3" href="https://goo.gl/forms/PkZEt23AmxVNvYZ42">Inscrição de Atividades</a>
-                <a class="btn btn-dark btn-xl mt-3" href="#" data-toggle="tooltip" data-placement="top"
-                   title="Disponível no DEPEN. Até 09/10">Inscrição de Monitores</a>
+                <h2>Está aqui!</h2>
+                <p class="lead mb-5">Acesse o Painel para ver a lista de atividades e poder se inscrever.</p>
+                {% if ifba %}
+                <a class="btn btn-dark btn-xl mt-3" href="/snct/index.php/painel/entrar"><i class="fas fa-key"></i> Painel do
+                    Usuário</a>
+                {% else %}
+                <a class="btn btn-dark btn-xl mt-3" href="{{ path_for('entrar') }}"><i class="fas fa-key"></i> Painel do Usuário</a>
+                {% endif %}
             </div>
         </div>
     </div>
