@@ -49,7 +49,15 @@ class DatabaseHandler
         }
         return true;
     }
-
+    public function getCertificadoByHash($hash){
+        $token = (array) Util::decodeToken($hash);
+        $certificados = $this->getCertificadosByUsuario($token['id_usuario']);
+        foreach($certificados as $certificado){
+            if($certificado['hash'] == $hash){
+                return $certificado;
+            }
+        }
+    }
     public function getCertificadosByUsuario($id_usuario){
         $inscricoes = $this->getInscricoesByIdUsuario($id_usuario, $ignoreAntigas = false);
         $certificados = array();
@@ -75,11 +83,8 @@ class DatabaseHandler
                 $certificados[] = $certificado;
             }
         }
-        $session = new \SlimSession\Helper;
-        $token = (array) Util::decodeToken($session->get('jwt_token'));
-        $usuario = $this->TokenTranslation($token);
         // Monitorias e Organizadores
-        foreach($usuario->getMonitorias() as $monitoria){
+        foreach($this->getMonitorDataByIdUsuario($id_usuario) as $monitoria){
             if($this->ativAcabou($monitoria)){
                 $sessoes = $this->getSessaoDataById($monitoria);
                 $dados = $this->getAtivDataById($monitoria);
@@ -93,7 +98,7 @@ class DatabaseHandler
                     $dadosMonitores = $this->getMonitorDataByAtividade('id_atividade');
                     $tipo = 3;
                     foreach($dadosMonitores as $monitor){
-                        if($monitor['id_usuario'] == $usuario->getId() && $monitor['organizador'] == 1){
+                        if($monitor['id_usuario'] == $id_usuario && $monitor['organizador'] == 1){
                             $tipo = 2;
                         }
                     }
