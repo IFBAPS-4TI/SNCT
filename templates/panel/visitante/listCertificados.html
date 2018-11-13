@@ -23,7 +23,7 @@
         <td>Organizador</td>
         {% endif %}
         <td>
-            <a href="{{ path_for('monitor.edit.ativ', { 'id_atividade': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
+            <a href="{{ path_for('certificados', { 'hash': certificado['hash'] }) }}" class="btn btn-dark btn-sm"
                role="button" data-toggle="tooltip" data-placement="top" title="Baixar certificado"><i class="fas fa-file-pdf"></i></a>
         </td>
     </tr>

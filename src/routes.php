@@ -23,6 +23,8 @@ $app->group('/painel', function () use ($userdata) {
     $this->get('[/]', \Painel::class . ':indexView')->add($userdata)->setName('painel');
     $this->get('/sair', \Painel::class . ':logoutView')->setName('sair');
     $this->get('/recuperar', \Painel::class . ':forgotView')->setName('resetar');
+    $this->get('/certificado/{hash}', \Painel::class . ':certificadoGen')->setName('certificados');
+
     /* POST rotas */
     $this->post('/recuperar', \Painel::class . ':resetarSenha');
     $this->post('/registrar', \Painel::class . ':registrarUsuario');

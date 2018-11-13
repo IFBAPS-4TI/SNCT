@@ -32,6 +32,16 @@ class Painel
         return true;
     }
 
+    public function certificadoGen($request, $response, $args){
+
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',16);
+        $pdf->Cell(40,10,'Hello World!');
+        $pdf->Output();
+        return $response->withHeader('Content-type', 'application/pdf');
+    }
+
     /**
      * Controle responsável por logar o usuário e definir o token.
      * @param $request

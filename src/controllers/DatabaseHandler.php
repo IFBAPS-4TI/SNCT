@@ -71,7 +71,7 @@ class DatabaseHandler
                     "tipo" => 1,
                     "iss" => $_SERVER['SERVER_NAME']
                 );
-                $certificado['hash'] = Util::encodeToken($token); // Assinando os certificados
+                $certificado['hash'] = base64_encode(Util::encodeToken($token)); // Assinando os certificados
                 $certificados[] = $certificado;
             }
         }
@@ -105,7 +105,7 @@ class DatabaseHandler
                         "tipo" => $tipo,
                         "iss" => $_SERVER['SERVER_NAME']
                     );
-                    $certificado['hash'] = Util::encodeToken($token); // Assinando os certificados
+                    $certificado['hash'] = base64_encode(Util::encodeToken($token)); // Assinando os certificados
                     $certificados[] = $certificado;
                 }
             }
