@@ -29,6 +29,7 @@ $app->group('/painel', function () use ($userdata) {
     $this->post('/entrar', \Painel::class . ':logarUsuario');
 });
 $app->group('/painel/visitante', function () use ($userdata) {
+    $this->get('/certificados', \Visitante::class . ':listCertificadosView')->setName('visitante.certificados');
     $this->get('/lista', \Visitante::class . ':listInscricoesView')->setName('visitante.lista');
     $this->get('/editar', \Visitante::class . ':alterarPefilView')->setName('visitante.editar');
     $this->post('/editar', \Visitante::class . ':alterarPerfil');

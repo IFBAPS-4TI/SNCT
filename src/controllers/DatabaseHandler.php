@@ -50,6 +50,52 @@ class DatabaseHandler
         return true;
     }
 
+    public function getCertificadosByUsuario($id_usuario){
+        $inscricoes = $this->getInscricoesByIdUsuario($id_usuario, $ignoreAntigas = false);
+        $certificados = array();
+        // Primeiro as inscrições
+        foreach($inscricoes as $inscricao){
+            if($inscricao['compareceu'] == 1 && $inscricao['certificado'] == 1 && $this->ativAcabou($inscricao['id_atividade'])){
+                $certificado = array();
+                $certificado['id_atividade'] = $inscricao['id_atividade'];
+                $certificado['nome'] = $inscricao['nome'];
+                $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
+                $certificado['duracao'] = $inscricao['duracao'];
+                $certificado['hash'] = md5($inscricao['id_atividade'].$inscricao['id_sessao'].$inscricao['timestamp_ativ']);
+                $certificado['tipo_org'] = 1; // Visitante = 1, Organizador = 2, Monitor = 3;
+                $certificados[] = $certificado;
+            }
+        }
+        $session = new \SlimSession\Helper;
+        $token = (array) Util::decodeToken($session->get('jwt_token'));
+        $usuario = $this->TokenTranslation($token);
+        // Monitorias e Organizadores
+        foreach($usuario->getMonitorias() as $monitoria){
+            if($this->ativAcabou($monitoria)){
+                $sessoes = $this->getSessaoDataById($monitoria);
+                $dados = $this->getAtivDataById($monitoria);
+                foreach($sessoes as $sessao){
+                    $certificado = array();
+                    $certificado['id_atividade'] = $dados['id_atividade'];
+                    $certificado['nome'] = $dados['nome'];
+                    $certificado['timestamp_ativ'] = $inscricao['timestamp_ativ'];
+                    $certificado['duracao'] = $inscricao['duracao'];
+                    $certificado['hash'] = md5($dados['id_atividade'].$sessao['id_sessao'].$sessao['timestamp_ativ']);
+                    $dadosMonitores = $this->getMonitorDataByAtividade('id_atividade');
+                    $tipo = 3;
+                    foreach($dadosMonitores as $monitor){
+                        if($monitor['id_usuario'] == $usuario->getId() && $monitor['organizador'] == 1){
+                            $tipo = 2;
+                        }
+                    }
+                    $certificado['tipo_org'] = $tipo; // Visitante = 1, Organizador = 2, Monitor = 3;
+                    $certificados[] = $certificado;
+                }
+            }
+        }
+        return $certificados;
+    }
+
     public function criarUsuario(\Models\Usuario $usuario)
     {
         // Verifica se email ou cpf do usuário já existe

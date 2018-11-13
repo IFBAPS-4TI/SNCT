@@ -22,6 +22,16 @@ class Visitante
         return $this->container->view->render($response, 'panel/visitante/listInscricoes.html', $request->getAttributes());
     }
 
+
+    public function listCertificadosView($request, $response, $args)
+    {
+        $handler = new DatabaseHandler();
+        $token = (array)Util::decodeToken($this->session->get('jwt_token'));
+        $usuario = $handler->TokenTranslation($token);
+        $request = $request->withAttribute("certificados", $handler->getCertificadosByUsuario($usuario->getId()));
+        return $this->container->view->render($response, 'panel/visitante/listCertificados.html', $request->getAttributes());
+    }
+
     public function alterarPefilView($request, $response, $args)
     {
         $handler = new DatabaseHandler();

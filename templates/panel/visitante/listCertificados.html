@@ -1,0 +1,34 @@
+{% extends "/panel/templates/panel.html" %}
+{% block content %}
+<h4>Certificados de atividades</h4>
+<table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Opções</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for certificado in certificados %}
+    <tr>
+        <td>{{ certificado['id_atividade'] }}</td>
+        <td>{{ certificado['nome'] }}</td>
+        {% if certificado['tipo_org'] == 1 %}
+        <td>Visitante</td>
+        {% elseif certificado['tipo_org'] == 2 %}
+        <td>Monitor</td>
+        {% elseif certificado['tipo_org'] == 3 %}
+        <td>Organizador</td>
+        {% endif %}
+        <td>
+            <a href="{{ path_for('monitor.edit.ativ', { 'id_atividade': ativ['id_atividade'] }) }}" class="btn btn-dark btn-sm"
+               role="button" data-toggle="tooltip" data-placement="top" title="Baixar certificado"><i class="fas fa-file-pdf"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endblock %}
