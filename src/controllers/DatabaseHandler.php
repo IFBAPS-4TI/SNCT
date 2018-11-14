@@ -105,14 +105,14 @@ class DatabaseHandler
                         }
                     }
                     $certificado['tipo_org'] = $tipo; // Visitante = 1, Organizador = 2, Monitor = 3;
-                    $token = array(
+                    $tk = array(
                         "id_usuario" => $id_usuario,
-                        "id_atividade" => $inscricao['id_atividade'],
-                        "id_sessao" => $inscricao['id_sessao'],
+                        "id_atividade" => $certificado['id_atividade'],
+                        "id_sessao" => $certificado['id_sessao'],
                         "tipo" => $tipo,
                         "iss" => $_SERVER['SERVER_NAME']
                     );
-                    $certificado['hash'] = base64_encode(Util::encodeToken($token)); // Assinando os certificados
+                    $certificado['hash'] = base64_encode(Util::encodeToken($tk)); // Assinando os certificados
                     $certificados[] = $certificado;
                 }
             }

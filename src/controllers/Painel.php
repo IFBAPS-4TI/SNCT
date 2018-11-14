@@ -39,9 +39,13 @@ class Painel
             $certificado = $handler->getCertificadoByHash(base64_decode($args['hash']));
             $usuario = $handler->getDataById($certificado['id_usuario']);
             $data = explode("U", $certificado['timestamp_ativ'])[0];
+            $hora = explode("U", $certificado['timestamp_ativ'])[1];
             $ano = explode("/", $data)[2];
             $pdf = new \setasign\Fpdi\Fpdi();
             $modelo = __DIR__. "/../../public/certs/{$ano}.pdf";
+            if(getenv("production") == "ifba"){
+                $modelo = __DIR__. "/../../public_html/certs/{$ano}.pdf";
+            }
             $pdf->SetTitle("Certificado {$certificado['nome']}");
             $pdf->AddPage();
             $pdf->setSourceFile($modelo);
@@ -58,7 +62,7 @@ class Painel
             }else{
                 $atrib = "participou da";
             }
-            $texto = "Certificamos que ". strtoupper($usuario['nome']) .", inscrito no CPF sob n.º ". Util::mask($usuario['cpf'],"###.###.###-##") ." participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro, durante o dia {$data}, e que, no referido evento, {$atrib} seguinte atividade:";
+            $texto = "Certificamos que ". strtoupper($usuario['nome']) .", inscrito no CPF sob n.º ". Util::mask($usuario['cpf'],"###.###.###-##") ." participou da Semana Nacional de Ciência e Tecnologia do Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) - Campus Porto Seguro, durante o dia {$data}, e que, no referido evento a partir das {$hora}, {$atrib} seguinte atividade:";
             $pdf->MultiCell(0,10, Util::textutf($texto), 0, "C");
             $pdf->Ln(5);
             $texto = "\"{$certificado['nome']}\"\ncom carga horária de {$certificado['duracao']} minutos.";
@@ -70,7 +74,7 @@ class Painel
             $pdf->Output();
             return $response->withHeader('Content-type', 'application/pdf');
         } catch (Exception $e) {
-            Flash::message("<strong>Erro!</strong> Certificado inválido.", $type = "error");
+            Flash::message("<strong>Erro!</strong> Certificado inválido. {}", $type = "error");
             return $response->withStatus(200)->withHeader('Location', $this->container->get('router')->pathFor('entrar', []));
         }
     }
